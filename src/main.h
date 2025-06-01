@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file main.h
  * \brief Core game initialisation for UNIX (and other) machines

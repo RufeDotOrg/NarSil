@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-quest.h
  * \brief Quest-related variables and functions

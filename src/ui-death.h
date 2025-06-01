@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-death.h
  * \brief Handle the UI bits that happen after the character dies.

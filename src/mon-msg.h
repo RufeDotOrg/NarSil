@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-msg.h
  * \brief Structures and functions for monster messages.

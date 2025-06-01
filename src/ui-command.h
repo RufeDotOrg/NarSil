@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-command.h
  * \brief Deal with UI only command processing.

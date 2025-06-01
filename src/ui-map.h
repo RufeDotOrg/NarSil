@@ -1,3 +1,4 @@
+#pragma once
 /**
    \file ui-map.h
    \brief Writing level map info to the screen

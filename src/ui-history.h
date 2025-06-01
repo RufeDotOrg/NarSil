@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-history.h
  * \brief Character auto-history display

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file score.h
  * \brief Highscore handling for Angband

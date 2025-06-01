@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-smith.h
  * \brief Smithing of objects

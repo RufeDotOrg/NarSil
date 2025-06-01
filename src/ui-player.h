@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-player.h
  * \brief character info

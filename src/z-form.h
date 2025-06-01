@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-form.h
  * \brief Low-level text formatting (snprintf() replacement)

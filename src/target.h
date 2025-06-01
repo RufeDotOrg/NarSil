@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file target.h
  * \brief Targetting code

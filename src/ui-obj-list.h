@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-obj-list.h
  * \brief Object list UI.

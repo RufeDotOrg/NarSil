@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-abilities.h
  * \brief Player abilities

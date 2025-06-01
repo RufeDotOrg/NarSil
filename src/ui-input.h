@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-input.h
  * \brief Some high-level UI functions, inkey()

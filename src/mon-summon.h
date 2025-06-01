@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-summon.h
  * \brief Monster summoning

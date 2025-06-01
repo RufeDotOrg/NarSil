@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-knowledge.h
  * \brief Object knowledge

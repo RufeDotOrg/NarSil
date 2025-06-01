@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file save-charoutput.h
  * \brief Declare interface for saving CharOutput.txt for angband.live

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-keymap.h
  * \brief Keymap handling

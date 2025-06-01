@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-rand.h
  * \brief A Random Number Generator for Angband

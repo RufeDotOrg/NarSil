@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-abilities.h
  * \brief Text-based user interface for player abilities

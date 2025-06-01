@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-calcs.h
  * \brief Monster status calculation 

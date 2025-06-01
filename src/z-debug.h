@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-debug.h
  * \brief Debugging support

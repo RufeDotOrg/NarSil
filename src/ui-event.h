@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-event.h
  * \brief Utility functions relating to UI events

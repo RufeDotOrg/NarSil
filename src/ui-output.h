@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-output.h
  * \brief Putting text on the screen, screen saving and loading, panel handling

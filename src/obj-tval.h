@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-tval.h
  * \brief Wrapper functions for tvals.

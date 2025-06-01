@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-type.h
  * \brief Support various data types.

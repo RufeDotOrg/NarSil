@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-target.h
  * \brief UI for targetting code

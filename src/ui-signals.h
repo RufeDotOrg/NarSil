@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-signals.h
  * \brief Handle various OS signals

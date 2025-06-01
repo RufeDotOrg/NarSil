@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-list.h
  * \brief Object list construction.

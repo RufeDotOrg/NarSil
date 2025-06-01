@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file tutorial-init.h
  * \brief Declare interface for parsing tutorial data.

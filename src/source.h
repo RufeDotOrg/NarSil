@@ -1,3 +1,4 @@
+#pragma once
 #ifndef EFFECT_SOURCE_H
 #define EFFECT_SOURCE_H
 

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file config.h
  * \brief Configuration options

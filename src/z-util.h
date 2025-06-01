@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-util.h
  * \brief Low-level string handling and other utilities.

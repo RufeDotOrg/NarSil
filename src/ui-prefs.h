@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-prefs.h
  * \brief Pref file handling code

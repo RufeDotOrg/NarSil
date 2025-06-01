@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file parser.h
  * \brief Info file parser.

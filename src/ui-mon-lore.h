@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-mon-lore.h
  * \brief Monster memory UI

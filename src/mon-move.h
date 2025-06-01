@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-move.h
  * \brief Monster movement

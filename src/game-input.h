@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file game-input.h
  * \brief Ask for non-command input from the UI.

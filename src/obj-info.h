@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-info.h
  * \brief Object description code.

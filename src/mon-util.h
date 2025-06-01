@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-util.h
  * \brief Functions for monster utilities.

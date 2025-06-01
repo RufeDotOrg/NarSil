@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file generate.h
  * \brief Dungeon generation.

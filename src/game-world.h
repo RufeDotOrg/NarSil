@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file game-world.h
  * \brief Game core management of the game world

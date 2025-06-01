@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-attack.h
  * \brief Attacks (both throwing and melee) by the player

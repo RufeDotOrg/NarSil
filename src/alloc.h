@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file alloc.h
  * \brief Allocation

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file option.h
  * \brief Options table and definitions.

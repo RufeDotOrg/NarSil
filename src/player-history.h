@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-history.h
  * \brief Character auto-history creation and management

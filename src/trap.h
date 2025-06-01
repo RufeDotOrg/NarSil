@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file trap.h 
  * \brief trap predicates, structs and functions

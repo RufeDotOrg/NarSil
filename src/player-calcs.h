@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-calcs.h
  * \brief Player temporary status structures.

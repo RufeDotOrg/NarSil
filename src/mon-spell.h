@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-spell.h
  * \brief structures and functions for monster spells

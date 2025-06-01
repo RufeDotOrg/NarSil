@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file angband.h
  * \brief Includes basic includes

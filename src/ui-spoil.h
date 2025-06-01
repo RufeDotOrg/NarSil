@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-spoil.h
  * \brief Declarations for menu to generate spoiler files

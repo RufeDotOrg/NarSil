@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-bitflag.h
  * \brief Low-level bit vector manipulation

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-util.h
  * \brief Player utility functions

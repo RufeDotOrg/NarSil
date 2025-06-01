@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-list.h
  * \brief Monster list construction.

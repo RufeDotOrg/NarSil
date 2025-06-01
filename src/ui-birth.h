@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-birth.h
  * \brief Text-based user interface for character creation

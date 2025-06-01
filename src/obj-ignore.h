@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-ignore.h
  * \brief Item ignoring

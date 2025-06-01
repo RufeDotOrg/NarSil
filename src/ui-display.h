@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-display.h
  * \brief Handles the setting up updating, and cleaning up of the game display.

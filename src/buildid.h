@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file buildid.h
  * \brief Compile in build details

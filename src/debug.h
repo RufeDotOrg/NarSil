@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file debug.h
  * \brief Simple debugging functions

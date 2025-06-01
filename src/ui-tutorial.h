@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-tutorial.h
  * \brief Declare interface for starting the tutorial and tutorial hooks into

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-predicate.h
  * \brief Monster predicates

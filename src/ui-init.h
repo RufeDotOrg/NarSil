@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-init.h
  * \brief UI initialistion

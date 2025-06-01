@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file message.h
  * \brief Message handling

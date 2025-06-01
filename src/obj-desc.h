@@ -1,3 +1,4 @@
+#pragma once
 /**
    \file obj-desc.h
    \brief Create object name descriptions

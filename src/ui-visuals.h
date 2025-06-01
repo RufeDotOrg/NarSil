@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-visuals.h
  * \brief Appearance for screen elements.

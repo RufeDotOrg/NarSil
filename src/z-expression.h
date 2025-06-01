@@ -1,3 +1,4 @@
+#pragma once
 /**
    \file z-expression.h
    \brief Creating, storing, and deserializing simple math expressions

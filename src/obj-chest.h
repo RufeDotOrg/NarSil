@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-chest.h
  * \brief Encapsulation of chest-related functions

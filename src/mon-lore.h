@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-lore.h
  * \brief Structures and functions for monster recall.

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-slays.h
  * \brief Structures and functions for dealing with slays and brands

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-util.h
  * \brief Object utilities

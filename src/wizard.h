@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file wizard.h
  * \brief Debug mode commands, stats collection, spoiler generation

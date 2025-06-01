@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-dict.h
  * \brief Provide a generic dictionary interface.

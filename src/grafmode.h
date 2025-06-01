@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file grafmode.h
  * \brief Load a list of possible graphics modes.

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-wizard.h
  * \brief Declarations for menus and ui-game.c shims related to debug commands

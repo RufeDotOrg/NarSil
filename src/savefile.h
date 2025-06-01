@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file savefile.h
  * \brief Savefile loading and saving main routines

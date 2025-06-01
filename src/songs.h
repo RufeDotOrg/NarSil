@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file songs.h
  * \brief Player and monster songs

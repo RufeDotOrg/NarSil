@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-init.h
  * \brief Parsing functions for monsters and monster base types.

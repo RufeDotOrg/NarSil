@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-init.h
  * \brief Object initialization routines

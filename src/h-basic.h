@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file h-basic.h
  * \brief The lowest level header

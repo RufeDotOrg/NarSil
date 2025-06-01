@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-options.h
  * \brief Text UI options handling code (everything accessible from '=')

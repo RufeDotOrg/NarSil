@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-mon-list.h
  * \brief Monster list UI.

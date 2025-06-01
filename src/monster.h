@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file monster.h
  * \brief Flags, structures and variables for monsters

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file object.h
  * \brief basic object structs and enums

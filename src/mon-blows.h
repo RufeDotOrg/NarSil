@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-blows.h
  * \brief Functions for managing monster melee.

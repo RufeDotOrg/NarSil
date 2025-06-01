@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-color.h
  * \brief Generic color definitions

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-context.h
  * \brief Show player and terrain context menus.

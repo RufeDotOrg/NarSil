@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file project.h
  * \brief projection and helpers

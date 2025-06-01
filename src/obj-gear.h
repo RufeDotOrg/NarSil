@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file: obj-gear.h
  * \brief management of inventory, equipment and quiver

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-skills.h
  * \brief Text-based user interface for skill point allocation

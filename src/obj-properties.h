@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-properties.h
  * \brief definitions and functions for object flags and modifiers

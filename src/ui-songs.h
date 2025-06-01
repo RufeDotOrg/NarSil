@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-songs.h
  * \brief Text-based user interface for song selection

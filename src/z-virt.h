@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-virt.h
  * \brief Memory management

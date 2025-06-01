@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-group.h
  * \brief Monster group behaviours

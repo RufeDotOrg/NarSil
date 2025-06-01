@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file init.h
  * \brief initialization

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file effects-info.h
  * \brief Declare interfaces for providing information about effects

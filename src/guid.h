@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file guid.h
  * \brief Entity guids.

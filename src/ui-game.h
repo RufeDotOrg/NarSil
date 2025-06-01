@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-game.h
  * \brief Game management for the traditional text UI

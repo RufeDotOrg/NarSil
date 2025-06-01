@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player.h
  * \brief Player implementation

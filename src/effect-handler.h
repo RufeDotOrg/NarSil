@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file effect-handler.h
  * \brief Internal header for effect handler functions

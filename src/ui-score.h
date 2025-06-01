@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-score.h
  * \brief Highscore display for Angband

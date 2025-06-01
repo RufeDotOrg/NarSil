@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-smith.c
  * \brief Text-based user interface for object smithing

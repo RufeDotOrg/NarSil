@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-path.h
  * \brief Pathfinding and running code.

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file game-event.h
  * \brief Allows the registering of handlers to be told about game events.

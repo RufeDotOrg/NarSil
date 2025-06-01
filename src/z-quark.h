@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-quark.h
  * \brief Save memory by storing strings in a global array, ensuring

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-make.h
  * \brief Structures and functions for monster creation / deletion.

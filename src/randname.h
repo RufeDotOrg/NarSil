@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file randname.h
  * \brief Random name generation

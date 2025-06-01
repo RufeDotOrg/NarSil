@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-make.h
  * \brief Object generation functions.

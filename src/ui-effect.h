@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-effect.h
  * \brief Declarations for the text UI's handling of effects

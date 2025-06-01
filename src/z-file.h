@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-file.h
  * \brief Low-level file (and directory) handling

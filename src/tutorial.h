@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file tutorial.h
  * \brief Declare interface for building and managing tutorial levels.

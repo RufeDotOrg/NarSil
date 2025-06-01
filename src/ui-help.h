@@ -1,3 +1,4 @@
+#pragma once
 /**
    \file ui-help.h
    \brief In-game help

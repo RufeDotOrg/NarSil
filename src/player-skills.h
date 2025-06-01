@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-skills.h
  * \brief Player skill allocation

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file datafile.h
  * \brief Data file writing routines.

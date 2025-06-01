@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file cmd-core.h
  * \brief Handles the queueing of game commands.

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-desc.h
  * \brief Monster description

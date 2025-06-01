@@ -1,3 +1,4 @@
+#pragma once
 /**
    \file z-dice.h
    \brief Represent more complex dice than random_value

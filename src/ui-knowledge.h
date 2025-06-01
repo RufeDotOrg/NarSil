@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file ui-knowledge.h
  * \brief Player knowledge functions

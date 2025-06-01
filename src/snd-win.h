@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file snd-win.h
  * \brief Sound handling for Windows

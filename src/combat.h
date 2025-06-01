@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file combat.h
  * \brief All forms of combat

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file mon-timed.h
  * \brief Structures and functions for monster timed effects.

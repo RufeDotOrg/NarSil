@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file player-timed.h
  * \brief Timed effects handling

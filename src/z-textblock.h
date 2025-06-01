@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-textblock.h
  * \brief Text output bugger (?NRM) code

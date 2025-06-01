@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file z-queue.h
  * \brief Simple circular integer queue.

@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file obj-pile.h
  * \brief Deal with piles of objects

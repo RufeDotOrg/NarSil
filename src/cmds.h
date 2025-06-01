@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file cmds.h
  * \brief Header for game command files
