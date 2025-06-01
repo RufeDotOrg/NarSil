@@ -43,7 +43,7 @@ const char *parser_error_str[PARSE_ERROR_MAX] = {
  * Angband datafile parsing routines
  * ------------------------------------------------------------------------ */
 
-static void print_error(struct file_parser *fp, struct parser *p) {
+static void parse_error(struct file_parser *fp, struct parser *p) {
 	struct parser_state s;
 	parser_getstate(p, &s);
 	msg("Parse error in %s line %d column %d: %s: %s", fp->name,
@@ -60,7 +60,7 @@ errr run_parser(struct file_parser *fp) {
 	}
 	r = fp->run(p);
 	if (r) {
-		print_error(fp, p);
+		parse_error(fp, p);
 		return r;
 	}
 	r = fp->finish(p);

@@ -35,7 +35,7 @@
  * ------------------------------------------------------------------------ */
 
 #define COSTS_COL     (42 + 32)
-#define TOTAL_COL     (42 + 15)
+#define SKTOTAL_COL     (42 + 15)
 #define SKILL_COSTS_ROW 7
 int skill_idx = 0;
 
@@ -43,7 +43,7 @@ int skill_idx = 0;
  * Remember what's possible for a given skill.  0 means can't buy or sell.
  * 1 means can sell.  2 means can buy.  3 means can buy or sell.
  */
-static int buysell[SKILL_MAX];
+static int skbuysell[SKILL_MAX];
 
 /**
  * This is called whenever a skill changes.  We take the easy road, and just
@@ -59,7 +59,7 @@ static void point_skills(game_event_type type, game_event_data *data,
  * This is called whenever any of the other miscellaneous skill-dependent things
  * changed.  We redisplay everything because it's easier.
  */
-static void point_misc(game_event_type type, game_event_data *data,
+static void sk_point_misc(game_event_type type, game_event_data *data,
 							 void *user)
 {
 	display_player_xtra_info();
@@ -84,12 +84,12 @@ static void skill_points(game_event_type type, game_event_data *data,
 
 	for (i = 0; i < SKILL_MAX; i++) {
 		/* Remember what's allowed. */
-		buysell[i] = 0;
+		skbuysell[i] = 0;
 		if (spent[i] > 0) {
-			buysell[i] |= 1;
+			skbuysell[i] |= 1;
 		}
 		if (inc[i] <= remaining) {
-			buysell[i] |= 2;
+			skbuysell[i] |= 2;
 		}
 		/* Display cost */
 		put_str(format("%4d", spent[i]), SKILL_COSTS_ROW + i, COSTS_COL);
@@ -97,7 +97,7 @@ static void skill_points(game_event_type type, game_event_data *data,
 	}
 
 	put_str(format("Total Cost: %4d/%4d", sum, remaining + sum),
-		SKILL_COSTS_ROW + SKILL_MAX, TOTAL_COL);
+		SKILL_COSTS_ROW + SKILL_MAX, SKTOTAL_COL);
 }
 
 static void skill_points_start(cmd_context context, bool reset)
@@ -116,14 +116,14 @@ static void skill_points_start(cmd_context context, bool reset)
 	prt(prompt, Term->hgt - 1, Term->wid / 2 - strlen(prompt) / 2);
 
 	for (i = 0; i < SKILL_MAX; ++i) {
-		buysell[i] = 0;
+		skbuysell[i] = 0;
 	}
 
 	/* Register handlers for various events - cheat a bit because we redraw
 	   the lot at once rather than each bit at a time. */
 	event_add_handler(EVENT_SKILLPOINTS, skill_points, NULL);	
 	event_add_handler(EVENT_SKILLS, point_skills, NULL);	
-	event_add_handler(EVENT_EXP_CHANGE, point_misc, NULL);
+	event_add_handler(EVENT_EXP_CHANGE, sk_point_misc, NULL);
 	init_skills(false, reset);
 }
 
@@ -131,7 +131,7 @@ static void skill_points_stop(void)
 {
 	event_remove_handler(EVENT_SKILLPOINTS, skill_points, NULL);	
 	event_remove_handler(EVENT_SKILLS, point_skills, NULL);	
-	event_remove_handler(EVENT_EXP_CHANGE, point_misc, NULL);	
+	event_remove_handler(EVENT_EXP_CHANGE, sk_point_misc, NULL);	
 }
 
 static int skill_points_command(void)
@@ -237,12 +237,12 @@ static int skill_points_command(void)
 
 			m->selections = labels;
 			if (in.mouse.y == SKILL_COSTS_ROW + skill_idx
-					&& (buysell[skill_idx] & 1)) {
+					&& (skbuysell[skill_idx] & 1)) {
 				menu_dynamic_add_label(m, "Sell", 's',
 					ACT_CTX_SKILL_PTS_SELL, labels);
 			}
 			if (in.mouse.y == SKILL_COSTS_ROW + skill_idx
-					&& (buysell[skill_idx] & 2)) {
+					&& (skbuysell[skill_idx] & 2)) {
 				menu_dynamic_add_label(m, "Buy", 'b',
 					ACT_CTX_SKILL_PTS_BUY, labels);
 			}

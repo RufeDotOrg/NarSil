@@ -2428,7 +2428,7 @@ static void show_splashscreen(game_event_type type, game_event_data *data,
  * ------------------------------------------------------------------------
  * Visual updates betweeen player turns.
  * ------------------------------------------------------------------------ */
-static void refresh(game_event_type type, game_event_data *data, void *user)
+static void ui_refresh(game_event_type type, game_event_data *data, void *user)
 {
 	Term_fresh();
 }
@@ -2724,7 +2724,7 @@ static void ui_enter_world(game_event_type type, game_event_data *data,
 	event_add_handler(EVENT_CHECK_INTERRUPT, check_for_player_interrupt, NULL);
 
 	/* Refresh the screen and put the cursor in the appropriate place */
-	event_add_handler(EVENT_REFRESH, refresh, NULL);
+	event_add_handler(EVENT_REFRESH, ui_refresh, NULL);
 
 	/* Do the visual updates required on a new dungeon level */
 	event_add_handler(EVENT_NEW_LEVEL_DISPLAY, new_level_display_update, NULL);
@@ -2800,7 +2800,7 @@ static void ui_leave_world(game_event_type type, game_event_data *data,
 	event_remove_handler(EVENT_CHECK_INTERRUPT, check_for_player_interrupt, NULL);
 
 	/* Refresh the screen and put the cursor in the appropriate place */
-	event_remove_handler(EVENT_REFRESH, refresh, NULL);
+	event_remove_handler(EVENT_REFRESH, ui_refresh, NULL);
 
 	/* Do the visual updates required on a new dungeon level */
 	event_remove_handler(EVENT_NEW_LEVEL_DISPLAY, new_level_display_update, NULL);

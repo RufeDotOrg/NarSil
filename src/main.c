@@ -59,9 +59,9 @@
 #endif
 
 /**
- * List of the available modules in the order they are tried.
+ * List of the available mmodules in the order they are tried.
  */
-static const struct module modules[] =
+static const struct module mmodules[] =
 {
 #ifdef USE_X11
 	{ "x11", help_x11, init_x11 },
@@ -453,9 +453,9 @@ int main(int argc, char *argv[])
 				puts("  -m<sys>        Use module <sys>, where <sys> can be:");
 
 				/* Print the name and help for each available module */
-				for (i = 0; i < (int)N_ELEMENTS(modules); i++)
+				for (i = 0; i < (int)N_ELEMENTS(mmodules); i++)
 					printf("     %s   %s\n",
-					       modules[i].name, modules[i].help);
+					       mmodules[i].name, mmodules[i].help);
 
 				/* Actually abort the process */
 				quit(NULL);
@@ -498,12 +498,12 @@ int main(int argc, char *argv[])
 
 #endif /* UNIX */
 
-	/* Try the modules in the order specified by modules[] */
-	for (i = 0; i < (int)N_ELEMENTS(modules); i++) {
+	/* Try the mmodules in the order specified by mmodules[] */
+	for (i = 0; i < (int)N_ELEMENTS(mmodules); i++) {
 		/* User requested a specific module? */
-		if (!mstr || (streq(mstr, modules[i].name))) {
-			ANGBAND_SYS = modules[i].name;
-			if (0 == modules[i].init(argc, argv)) {
+		if (!mstr || (streq(mstr, mmodules[i].name))) {
+			ANGBAND_SYS = mmodules[i].name;
+			if (0 == mmodules[i].init(argc, argv)) {
 				done = true;
 				break;
 			}

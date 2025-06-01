@@ -91,13 +91,6 @@ const char *list_player_flag_names[] = {
 	NULL
 };
 
-static const char *skill_names[] = {
-	#define SKILL(a, b) b,
-	#include "list-skills.h"
-	#undef SKILL
-	""
-};
-
 static bool quickstart_allowed = false;
 bool arg_force_name;
 

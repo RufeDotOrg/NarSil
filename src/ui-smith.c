@@ -793,7 +793,7 @@ static void rename_artefact(void)
 /**
  * Display an entry in the menu.
  */
-static void skill_display(struct menu *menu, int oid, bool cursor, int row,
+static void ui_skill_display(struct menu *menu, int oid, bool cursor, int row,
 						 int col, int width)
 {
 	struct ability **choice = menu->menu_data;
@@ -825,7 +825,7 @@ static void skill_display(struct menu *menu, int oid, bool cursor, int row,
 /**
  * Handle keypresses.
  */
-static bool skill_action(struct menu *m, const ui_event *event, int oid)
+static bool ui_skill_action(struct menu *m, const ui_event *event, int oid)
 {
 	struct ability **choice = m->menu_data;
 	if (event->type == EVT_SELECT) {
@@ -936,7 +936,7 @@ static bool artefact_action(struct menu *m, const ui_event *event, int oid)
 			mem_free(smith_art_properties);
 			smith_art_properties = NULL;
 		} else if (oid < SMITH_CAT_MAX + SKILL_MAX) {
-			menu_iter menu_f = { NULL, NULL, skill_display, skill_action, NULL};
+			menu_iter menu_f = { NULL, NULL, ui_skill_display, ui_skill_action, NULL};
 			menu_init(&menu, MN_SKIN_SCROLL, &menu_f);
 			smith_art_abilities =
 				mem_zalloc(100 * sizeof(struct ability*));

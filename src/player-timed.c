@@ -53,14 +53,6 @@ struct timed_effect_data timed_effects[TMD_MAX] = {
 	#undef TMD
 };
 
-const char *obj_flags[] = {
-	"NONE",
-	#define OF(a, b) #a,
-	#include "list-object-flags.h"
-	#undef OF
-	NULL
-};
-
 int timed_name_to_idx(const char *name)
 {
     for (size_t i = 0; i < N_ELEMENTS(timed_effects); i++) {

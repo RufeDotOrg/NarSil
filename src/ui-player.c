@@ -44,13 +44,6 @@
 #include "ui-skills.h"
 
 
-static const char *skill_names[] = {
-	#define SKILL(a, b) b,
-	#include "list-skills.h"
-	#undef SKILL
-	""
-};
-
 /**
  * ------------------------------------------------------------------------
  * Panel utilities

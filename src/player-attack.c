@@ -120,7 +120,7 @@ static void possible_follow_through(struct player *p, struct loc grid,
 /**
  * Cruel blow ability
  */
-static void cruel_blow(int crit_bonus_dice, struct monster *mon)
+static void py_cruel_blow(int crit_bonus_dice, struct monster *mon)
 {
 	char m_name[80];
 
@@ -625,7 +625,7 @@ void py_attack_real(struct player *p, struct loc grid, int attack_type)
 				}
 
 				if (net_dam) {
-					cruel_blow(crit_bonus_dice, mon);
+					py_cruel_blow(crit_bonus_dice, mon);
 				}
 			}
 		} else {

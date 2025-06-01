@@ -43,22 +43,6 @@
 #include "player-util.h"
 #include "project.h"
 
-static const char *mon_race_flags[] =
-{
-	#define RF(a, b, c) #a,
-	#include "list-mon-race-flags.h"
-	#undef RF
-	NULL
-};
-
-static const char *obj_flags[] = {
-	"NONE",
-	#define OF(a, b) #a,
-	#include "list-object-flags.h"
-	#undef OF
-	NULL
-};
-
 static const char *obj_mods[] = {
 	#define STAT(a) #a,
 	#include "list-stats.h"

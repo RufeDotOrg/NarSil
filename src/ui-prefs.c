@@ -1172,7 +1172,7 @@ errr process_pref_file_command(const char *s)
 }
 
 
-static void print_error(const char *name, struct parser *p) {
+static void ui_print_error(const char *name, struct parser *p) {
 	struct parser_state s;
 	parser_getstate(p, &s);
 	msg("Parse error in %s line %d column %d: %s: %s", name,
@@ -1205,7 +1205,7 @@ static bool process_pref_file_named(const char *path, bool quiet, bool user) {
 		while (file_getl(f, line, sizeof line)) {
 			e = parser_parse(p, line);
 			if (e != PARSE_ERROR_NONE) {
-				print_error(path, p);
+				ui_print_error(path, p);
 				break;
 			}
 		}

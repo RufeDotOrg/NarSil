@@ -1,6 +1,6 @@
 /**
  * \file mon-timed.c
- * \brief Monster timed effects.
+ * \brief Monster timed teffects.
  *
  * Copyright (c) 1997-2007 Ben Harrison, James E. Wilson, Robert A. Koeneke
  *
@@ -37,7 +37,7 @@ enum stack_type {
 };
 
 /**
- * Monster timed effects.
+ * Monster timed teffects.
  */
 static struct mon_timed_effect {
 	const char *name;
@@ -48,7 +48,7 @@ static struct mon_timed_effect {
 	int message_begin;
 	int message_end;
 	int message_increase;
-} effects[] = {
+} teffects[] = {
 	#define MON_TMD(a, b, c, d, e, f, g, h) { #a, b, STACK_##c, d, e, f, g, h },
 	#include "list-mon-timed.h"
 	#undef MON_TMD
@@ -62,7 +62,7 @@ static struct mon_timed_effect {
 int mon_timed_name_to_idx(const char *name)
 {
     for (size_t i = 0; i < MON_TMD_MAX; i++) {
-        if (streq(name, effects[i].name))
+        if (streq(name, teffects[i].name))
             return i;
     }
 
@@ -93,7 +93,7 @@ static bool mon_set_timed(struct monster *mon,
 	assert(effect_type < MON_TMD_MAX);
 	assert(timer >= 0);
 
-	struct mon_timed_effect *effect = &effects[effect_type];
+	struct mon_timed_effect *effect = &teffects[effect_type];
 
 	int m_note = 0;
 	int old_timer = mon->m_timed[effect_type];
@@ -160,7 +160,7 @@ bool mon_inc_timed(struct monster *mon, int effect_type, int timer, int flag)
 	assert(effect_type < MON_TMD_MAX);
 	assert(timer > 0); /* For negative amounts, we use mon_dec_timed instead */
 
-	struct mon_timed_effect *effect = &effects[effect_type];
+	struct mon_timed_effect *effect = &teffects[effect_type];
 	int new_value = timer;
 
 	/* Make it last for a mimimum # of turns if it is a new effect */
@@ -168,7 +168,7 @@ bool mon_inc_timed(struct monster *mon, int effect_type, int timer, int flag)
 		timer = MON_INC_MIN_TURNS;
 	}
 
-	/* Stack effects correctly */
+	/* Stack teffects correctly */
 	switch (effect->stacking) {
 		case STACK_NO: {
 			new_value = mon->m_timed[effect_type];

@@ -59,33 +59,6 @@ static struct file_parser tutorial_parser = {
 	tutorial_finish_parser,
 	tutorial_cleanup_parsed_data
 };
-static const char *obj_flags[] = {
-	"NONE",
-	#define OF(a, b) #a,
-	#include "list-object-flags.h"
-	#undef OF
-	NULL
-};
-static const char *element_names[] = {
-	"NONE",
-	#define ELEM(a) #a,
-	#include "list-elements.h"
-	#undef ELEM
-	NULL
-};
-static const char *obj_mods[] = {
-	"NONE",
-	#define STAT(a) #a,
-	#include "list-stats.h"
-	#undef STAT
-	#define SKILL(a, b) #a,
-	#include "list-skills.h"
-	#undef SKILL
-	#define OBJ_MOD(a) #a,
-	#include "list-object-modifiers.h"
-	#undef OBJ_MOD
-	NULL,
-};
 static const char *square_flag_names[] = {
 	#define SQUARE(a, b) #a,
 	#include "list-square-flags.h"
