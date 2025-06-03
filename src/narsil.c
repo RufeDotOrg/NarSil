@@ -1,5 +1,6 @@
 #include "bulk.h"
 
+#include "src/local/type.c"
 #include "src/local/var.c"
 
 int
@@ -374,32 +375,6 @@ count_neighbors(struct loc* match, struct chunk* c, struct loc grid,
 
   return count;
 }
-
-struct vinfo_type {
-  int16_t grid[8];
-
-  uint32_t bits_3;
-  uint32_t bits_2;
-  uint32_t bits_1;
-  uint32_t bits_0;
-
-  uint8_t slope_fire_index1;
-
-  uint8_t slope_fire_index2;
-  struct vinfo_type* next_0;
-  struct vinfo_type* next_1;
-  uint8_t y;
-  uint8_t x;
-  uint8_t d;
-  uint8_t r;
-};
-
-struct vinfo_hack {
-  int num_slopes;
-  long slopes[126];
-  long slopes_min[20 + 1][20 + 1];
-  long slopes_max[20 + 1][20 + 1];
-};
 
 bool (*ang_sort_comp)(const void* u, const void* v, int a, int b);
 
@@ -4367,16 +4342,6 @@ do_cmd_skip(struct command* cmd)
   player->previous_action[0] = ACTION_MISC;
 }
 
-errr (*cmd_get_hook)(cmd_context c);
-
-struct command_info {
-  cmd_code cmd;
-  const char* verb;
-  cmd_handler_fn fn;
-  bool repeat_allowed;
-  int auto_repeat_n;
-};
-
 void
 cmd_copy(struct command* dest, const struct command* src)
 {
@@ -5299,8 +5264,6 @@ do_cmd_drop(struct command* cmd)
   player->previous_action[0] = ACTION_MISC;
 }
 
-enum use { USE_CHARGE, USE_VOICE, USE_SINGLE };
-
 static void
 use_aux(struct command* cmd, struct object* obj, enum use use, int snd,
         bool allow_vertical)
@@ -6041,12 +6004,6 @@ do_cmd_spoil_obj(struct command* cmd)
 {
   spoil_obj_desc("obj-desc.spo");
 }
-
-enum EditPlayerState {
-  EDIT_PLAYER_UNKNOWN,
-  EDIT_PLAYER_STARTED,
-  EDIT_PLAYER_BREAK
-} edit_player_state = EDIT_PLAYER_UNKNOWN;
 
 static bool
 get_int_from_string(const char* s, int* val)
@@ -7141,10 +7098,6 @@ do_cmd_wiz_push_object(struct command* cmd)
   }
   push_object(grid);
 }
-struct wiz_query_feature_closure {
-  const int* features;
-  int n;
-};
 
 static void
 wiz_hack_map_query_feature(struct chunk* c, void* closure, struct loc grid,
@@ -10875,112 +10828,6 @@ effect_simple(int index, struct source origin, const char* dice_string,
   dice_free(effect.dice);
 }
 
-static struct {
-  int index;
-  int args;
-  int efinfo_flag;
-  const char* desc;
-  const char* menu_name;
-} base_descs[] = {
-    {EF_NONE, 0, EFINFO_NONE, "", ""},
-
-    {EF_HEAL_HP, 2, EFINFO_HEAL, "heals %s hitpoints%s", "heal self"},
-    {EF_DAMAGE, 1, EFINFO_DICE, "does %s damage to the player", "%s damage"},
-    {EF_DART, 1, EFINFO_DICE, "does %s damage to the player", "dart"},
-    {EF_PIT, 0, EFINFO_DICE, "player falls in a pit", "pitfall"},
-    {EF_PROJECT_LOS, 1, EFINFO_PROJ, "%s which are in line of sight",
-     "%s in line of sight"},
-    {EF_PROJECT_LOS_GRIDS, 1, EFINFO_PROJ, "%s which are in line of sight",
-     "%s in line of sight"},
-    {EF_DEADFALL, 0, EFINFO_DICE, "makes rocks fall on the player", "deadfall"},
-    {EF_EARTHQUAKE, 1, EFINFO_QUAKE,
-     "causes an earthquake around you of radius %d", "cause earthquake"},
-    {EF_SPOT, 4, EFINFO_SPOT,
-     "creates a ball of %s with radius %d, centred on and hitting the player, "
-     "with full intensity to radius %d, dealing %s damage at the centre",
-     "engulf with %s"},
-    {EF_SPHERE, 4, EFINFO_SPOT,
-     "creates a ball of %s with radius %d, centred on the player, with full "
-     "intensity to radius %d, dealing %s damage at the centre",
-     "project %s"},
-    {EF_EXPLOSION, 1, EFINFO_PROJ, "produces a blast of %s", "blast %s"},
-    {EF_BREATH, 3, EFINFO_BREATH,
-     "breathes a cone of %s with width %d degrees, dealing %s damage at the "
-     "source",
-     "breathe a cone of %s"},
-    {EF_BOLT, 2, EFINFO_BOLT, "casts a bolt of %s dealing %s damage",
-     "cast a bolt of %s"},
-    {EF_BEAM, 2, EFINFO_BOLT, "casts a beam of %s dealing %s damage",
-     "cast a beam of %s"},
-    {EF_TERRAIN_BEAM, 1, EFINFO_PROJ, "casts a beam of %s",
-     "cast a beam of %s"},
-    {EF_NOURISH, 3, EFINFO_FOOD, "%s for %s turns (%s percent)", "%s %s"},
-    {EF_CURE, 1, EFINFO_CURE, "cures %s", "cure %s"},
-    {EF_TIMED_SET, 2, EFINFO_TIMED, "administers %s for %s turns",
-     "administer %s"},
-    {EF_TIMED_INC, 2, EFINFO_TIMED, "extends %s for %s turns", "extend %s"},
-    {EF_TIMED_INC_CHECK, 1, EFINFO_TIMED, "checks if %s can be extended",
-     "checks %s extension"},
-    {EF_TIMED_INC_NO_RES, 2, EFINFO_TIMED,
-     "extends %s for %s turns (unresistable)", "extend %s"},
-    {EF_TERROR, 1, EFINFO_TERROR,
-     "administers fear for %s turns, and haste for about half as long",
-     "administer fear/haste"},
-    {EF_GLYPH, 1, EFINFO_NONE, "inscribes a glyph beneath you",
-     "inscribe a glyph"},
-    {EF_RESTORE_STAT, 1, EFINFO_STAT, "restores your %s", "restore %s"},
-    {EF_DRAIN_STAT, 1, EFINFO_STAT, "reduces your %s", "drains %s"},
-    {EF_RESTORE_MANA, 0, EFINFO_NONE, "restores some mana",
-     "restore some mana"},
-    {EF_REMOVE_CURSE, 1, EFINFO_DICE,
-     "attempts power %s removal of a single curse on an object",
-     "remove curse"},
-    {EF_MAP_AREA, 0, EFINFO_NONE, "maps the current dungeon level",
-     "map level"},
-    {EF_DETECT_TRAPS, 0, EFINFO_NONE, "detects traps nearby", "detect traps"},
-    {EF_DETECT_DOORS, 0, EFINFO_NONE, "detects doors nearby", "detect doors"},
-    {EF_DETECT_OBJECTS, 0, EFINFO_NONE, "detects objects nearby",
-     "detect objects"},
-    {EF_DETECT_MONSTERS, 0, EFINFO_NONE, "detects monsters on the level",
-     "detect monsters"},
-    {EF_REVEAL_MONSTER, 0, EFINFO_NONE, "reveals a monster", "reveal monster"},
-    {EF_CLOSE_CHASMS, 0, EFINFO_NONE, "close nearby chasms", "close_chasms"},
-    {EF_IDENTIFY, 0, EFINFO_NONE, "identifie a selected item", "identify"},
-    {EF_RECHARGE, 0, EFINFO_NONE,
-     "tries to recharge a wand or staff, destroying the wand or staff on "
-     "failure",
-     "recharge"},
-    {EF_SUMMON, 1, EFINFO_SUMM, "summons %s at the current dungeon level",
-     "summon %s"},
-    {EF_TELEPORT_TO, 0, EFINFO_NONE, "teleports toward a target",
-     "teleport to target"},
-    {EF_DARKEN_LEVEL, 0, EFINFO_NONE,
-     "completely darkens and forgets the level", "darken level"},
-    {EF_LIGHT_AREA, 0, EFINFO_NONE, "lights up the surrounding area",
-     "light area"},
-    {EF_DARKEN_AREA, 0, EFINFO_NONE, "darkens the surrounding area",
-     "darken area"},
-    {EF_SONG_OF_ELBERETH, 0, EFINFO_NONE, "sings a song of Elbereth",
-     "song of Elbereth"},
-    {EF_SONG_OF_LORIEN, 0, EFINFO_NONE, "sings a song of Lorien",
-     "song of Lorien"},
-    {EF_SONG_OF_FREEDOM, 0, EFINFO_NONE, "sings a song of Freedom",
-     "song of Freedom"},
-    {EF_SONG_OF_BINDING, 0, EFINFO_NONE, "sings a song of Binding",
-     "song of Binding"},
-    {EF_SONG_OF_PIERCING, 0, EFINFO_NONE, "sings a song of Piercing",
-     "song of Piercing"},
-    {EF_SONG_OF_OATHS, 0, EFINFO_NONE, "sings a song of Oaths",
-     "song of Oaths"},
-    {EF_AGGRAVATE, 0, EFINFO_NONE, "makes nearby monsters aggressive",
-     "make angry"},
-    {EF_NOISE, 0, EFINFO_NONE, "makes a noise that monsters may hear",
-     "make a noise"},
-    {EF_CREATE_TRAPS, 0, EFINFO_NONE, "create traps on the level",
-     "create traps"},
-
-};
-
 static void
 format_dice_string(const random_value* v, int multiplier, size_t len,
                    char* dice_string)
@@ -11260,12 +11107,6 @@ effect_projection(const struct effect* effect)
   }
   return "";
 }
-
-struct event_handler_entry {
-  struct event_handler_entry* next;
-  game_event_handler* fn;
-  void* user;
-};
 
 static void
 game_event_dispatch(game_event_type type, game_event_data* data)
@@ -12393,33 +12234,6 @@ run_game_loop(void)
     }
   }
 }
-
-static const struct {
-  const char* name;
-  cave_builder builder;
-} cave_builders[] = {
-
-    {"cave", cave_gen},
-    {"throne", throne_gen},
-    {"gates", gates_gen},
-
-};
-static const struct {
-  const char* name;
-  int max_height;
-  int max_width;
-  room_builder builder;
-} room_builders[] = {
-
-    {"simple room", 0, 0, build_simple},
-    {"crossed room", 0, 0, build_crossed},
-    {"Interesting room", 22, 33, build_interesting},
-    {"Lesser vault", 22, 33, build_lesser_vault},
-    {"Greater vault", 44, 66, build_greater_vault},
-    {"Throne room", 30, 35, build_throne},
-    {"Gates of Angband", 32, 64, build_gates},
-
-};
 
 static enum parser_error
 parse_profile_name(struct parser* p)
@@ -16994,15 +16808,6 @@ cleanup_house(void)
   }
 }
 
-struct name {
-  struct name* next;
-  char* str;
-};
-struct names_parse {
-  unsigned int section;
-  unsigned int nnames[RANDNAME_NUM_TYPES];
-  struct name* names[RANDNAME_NUM_TYPES];
-};
 static enum parser_error
 parse_names_section(struct parser* p)
 {
@@ -17152,43 +16957,6 @@ cleanup_flavor(void)
     f = next;
   }
 }
-
-static struct {
-  const char* name;
-  struct file_parser* parser;
-} pl[] = {{"world", &world_parser},
-          {"projections", &projection_parser},
-          {"features", &feat_parser},
-          {"slays", &slay_parser},
-          {"brands", &brand_parser},
-          {"object bases", &object_base_parser},
-          {"monster pain messages", &pain_parser},
-          {"monster pursuit messages", &pursuit_parser},
-          {"monster warning messages", &warning_parser},
-          {"monster bases", &mon_base_parser},
-          {"summons", &summon_parser},
-          {"objects", &object_parser},
-          {"abilities", &ability_parser},
-          {"ego-items", &ego_parser},
-          {"history charts", &history_parser},
-          {"bodies", &body_parser},
-          {"player races", &race_parser},
-          {"player houses", &house_parser},
-          {"player sexes", &sex_parser},
-          {"artifacts", &artifact_parser},
-          {"drops", &drop_parser},
-          {"object properties", &object_property_parser},
-          {"timed effects", &player_timed_parser},
-          {"blow methods", &meth_parser},
-          {"blow effects", &eff_parser},
-          {"monster spells", &mon_spell_parser},
-          {"monsters", &monster_parser},
-          {"monster lore", &lore_parser},
-          {"traps", &trap_parser},
-          {"songs", &song_parser},
-          {"chest_traps", &chest_trap_parser},
-          {"flavours", &flavor_parser},
-          {"random names", &names_parser}};
 
 void
 init_arrays(void)
@@ -18382,26 +18150,6 @@ rd_monster_groups(void)
   return 0;
 }
 
-typedef struct _message_t {
-  char* str;
-  struct _message_t* newer;
-  struct _message_t* older;
-  uint16_t type;
-  uint16_t count;
-} message_t;
-typedef struct _msgcolor_t {
-  uint16_t type;
-  uint8_t color;
-  struct _msgcolor_t* next;
-} msgcolor_t;
-typedef struct _msgqueue_t {
-  message_t* head;
-  message_t* tail;
-  msgcolor_t* colors;
-  uint32_t count;
-  uint32_t max;
-} msgqueue_t;
-
 void
 messages_init(void)
 {
@@ -19402,12 +19150,6 @@ make_attack_normal(struct monster* mon, struct player* p)
   return true;
 }
 
-typedef enum {
-  BLOW_TAG_NONE,
-  BLOW_TAG_TARGET,
-  BLOW_TAG_OF_TARGET,
-  BLOW_TAG_HAS
-} blow_tag_t;
 static blow_tag_t
 blow_tag_lookup(const char* tag)
 {
@@ -23198,13 +22940,6 @@ monster_list_entry_line_color(const monster_list_entry_t* entry)
   else
     return COLOUR_WHITE;
 }
-
-enum monster_sex {
-  MON_SEX_NEUTER = 0,
-  MON_SEX_MALE,
-  MON_SEX_FEMALE,
-  MON_SEX_MAX,
-};
 
 void
 lore_learn_flag_if_visible(struct monster_lore* lore, const struct monster* mon,
@@ -27594,112 +27329,6 @@ reset_monsters(void)
   }
 }
 
-struct monster_race_message {
-  struct monster_race* race;
-  int flags;
-  int msg_code;
-  int count;
-  int delay;
-};
-
-struct monster_message_history {
-  struct monster* mon;
-  int message_code;
-};
-
-static const struct {
-  const char* msg;
-  bool omit_subject;
-  int type;
-} msg_repository[] = {
-
-    {"[is|are] hurt.", false, MSG_GENERIC},
-    {"die[s].", false, MSG_KILL},
-    {"[is|are] destroyed.", false, MSG_KILL},
-    {"resist[s] a lot.", false, MSG_GENERIC},
-    {"[is|are] hit hard.", false, MSG_GENERIC},
-    {"resist[s].", false, MSG_GENERIC},
-    {"[is|are] immune.", false, MSG_GENERIC},
-    {"resist[s] somewhat.", false, MSG_GENERIC},
-    {"[is|are] unaffected!", false, MSG_GENERIC},
-    {"spawn[s]!", false, MSG_GENERIC},
-    {"look[s] healthier.", false, MSG_GENERIC},
-    {"fall[s] asleep.", false, MSG_GENERIC},
-    {"wake[s] up.", false, MSG_GENERIC},
-    {"notice[s] you.", false, MSG_GENERIC},
-    {"wake[s] up and notice[s] you.", false, MSG_GENERIC},
-    {"stir[s].", false, MSG_GENERIC},
-    {"look[s] around.", false, MSG_GENERIC},
-    {"become[s] unwary.", false, MSG_GENERIC},
-    {"cringe[s] from the light!", false, MSG_GENERIC},
-    {"shrivel[s] away in the light!", false, MSG_KILL},
-    {"partly shatter[s]!", false, MSG_GENERIC},
-    {"shatter[s]!", false, MSG_KILL},
-    {"catch[es] fire!", false, MSG_GENERIC},
-    {"[is|are] badly frozen.", false, MSG_GENERIC},
-    {"shudder[s].", false, MSG_GENERIC},
-    {"change[s]!", false, MSG_GENERIC},
-    {"disappear[s]!", false, MSG_GENERIC},
-    {"[is|are] even more stunned.", false, MSG_GENERIC},
-    {"[is|are] stunned.", false, MSG_GENERIC},
-    {"[is|are] no longer stunned.", false, MSG_GENERIC},
-    {"look[s] more confused.", false, MSG_GENERIC},
-    {"look[s] confused.", false, MSG_GENERIC},
-    {"[is|are] no longer confused.", false, MSG_GENERIC},
-    {"look[s] more slowed.", false, MSG_GENERIC},
-    {"look[s] slowed.", false, MSG_GENERIC},
-    {"speed[s] up.", false, MSG_GENERIC},
-    {"look[s] even faster!", false, MSG_GENERIC},
-    {"start[s] moving faster.", false, MSG_GENERIC},
-    {"slow[s] down.", false, MSG_GENERIC},
-    {"look[s] more terrified!", false, MSG_GENERIC},
-    {"flee[s] in terror!", false, MSG_FLEE},
-    {"[is|are] no longer afraid.", false, MSG_GENERIC},
-    {"turn[s] to fight!", false, MSG_GENERIC},
-    {"recover[s] [its|their] composure.", false, MSG_GENERIC},
-    {"panics.", false, MSG_GENERIC},
-    {"staggers into a door.", false, MSG_GENERIC},
-    {"staggers into some rubble.", false, MSG_GENERIC},
-    {"bashes into a wall.", false, MSG_GENERIC},
-    {"[is|are] frozen to the spot!", false, MSG_GENERIC},
-    {"can move again.", false, MSG_GENERIC},
-    {"[is|are] blown backwards by the force.", false, MSG_GENERIC},
-    {"holds firm against the force of the blast.", false, MSG_GENERIC},
-    {"falls under your spell!", false, MSG_GENERIC},
-    {"is no longer under your control.", false, MSG_GENERIC},
-    {"shimmers for a moment.", false, MSG_GENERIC},
-    {"You hear [a|several] scream[|s] of agony!", true, MSG_KILL},
-    {"disintegrate[s]!", false, MSG_KILL},
-    {"freeze[s] and shatter[s]!", false, MSG_KILL},
-    {"lose[s] some mana!", false, MSG_GENERIC},
-    {"look[s] briefly puzzled.", false, MSG_GENERIC},
-    {"maintain[s] the same shape.", false, MSG_GENERIC},
-    {"[is|are] unharmed.", false, MSG_GENERIC},
-    {"appear[s]!", false, MSG_GENERIC},
-    {"There is a puff of smoke!", true, MSG_GENERIC},
-    {"[goes|go] up the stairs.", false, MSG_GENERIC},
-    {"[goes|go] down the stairs.", false, MSG_GENERIC},
-    {"flee[s] up the stairs.", false, MSG_GENERIC},
-    {"flee[s] down the stairs.", false, MSG_GENERIC},
-    {"exchanges places with you.", false, MSG_GENERIC},
-    {"attacks you as it moves by.", false, MSG_GENERIC},
-    {"passes under the door.", false, MSG_GENERIC},
-    {"ends his song.", false, MSG_GENERIC},
-
-    {"", true, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", false, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", false, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", false, MSG_GENERIC},
-    {"", true, MSG_GENERIC},
-    {"", false, MSG_GENERIC},
-
-};
-
 void
 message_pain(struct monster* mon, int dam)
 {
@@ -28110,11 +27739,6 @@ monster_is_listened(const struct monster* mon)
   return mflag_has(mon->mflag, MFLAG_LISTENED);
 }
 
-typedef enum {
-  SPELL_TAG_NONE,
-  SPELL_TAG_NAME,
-  SPELL_TAG_PRONOUN,
-} spell_tag_t;
 static spell_tag_t
 spell_tag_lookup(const char* tag)
 {
@@ -28341,34 +27965,6 @@ do_mon_spell(int index, struct monster* mon, bool seen)
   }
 }
 
-static const struct mon_spell_info {
-  uint16_t index;
-  int type;
-} mon_spell_types[] = {
-
-    {RSF_NONE, 0},
-    {RSF_ARROW1, RST_INNATE | RST_ARCHERY | RST_DISTANT},
-    {RSF_ARROW2, RST_INNATE | RST_ARCHERY | RST_DISTANT},
-    {RSF_BOULDER, RST_INNATE | RST_ARCHERY | RST_DISTANT},
-    {RSF_BR_FIRE, RST_BREATH},
-    {RSF_BR_COLD, RST_BREATH},
-    {RSF_BR_POIS, RST_BREATH},
-    {RSF_BR_DARK, RST_BREATH},
-    {RSF_EARTHQUAKE, RST_SPELL | RST_DISTANT},
-    {RSF_SHRIEK, RST_SPELL},
-    {RSF_SCREECH, RST_SPELL},
-    {RSF_DARKNESS, RST_SPELL},
-    {RSF_FORGET, RST_SPELL},
-    {RSF_SCARE, RST_SPELL},
-    {RSF_CONF, RST_SPELL},
-    {RSF_HOLD, RST_SPELL},
-    {RSF_SLOW, RST_SPELL},
-    {RSF_SNG_BIND, RST_SONG},
-    {RSF_SNG_PIERCE, RST_SONG},
-    {RSF_SNG_OATHS, RST_SONG},
-    {RSF_MAX, 0},
-
-};
 static bool
 mon_spell_is_valid(int index)
 {
@@ -28788,31 +28384,6 @@ summon_specific(struct loc grid, int lev, int type)
 
   return 1;
 }
-
-enum stack_type { STACK_NO, STACK_INCR, STACK_MAX };
-
-static struct mon_timed_effect {
-  const char* name;
-  bool gets_save;
-  enum stack_type stacking;
-  int flag_resist;
-  int max_timer;
-  int message_begin;
-  int message_end;
-  int message_increase;
-} teffects[] = {
-
-    {"STUN", false, STACK_MAX, RF_NO_STUN, 200, MON_MSG_DAZED,
-     MON_MSG_NOT_DAZED, MON_MSG_MORE_DAZED},
-    {"CONF", true, STACK_MAX, RF_NO_CONF, 200, MON_MSG_CONFUSED,
-     MON_MSG_NOT_CONFUSED, MON_MSG_MORE_CONFUSED},
-    {"SLOW", true, STACK_INCR, RF_NO_SLOW, 5000, MON_MSG_SLOWED,
-     MON_MSG_NOT_SLOWED, MON_MSG_MORE_SLOWED},
-    {"FAST", false, STACK_INCR, 0, 5000, MON_MSG_HASTED, MON_MSG_NOT_HASTED,
-     MON_MSG_MORE_HASTED},
-    {"MAX", true, STACK_INCR, 0, 0, 0, 0, 0},
-
-};
 
 int
 mon_timed_name_to_idx(const char* name)
@@ -30451,30 +30022,6 @@ object_desc(char* buf, size_t max, const struct object* obj, uint32_t mode,
   return end;
 }
 
-static const struct slot_info {
-  int index;
-  bool acid_vuln;
-  bool name_in_desc;
-  const char* mention;
-  const char* describe;
-} slot_table[] = {
-
-    {EQUIP_NONE, false, false, "", ""},
-    {EQUIP_WEAPON, false, false, "Wielding", "attacking monsters with"},
-    {EQUIP_BOW, false, false, "Shooting", "shooting missiles with"},
-    {EQUIP_RING, false, true, "On %s", "wearing on your %s"},
-    {EQUIP_AMULET, false, true, "Around %s", "wearing around your %s"},
-    {EQUIP_LIGHT, false, false, "Light source", "using to light your way"},
-    {EQUIP_BODY_ARMOR, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_CLOAK, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_SHIELD, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_HAT, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_GLOVES, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_BOOTS, true, true, "On %s", "wearing on your %s"},
-    {EQUIP_QUIVER, true, true, "In quiver", "carrying in your %s"},
-
-    {EQUIP_MAX, false, false, NULL, NULL}};
-
 int
 slot_by_name(struct player* p, const char* name)
 {
@@ -31472,12 +31019,6 @@ player_has_throwable_prereq(void)
   return player_has_throwable(player, true);
 }
 
-typedef struct {
-  ignore_type_t ignore_type;
-  int tval;
-  const char* identifier;
-} quality_ignore_struct;
-
 static void
 init_ignore(void)
 {
@@ -31890,47 +31431,6 @@ ignore_name_for_type(ignore_type_t type)
   }
   return "unknown";
 }
-
-struct blow_info {
-  int str_plus;
-  int dex_plus;
-  int centiblows;
-};
-
-static const struct origin_type {
-  int type;
-  int args;
-  const char* desc;
-} origins[] = {
-
-    {ORIGIN_NONE, -1, ""},
-    {ORIGIN_FLOOR, 1, "Found lying on the floor %s"},
-    {ORIGIN_CHEST, 1, "Taken from a chest found %s"},
-    {ORIGIN_SPECIAL, 1, "Found lying on the floor of a special room %s"},
-    {ORIGIN_PIT, 1, "Found lying on the floor in a pit %s"},
-    {ORIGIN_VAULT, 1, "Found lying on the floor in a vault %s"},
-    {ORIGIN_LABYRINTH, 1, "Found lying on the floor of a labyrinth %s"},
-    {ORIGIN_CAVERN, 1, "Found lying on the floor of a cavern %s"},
-    {ORIGIN_RUBBLE, 1, "Found under some rubble %s"},
-    {ORIGIN_MIXED, -1, ""},
-    {ORIGIN_DROP, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_SPECIAL, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_PIT, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_VAULT, 2, "Dropped by %s %s"},
-    {ORIGIN_STATS, -1, ""},
-    {ORIGIN_ACQUIRE, 1, "Conjured forth by magic %s"},
-    {ORIGIN_STORE, 0, "Bought from a store"},
-    {ORIGIN_STOLEN, -1, ""},
-    {ORIGIN_BIRTH, 0, "An inheritance from your family"},
-    {ORIGIN_CHEAT, 0, "Created by debug option"},
-    {ORIGIN_DROP_BREED, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_SUMMON, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_UNKNOWN, 1, "Dropped by an unknown monster %s"},
-    {ORIGIN_DROP_POLY, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_MIMIC, 2, "Dropped by %s %s"},
-    {ORIGIN_DROP_WIZARD, 2, "Dropped by %s %s"},
-
-};
 
 static void
 info_out_list(textblock* tb, const char* list[], size_t count)
@@ -32822,10 +32322,6 @@ cleanup_projection(void)
   mem_free(projections);
 }
 
-struct kb_parsedata {
-  struct object_base defaults;
-  struct object_base* kb;
-};
 static enum parser_error
 parse_object_base_defaults(struct parser* p)
 {
@@ -41331,13 +40827,7 @@ verify_object(const char* prompt, const struct object* obj,
 
   return (get_check(out_val));
 }
-typedef enum {
-  MSG_TAG_NONE,
-  MSG_TAG_NAME,
-  MSG_TAG_KIND,
-  MSG_TAG_VERB,
-  MSG_TAG_VERB_IS
-} msg_tag_t;
+
 static msg_tag_t
 msg_tag_lookup(const char* tag)
 {
@@ -41580,81 +41070,6 @@ write_self_made_artefact_entries(ang_file* fff)
     file_putf(fff, "\n");
   }
 }
-
-static struct option_entry {
-  const char* name;
-  const char* description;
-  int type;
-  bool normal;
-} options[OPT_MAX] = {
-
-    {"none", "", OP_SPECIAL, false},
-    {"hjkl_movement", "Move with hjkl etc. (^ for underlying keys)",
-     OP_INTERFACE, false},
-    {"use_sound", "Use sound", OP_INTERFACE, false},
-    {"quick_messages", "Dismiss '-more-', 'y/n' prompts with any key",
-     OP_INTERFACE, true},
-    {"angband_keyset", "Use a keyset more closely based on Angband",
-     OP_INTERFACE, false},
-    {"stop_singing_on_rest", "Stop singing when you use the rest command",
-     OP_INTERFACE, true},
-    {"forgo_attacking_unwary", "Forgo bonus attacks on non-alert enemies",
-     OP_INTERFACE, true},
-    {"beep", "Audible beep (on errors/warnings)", OP_INTERFACE, false},
-    {"highlight_player", "Highlight the player with the cursor", OP_INTERFACE,
-     false},
-    {"highlight_target", "Highlight the target with the cursor", OP_INTERFACE,
-     true},
-    {"highlight_unwary", "Highlight sleeping and unwary creatures",
-     OP_INTERFACE, true},
-    {"solid_walls", "Show walls as solid blocks", OP_INTERFACE, true},
-    {"hybrid_walls", "Show walls with shaded background", OP_INTERFACE, false},
-    {"animate_flicker", "Color: Shimmer multi-colored things", OP_INTERFACE,
-     false},
-    {"center_player", "Center map continuously", OP_INTERFACE, false},
-    {"run_avoid_center", "Avoid centering while running", OP_INTERFACE, false},
-    {"auto_more", "Automatically clear '-more-' prompts", OP_INTERFACE, false},
-    {"mouse_movement", "Allow mouse clicks to move the player", OP_INTERFACE,
-     true},
-    {"display_hits", "Display a mark when something gets hit", OP_INTERFACE,
-     true},
-    {"pickup_always", "Always pickup items", OP_INTERFACE, false},
-    {"pickup_inven", "Always pickup items matching inventory", OP_INTERFACE,
-     false},
-    {"show_flavors", "Show flavors in object descriptions", OP_INTERFACE,
-     false},
-    {"cheat_peek", "Debug: Peek into object creation", OP_CHEAT, false},
-    {"score_peek", "Score: Peek into object creation", OP_SCORE, false},
-    {"cheat_hear", "Debug: Peek into monster creation", OP_CHEAT, false},
-    {"score_hear", "Score: Peek into monster creation", OP_SCORE, false},
-    {"cheat_room", "Debug: Peek into dungeon creation", OP_CHEAT, false},
-    {"score_room", "Score: Peek into dungeon creation", OP_SCORE, false},
-    {"cheat_xtra", "Debug: Peek into something else", OP_CHEAT, false},
-    {"score_xtra", "Score: Peek into something else", OP_SCORE, false},
-    {"cheat_know", "Debug: Know complete monster info", OP_CHEAT, false},
-    {"score_know", "Score: Know complete monster info", OP_SCORE, false},
-    {"cheat_live", "Debug: Allow player to avoid death", OP_CHEAT, false},
-    {"score_live", "Score: Allow player to avoid death", OP_SCORE, false},
-    {"cheat_monsters", "Debug: Continually display all monsters", OP_CHEAT,
-     false},
-    {"score_monsters", "Score: Continually display all monsters", OP_SCORE,
-     false},
-    {"cheat_noise", "Debug: Continually display noise levels", OP_CHEAT, false},
-    {"score_noise", "Score: Continually display noise levels", OP_SCORE, false},
-    {"cheat_scent", "Debug: Continually display scent levels", OP_CHEAT, false},
-    {"score_scent", "Score: Continually display scent levels", OP_SCORE, false},
-    {"cheat_light", "Debug: Continually display light levels", OP_CHEAT, false},
-    {"score_light", "Score: Continually display light levels", OP_SCORE, false},
-    {"cheat_skill_rolls", "Debug: Show all skill rolls", OP_CHEAT, false},
-    {"score_skill_rolls", "Score: Show all skill rolls", OP_SCORE, false},
-    {"cheat_timestop", "Debug: Don't allow monsters to move", OP_CHEAT, false},
-    {"score_timestop", "Score: Don't allow monsters to move", OP_SCORE, false},
-    {"birth_discon_stairs", "Disconnected stairs", OP_BIRTH, false},
-    {"birth_force_descend", "Force player descent (never make up stairs)",
-     OP_BIRTH, false},
-    {"birth_no_artifacts", "Restrict creation of artifacts", OP_BIRTH, false},
-
-};
 
 const char*
 option_type_name(int page)
@@ -41927,49 +41342,6 @@ init_options(void)
     while (page_opts < OPT_PAGE_PER) option_page[page][page_opts++] = OPT_none;
   }
 }
-
-enum {
-  PARSE_T_NONE = 0,
-  PARSE_T_INT = 2,
-  PARSE_T_SYM = 4,
-  PARSE_T_STR = 6,
-  PARSE_T_RAND = 8,
-  PARSE_T_UINT = 10,
-  PARSE_T_CHAR = 12,
-  PARSE_T_OPT = 0x00000001
-};
-struct parser_spec {
-  struct parser_spec* next;
-  int type;
-  const char* name;
-};
-struct parser_value {
-  struct parser_spec spec;
-  union {
-    wchar_t cval;
-    int ival;
-    unsigned int uval;
-    char* sval;
-    random_value rval;
-  } u;
-};
-struct parser_hook {
-  struct parser_hook* next;
-  enum parser_error (*func)(struct parser* p);
-  char* dir;
-  struct parser_spec* fhead;
-  struct parser_spec* ftail;
-};
-struct parser {
-  enum parser_error error;
-  unsigned int lineno;
-  unsigned int colno;
-  char errmsg[1024];
-  struct parser_hook* hooks;
-  struct parser_value* fhead;
-  struct parser_value* ftail;
-  void* priv;
-};
 
 struct parser*
 parser_new(void)
@@ -42406,11 +41778,6 @@ parser_setstate(struct parser* p, unsigned int col, const char* msg)
   p->colno = col;
   my_strcpy(p->errmsg, msg, sizeof(p->errmsg));
 }
-
-static struct {
-  uint8_t skill;
-  const char* name;
-} prereq_list[100];
 
 static enum parser_error
 parse_ability_skill(struct parser* p)
@@ -44117,23 +43484,6 @@ do_cmd_automatic_throw(void)
   cmd_set_arg_target(cmdq_peek(), "target", DIR_TARGET);
 }
 
-static int roman_to_int(const char* roman);
-static int int_to_roman(int n, char* roman, size_t bufsize);
-
-typedef struct birther birther;
-
-struct birther {
-  const struct player_race* race;
-  const struct player_house* house;
-  const struct player_sex* sex;
-  int16_t age;
-  int16_t wt;
-  int16_t ht;
-  int16_t stat[STAT_MAX];
-  char* history;
-  char name[PLAYER_NAME_LEN];
-};
-
 static void
 save_birth_data(birther* tosave)
 {
@@ -45796,10 +45146,6 @@ update_stuff(struct player* p)
     event_signal(EVENT_PLAYERMOVED);
   }
 }
-struct flag_event_trigger {
-  uint32_t flag;
-  game_event_type event;
-};
 
 void
 redraw_stuff(struct player* p)
@@ -49544,13 +48890,6 @@ project(struct source origin, int rad, struct loc finish, int dd, int ds,
   return (notice);
 }
 
-typedef struct project_feature_handler_context_s {
-  const struct source origin;
-  const struct loc grid;
-  const int dif;
-  const int type;
-  bool obvious;
-} project_feature_handler_context_t;
 typedef void (*project_feature_handler_f)(project_feature_handler_context_t*);
 static void
 project_feature_handler_FIRE(project_feature_handler_context_t* context)
@@ -49841,25 +49180,6 @@ project_f(struct source origin, struct loc grid, int dif, int typ)
   return context.obvious;
 }
 
-typedef struct project_monster_handler_context_s {
-  const struct source origin;
-  const int r;
-  const struct loc grid;
-  int dam;
-  int dif;
-  const int type;
-  bool seen;
-  const bool id;
-  struct monster* mon;
-  struct monster_lore* lore;
-  bool obvious;
-  bool skipped;
-  bool alert;
-  uint16_t flag;
-  enum mon_messages hurt_msg;
-  enum mon_messages die_msg;
-  int mon_timed[MON_TMD_MAX];
-} project_monster_handler_context_t;
 typedef void (*project_monster_handler_f)(project_monster_handler_context_t*);
 
 static void
@@ -50368,15 +49688,6 @@ inven_damage(struct player* p, int type, int perc, int resistance)
   return k;
 }
 
-typedef struct project_object_handler_context_s {
-  const struct loc grid;
-  const int type;
-  const struct object* obj;
-  bool obvious;
-  bool do_kill;
-  bool ignore;
-  const char* note_kill;
-} project_object_handler_context_t;
 typedef void (*project_object_handler_f)(project_object_handler_context_t*);
 
 static void
@@ -50567,16 +49878,6 @@ project_o(struct loc grid, int typ, const struct object* protected_obj)
 
   return obvious;
 }
-
-typedef struct project_player_handler_context_s {
-  const struct source origin;
-  const struct loc grid;
-  struct monster* mon;
-  int dd;
-  int ds;
-  int dam;
-  const int type;
-} project_player_handler_context_t;
 
 int
 adjust_dam(struct player* p, int dd, int ds, int type)
@@ -51927,42 +51228,6 @@ wr_monster_groups(void)
   wr_u16b(0);
 }
 
-typedef int (*loader_t)(void);
-struct blockheader {
-  char name[16];
-  uint32_t version;
-  uint32_t size;
-};
-struct blockinfo {
-  char name[16];
-  loader_t loader;
-  uint32_t version;
-};
-
-static const struct {
-  char name[16];
-  void (*save)(void);
-  uint32_t version;
-} savers[] = {
-    {"description", wr_description, 1},
-    {"rng", wr_randomizer, 1},
-    {"options", wr_options, 1},
-    {"messages", wr_messages, 1},
-    {"monster memory", wr_monster_memory, 1},
-    {"object memory", wr_object_memory, 1},
-    {"player", wr_player, 1},
-    {"ignore", wr_ignore, 1},
-    {"misc", wr_misc, 1},
-    {"artifacts", wr_artifacts, 1},
-    {"gear", wr_gear, 1},
-    {"dungeon", wr_dungeon, 1},
-    {"objects", wr_objects, 1},
-    {"monsters", wr_monsters, 1},
-    {"traps", wr_traps, 1},
-    {"history", wr_history, 1},
-    {"monster groups", wr_monster_groups, 1},
-};
-
 void
 note(const char* message)
 {
@@ -52763,16 +52028,6 @@ monster_sing(struct monster* mon, struct song* song)
   }
   return song_skill;
 }
-
-struct sound_module {
-  const char* name;
-  const char* help;
-  errr (*init)(struct sound_hooks* hooks, int argc, char** argv);
-};
-struct msg_snd_data {
-  uint16_t num_sounds;
-  uint16_t sound_ids[16];
-};
 
 static void
 load_sound(struct sound_data* sound_data)
@@ -57692,15 +56947,6 @@ tutorial_finish_parser(struct parser* p)
   return 0;
 }
 
-static struct bane_type {
-  int kills;
-  const char* name;
-} bane_types[] = {
-
-    {0, "Nothing"}, {0, "Orc"},   {0, "Wolf"},    {0, "Spider"}, {0, "Troll"},
-    {0, "Wraith"},  {0, "Rauko"}, {0, "Serpent"}, {0, "Dragon"},
-
-};
 static int
 get_skill_abilities(int skill)
 {
@@ -57988,23 +57234,6 @@ do_cmd_abilities(void)
   screen_load();
 }
 
-enum birth_stage {
-  BIRTH_BACK = -1,
-  BIRTH_RESET = 0,
-  BIRTH_QUICKSTART,
-  BIRTH_RACE_CHOICE,
-  BIRTH_HOUSE_CHOICE,
-  BIRTH_SEX_CHOICE,
-  BIRTH_STAT_POINTS,
-  BIRTH_SKILL_POINTS,
-  BIRTH_NAME_CHOICE,
-  BIRTH_AHW_CHOICE,
-  BIRTH_HISTORY_CHOICE,
-  BIRTH_FINAL_CONFIRM,
-  BIRTH_COMPLETE
-};
-enum birth_questions { BQ_METHOD = 0, BQ_RACE, BQ_HOUSE, MAX_BIRTH_QUESTIONS };
-
 static enum birth_stage
 textui_birth_quickstart(void)
 
@@ -58038,15 +57267,6 @@ textui_birth_quickstart(void)
   clear_from(23);
   return next;
 }
-
-typedef void (*browse_f)(int oid, void* db, const region* l);
-
-struct birthmenu_data {
-  const char** items;
-  const char* hint;
-  bool allow_random;
-  enum birth_stage stage_inout;
-};
 
 static void
 birthmenu_display(struct menu* menu, int oid, bool cursor, int row, int col,
@@ -59777,26 +58997,6 @@ do_cmd_save_screen(void)
   do_cmd_save_screen_html(mode, ml_term);
 }
 
-enum context_menu_value_e {
-  MENU_VALUE_INSPECT = CMD_REPEAT + 1000,
-  MENU_VALUE_DROP_ALL,
-  MENU_VALUE_LOOK,
-  MENU_VALUE_RECALL,
-  MENU_VALUE_REST,
-  MENU_VALUE_INVENTORY,
-  MENU_VALUE_CENTER_MAP,
-  MENU_VALUE_FLOOR,
-  MENU_VALUE_CHARACTER,
-  MENU_VALUE_OTHER,
-  MENU_VALUE_KNOWLEDGE,
-  MENU_VALUE_MAP,
-  MENU_VALUE_MESSAGES,
-  MENU_VALUE_OBJECTS,
-  MENU_VALUE_MONSTERS,
-  MENU_VALUE_TOGGLE_IGNORED,
-  MENU_VALUE_OPTIONS,
-  MENU_VALUE_HELP,
-};
 static int
 context_menu_player_2(int mx, int my)
 {
@@ -61470,38 +60670,6 @@ update_topbar(game_event_type type, game_event_data* data, void* user, int row)
   col += prt_health_short(row, col);
 }
 
-static const struct side_handler_t {
-  void (*hook)(int, int);
-  int priority;
-  game_event_type type;
-} side_handlers[] = {
-    {NULL, 21, 0},
-    {prt_name, 13, EVENT_NAME},
-    {NULL, 22, 0},
-    {prt_str, 4, EVENT_STATS},
-    {prt_dex, 3, EVENT_STATS},
-    {prt_con, 2, EVENT_STATS},
-    {prt_gra, 1, EVENT_STATS},
-    {NULL, 23, 0},
-    {prt_exp, 5, EVENT_EXPERIENCE},
-    {NULL, 24, 0},
-    {prt_hp, 6, EVENT_HP},
-    {prt_sp, 7, EVENT_MANA},
-    {NULL, 17, 0},
-    {prt_mel, 8, EVENT_MELEE},
-    {prt_arc, 9, EVENT_ARCHERY},
-    {prt_evn, 10, EVENT_ARMOR},
-    {NULL, 25, 0},
-    {prt_health, 11, EVENT_MONSTERHEALTH},
-    {NULL, 14, 0},
-    {NULL, 20, 0},
-    {prt_cut, 15, EVENT_STATUS},
-    {prt_poisoned, 16, EVENT_STATUS},
-    {prt_song, 12, EVENT_SONG},
-    {NULL, 18, 0},
-    {prt_speed, 19, EVENT_STATUS},
-};
-
 static void
 update_sidebar(game_event_type type, game_event_data* data, void* user)
 {
@@ -61547,13 +60715,6 @@ hp_colour_change(game_event_type type, game_event_data* data, void* user)
 {
   if (use_graphics == GRAPHICS_NONE) square_light_spot(cave, player->grid);
 }
-
-struct state_info {
-  int value;
-  const char* str;
-  size_t len;
-  uint8_t attr;
-};
 
 static size_t
 prt_state(int row, int col)
@@ -62281,10 +61442,7 @@ update_messages_subwindow(game_event_type type, game_event_data* data,
 
   Term_activate(old);
 }
-static struct minimap_flags {
-  int win_idx;
-  bool needs_redraw;
-} minimap_data[ANGBAND_TERM_MAX];
+
 static void
 update_minimap_subwindow(game_event_type type, game_event_data* data,
                          void* user)
@@ -63052,45 +62210,6 @@ textui_get_effect_from_list(const char* prompt, struct effect* effect,
   return choice;
 }
 
-static const struct {
-  keycode_t code;
-  const char* desc;
-} mappings[] = {
-    {ESCAPE, "Escape"},
-    {KC_ENTER, "Enter"},
-    {KC_TAB, "Tab"},
-    {KC_DELETE, "Delete"},
-    {KC_BACKSPACE, "Backspace"},
-    {ARROW_DOWN, "Down"},
-    {ARROW_LEFT, "Left"},
-    {ARROW_RIGHT, "Right"},
-    {ARROW_UP, "Up"},
-    {KC_F1, "F1"},
-    {KC_F2, "F2"},
-    {KC_F3, "F3"},
-    {KC_F4, "F4"},
-    {KC_F5, "F5"},
-    {KC_F6, "F6"},
-    {KC_F7, "F7"},
-    {KC_F8, "F8"},
-    {KC_F9, "F9"},
-    {KC_F10, "F10"},
-    {KC_F11, "F11"},
-    {KC_F12, "F12"},
-    {KC_F13, "F13"},
-    {KC_F14, "F14"},
-    {KC_F15, "F15"},
-    {KC_HELP, "Help"},
-    {KC_HOME, "Home"},
-    {KC_PGUP, "PageUp"},
-    {KC_END, "End"},
-    {KC_PGDOWN, "PageDown"},
-    {KC_INSERT, "Insert"},
-    {KC_PAUSE, "Pause"},
-    {KC_BREAK, "Break"},
-    {KC_BEGIN, "Begin"},
-};
-
 keycode_t
 keycode_find_code(const char* str, size_t len)
 {
@@ -63443,13 +62562,6 @@ event_is_mouse_m(ui_event e, uint8_t button, uint8_t mods)
   return e.type == EVT_MOUSE && e.mouse.button == button &&
          (e.mouse.mods & mods);
 }
-
-struct savefile_getter_impl {
-  ang_dir* d;
-  struct savefile_details details;
-  bool have_details;
-  bool have_savedir;
-};
 
 void
 cmd_init(void)
@@ -65735,13 +64847,6 @@ textui_process_key(struct keypress kp, unsigned char* c, int count)
   return true;
 }
 
-struct keymap {
-  struct keypress key;
-  struct keypress* actions;
-  bool user;
-  struct keymap* next;
-};
-
 const struct keypress*
 keymap_find(int keymap, struct keypress kc)
 {
@@ -65848,41 +64953,6 @@ keymap_dump(ang_file* fff)
     file_putf(fff, "\n");
   }
 }
-
-typedef struct {
-  const char* (*name)(int gid);
-
-  int (*gcomp)(const void*, const void*);
-
-  int (*group)(int oid);
-
-  void (*summary)(int gid, const int* item_list, int n, int top, int row,
-                  int col);
-
-  int maxnum;
-
-  bool easy_know;
-} group_funcs;
-typedef struct {
-  void (*display_member)(int col, int row, bool cursor, int oid);
-
-  void (*lore)(int oid);
-
-  wchar_t* (*xchar)(int oid);
-
-  uint8_t* (*xattr)(int oid);
-
-  const char* (*xtra_prompt)(int oid);
-
-  void (*xtra_act)(struct keypress ch, int oid);
-
-  bool is_visual;
-} member_funcs;
-
-typedef struct join {
-  int oid;
-  int gid;
-} join_t;
 
 static int
 default_item_id(int oid)
@@ -69731,12 +68801,6 @@ menu_set_cursor_x_offset(struct menu* m, int offset)
   m->cursor_x_offset = offset;
 }
 
-struct menu_entry {
-  char* text;
-  int value;
-  menu_row_validity_t valid;
-  struct menu_entry* next;
-};
 static int
 dynamic_valid(struct menu* m, int oid)
 {
@@ -70424,14 +69488,6 @@ object_list_show_interactive(int height, int width)
   textblock_free(tb);
   object_list_free(list);
 }
-
-struct object_menu_data {
-  char label[80];
-  char equip_label[80];
-  struct object* object;
-  char o_name[80];
-  char key;
-};
 
 static bool
 use_flavor_glyph(const struct object_kind* kind)
@@ -71267,15 +70323,6 @@ textui_obj_examine(void)
   textblock_free(tb);
 }
 
-enum {
-  IGNORE_THIS_ITEM,
-  UNIGNORE_THIS_ITEM,
-  IGNORE_THIS_FLAVOR,
-  UNIGNORE_THIS_FLAVOR,
-  IGNORE_THIS_EGO,
-  UNIGNORE_THIS_EGO,
-  IGNORE_THIS_QUALITY
-};
 void
 textui_cmd_ignore_menu(struct object* obj)
 {
@@ -72400,11 +71447,6 @@ ego_menu(const char* unused, int also_unused)
   return;
 }
 
-typedef struct {
-  struct object_kind* kind;
-  bool aware;
-} ignore_choice;
-
 static int
 cmp_ignore(const void* a, const void* b)
 {
@@ -72512,11 +71554,6 @@ quality_menu(const char* unused, int also_unused)
   screen_load();
   return;
 }
-
-typedef struct {
-  int tval;
-  const char* desc;
-} tval_desc;
 
 bool
 ignore_tval(int tval)
@@ -72646,15 +71683,6 @@ seen_tval(int tval)
   return false;
 }
 
-static struct {
-  char tag;
-  const char* name;
-  void (*action)(const char*, int);
-} extra_item_options[] = {
-    {'Q', "Quality ignoring options", quality_menu},
-    {'E', "Ego ignoring options", ego_menu},
-    {'{', "Autoinscription setup", textui_browse_object_knowledge},
-};
 static char
 tag_options_item(struct menu* menu, int oid)
 {
@@ -73189,18 +72217,6 @@ textui_panel_contains(unsigned int y, unsigned int x)
   return (y - Term->offset_y) < hgt && (x - Term->offset_x) < wid;
 }
 
-struct panel_line {
-  uint8_t attr;
-  const char* label;
-  char value[20];
-};
-
-struct panel {
-  size_t len;
-  size_t max;
-  struct panel_line* lines;
-};
-
 static struct panel*
 panel_allocate(int n)
 {
@@ -73453,17 +72469,6 @@ get_panel_misc(void)
   return p;
 }
 
-static const struct {
-  region bounds;
-  bool align_left;
-  struct panel* (*panel)(void);
-} panels[] = {
-
-    {{1, 1, 18, 4}, true, get_panel_topleft},
-    {{22, 1, 12, 3}, false, get_panel_misc},
-    {{1, 6, 18, 9}, false, get_panel_midleft},
-    {{22, 6, 16, 9}, false, get_panel_combat},
-};
 void
 display_player_xtra_info(void)
 {
@@ -75372,10 +74377,6 @@ gain_skills(cmd_context context, bool reset)
   return next;
 }
 
-struct smithing_menu_data {
-  struct object* obj;
-};
-
 static void
 include_pval(struct object* obj)
 {
@@ -75877,11 +74878,6 @@ special_menu(const char* name, int row)
   return;
 }
 
-struct property_info {
-  struct obj_property* prop;
-  bool negative;
-};
-
 static int
 get_smith_properties(enum smithing_category cat)
 {
@@ -76211,11 +75207,6 @@ melt_menu(const char* name, int row)
   return;
 }
 
-struct numbers_menu_entry {
-  enum smithing_numbers_mod_index index;
-  const char* name;
-};
-
 static void
 numbers_set_validity(void)
 {
@@ -76534,11 +75525,6 @@ textui_smith_object(struct smithing_cost* cost)
   return create_smithed_item ? smith_obj : NULL;
 }
 
-struct song_menu_info {
-  struct song* song;
-  bool swap;
-};
-
 static int
 get_songs(void)
 {
@@ -76678,15 +75664,6 @@ do_cmd_spoilers(void)
   screen_load();
 }
 
-struct target_aux_state {
-  char coord_desc[20];
-  const char* phrase1;
-  const char* phrase2;
-  struct loc grid;
-  ui_event press;
-  int mode;
-  bool boring;
-};
 typedef bool (*target_aux_handler)(struct chunk* c, struct player* p,
                                    struct target_aux_state* auxst);
 
@@ -80002,13 +78979,6 @@ start_tutorial(void)
   on_new_level();
 }
 
-struct visuals_color_cycle {
-  uint8_t* steps;
-  size_t max_steps;
-  char* cycle_name;
-  uint8_t invalid_color;
-};
-
 static struct visuals_color_cycle*
 visuals_color_cycle_new(const char* name, size_t const step_count,
                         uint8_t const invalid_color)
@@ -80094,12 +79064,6 @@ visuals_color_cycle_attr_for_frame(struct visuals_color_cycle const* ccycle,
   return ccycle->steps[step];
 }
 
-struct visuals_cycle_group {
-  struct visuals_color_cycle** cycles;
-  size_t max_cycles;
-  char* group_name;
-};
-
 static struct visuals_cycle_group*
 visuals_cycle_group_new(const char* name, size_t const cycle_count)
 {
@@ -80142,11 +79106,6 @@ visuals_cycle_group_free(struct visuals_cycle_group* group)
   mem_free(group);
   group = NULL;
 }
-
-struct visuals_cycler {
-  struct visuals_cycle_group** groups;
-  size_t max_groups;
-};
 
 static struct visuals_cycler*
 visuals_cycler_new(size_t const group_count)
@@ -80230,12 +79189,6 @@ visuals_cycler_get_attr_for_frame(const char* group_name,
   return visuals_color_cycle_attr_for_frame(ccycle, frame);
 }
 
-struct {
-  struct visuals_color_cycle** race;
-  size_t max_entries;
-  size_t alloc_size;
-}* visuals_color_cycles_by_race = NULL;
-
 void
 visuals_cycler_set_cycle_for_race(struct monster_race const* race,
                                   const char* group_name,
@@ -80285,12 +79238,6 @@ visuals_cycler_get_attr_for_race(struct monster_race const* race,
   }
   return visuals_color_cycle_attr_for_frame(ccycle, frame);
 }
-
-struct visuals_flicker {
-  uint8_t* cycles;
-  size_t max_cycles;
-  size_t colors_per_cycle;
-};
 
 static struct visuals_flicker*
 visuals_flicker_new(size_t const max_cycles, size_t const colors_per_cycle)
@@ -80377,19 +79324,6 @@ visuals_flicker_get_attr_for_frame(uint8_t const selection_attr,
   return visuals_flicker_get_color(visuals_flicker_table, selection_attr,
                                    color_index);
 }
-
-struct visuals_parse_context {
-  size_t flicker_cycle_index;
-  size_t flicker_color_index;
-  struct visuals_color_cycle** cycles;
-  size_t max_cycles;
-  size_t cycles_index;
-  size_t cycle_step_index;
-  char** group_names;
-  size_t max_groups;
-  struct visuals_color_cycle** group_cycles;
-  size_t max_group_cycles;
-};
 
 static struct visuals_parse_context*
 visuals_parse_context_new(void)
@@ -81973,46 +80907,6 @@ build_gamma_table(int gamma)
   }
 }
 
-typedef struct dice_expression_entry_s {
-  const char* name;
-  const expression_t* expression;
-} dice_expression_entry_t;
-struct dice_s {
-  int b, x, y, m;
-  bool ex_b, ex_x, ex_y, ex_m;
-  dice_expression_entry_t* expressions;
-};
-
-typedef enum dice_state_e {
-  DICE_STATE_START,
-  DICE_STATE_BASE_DIGIT,
-  DICE_STATE_FLUSH_BASE,
-  DICE_STATE_DICE_DIGIT,
-  DICE_STATE_FLUSH_DICE,
-  DICE_STATE_SIDE_DIGIT,
-  DICE_STATE_FLUSH_SIDE,
-  DICE_STATE_BONUS,
-  DICE_STATE_BONUS_DIGIT,
-  DICE_STATE_FLUSH_BONUS,
-  DICE_STATE_VAR,
-  DICE_STATE_VAR_CHAR,
-  DICE_STATE_FLUSH_ALL,
-  DICE_STATE_MAX,
-} dice_state_t;
-
-typedef enum dice_input_e {
-  DICE_INPUT_AMP,
-  DICE_INPUT_MINUS,
-  DICE_INPUT_BASE,
-  DICE_INPUT_DICE,
-  DICE_INPUT_BONUS,
-  DICE_INPUT_VAR,
-  DICE_INPUT_DIGIT,
-  DICE_INPUT_UPPER,
-  DICE_INPUT_NULL,
-  DICE_INPUT_MAX,
-} dice_input_t;
-
 static dice_input_t
 dice_input_for_char(char c)
 {
@@ -82380,19 +81274,6 @@ dice_test_variables(const dice_t* dice, const char* base, const char* dice_name,
   return success;
 }
 
-struct dict_list_entry {
-  void* key;
-  void* value;
-  struct dict_list_entry* next;
-};
-struct dict_impl {
-  uint32_t (*key_hasher)(const void* key);
-  int (*key_comparer)(const void* a, const void* b);
-  void (*key_freer)(void* key);
-  void (*value_freer)(void* value);
-  struct dict_list_entry* lists[512];
-};
-
 static void
 dict_depth_first_recurse(dict_type d,
                          void (*element_visitor)(dict_type d,
@@ -82492,42 +81373,6 @@ dict_has(dict_type d, const void* key)
   }
   return NULL;
 }
-
-struct expression_operation_s {
-  uint8_t operator;
-  int16_t operand;
-};
-struct expression_s {
-  expression_base_value_f base_value;
-  size_t operation_count;
-  size_t operations_size;
-  expression_operation_t* operations;
-  int32_t fixed_base;
-};
-
-typedef enum expression_operator_e {
-  OPERATOR_NONE,
-  OPERATOR_ADD,
-  OPERATOR_SUB,
-  OPERATOR_MUL,
-  OPERATOR_DIV,
-  OPERATOR_NEG,
-} expression_operator_t;
-
-typedef enum expression_state_e {
-  EXPRESSION_STATE_START,
-  EXPRESSION_STATE_OPERATOR,
-  EXPRESSION_STATE_OPERAND,
-  EXPRESSION_STATE_MAX,
-} expression_state_t;
-
-typedef enum expression_input_e {
-  EXPRESSION_INPUT_INVALID,
-  EXPRESSION_INPUT_NEEDS_OPERANDS,
-  EXPRESSION_INPUT_UNARY_OPERATOR,
-  EXPRESSION_INPUT_VALUE,
-  EXPRESSION_INPUT_MAX,
-} expression_input_t;
 
 static expression_operator_t
 expression_operator_from_token(const char* token)
@@ -83074,12 +81919,6 @@ path_filename_index(const char* path)
   return 0;
 }
 
-struct ang_file {
-  FILE* fh;
-  char* fname;
-  file_mode mode;
-};
-
 bool
 file_delete(const char* fname)
 {
@@ -83340,11 +82179,6 @@ dir_create(const char* path)
   return false == 0 ? true : false;
 }
 
-struct ang_dir {
-  DIR* d;
-  char* dirname;
-  bool only_files;
-};
 ang_dir*
 my_dopen(const char* dirname)
 {
@@ -84083,13 +82917,6 @@ Rand_simple(uint32_t m)
   seed = ((seed % m) * 1103515245 + 12345) + ((v << 16) ^ v ^ getpid());
   return (seed % m);
 }
-
-struct textblock {
-  wchar_t* text;
-  int* attrs;
-  size_t strlen;
-  size_t size;
-};
 
 textblock*
 textblock_new(void)
@@ -85338,25 +84165,6 @@ static void
 generic_reinit(void)
 {
 }
-static const struct {
-  const char* name;
-  char** path;
-  bool setgid_ok;
-} change_path_values[] = {
-    {"scores", &ANGBAND_DIR_SCORES, false},
-    {"gamedata", &ANGBAND_DIR_GAMEDATA, true},
-    {"screens", &ANGBAND_DIR_SCREENS, true},
-    {"help", &ANGBAND_DIR_HELP, true},
-    {"pref", &ANGBAND_DIR_CUSTOMIZE, true},
-    {"fonts", &ANGBAND_DIR_FONTS, true},
-    {"tiles", &ANGBAND_DIR_TILES, true},
-    {"sounds", &ANGBAND_DIR_SOUNDS, true},
-    {"icons", &ANGBAND_DIR_ICONS, true},
-    {"user", &ANGBAND_DIR_USER, true},
-    {"save", &ANGBAND_DIR_SAVE, false},
-    {"panic", &ANGBAND_DIR_PANIC, false},
-    {"archive", &ANGBAND_DIR_ARCHIVE, false},
-};
 
 static void
 change_path(const char* info)
@@ -85579,11 +84387,6 @@ main(int argc, char* argv[])
 #include <term.h>
 #undef term
 
-struct rect_s {
-  int x, y;
-  int cx, cy;
-};
-
 static rect_t
 rect(int x, int y, int cx, int cy)
 {
@@ -85594,12 +84397,6 @@ rect(int x, int y, int cx, int cy)
   r.cy = cy;
   return r;
 }
-
-typedef struct term_data {
-  term t;
-  rect_t r;
-  WINDOW* win;
-} term_data;
 
 static void
 keymap_norm(void)
@@ -86450,18 +85247,6 @@ init_gcu(int argc, char** argv)
 
   return (0);
 }
-
-static struct {
-  char letter;
-  void (*func)(const char*);
-  bool enabled;
-  const char* path;
-} opts[] = {
-    {'a', spoil_artifact, false, NULL},
-    {'m', spoil_mon_desc, false, NULL},
-    {'M', spoil_mon_info, false, NULL},
-    {'o', spoil_obj_desc, false, NULL},
-};
 
 errr
 init_spoil(int argc, char* argv[])
