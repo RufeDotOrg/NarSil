@@ -2,13 +2,13 @@
 /* src/autoconf.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Path to the game's configuration data */
-#define DEFAULT_CONFIG_PATH "/usr/local/etc/narsil/"
+#define DEFAULT_CONFIG_PATH "lib/"
 
 /* Path to the game's variable data */
 #define DEFAULT_DATA_PATH "/usr/local/var/games/narsil/"
 
 /* Path to the game's lib directory */
-#define DEFAULT_LIB_PATH "/usr/local/share/narsil/"
+#define DEFAULT_LIB_PATH "lib/"
 
 /* Define to store the game data in the lib path. */
 /* #undef GAMEDATA_IN_LIB */
