@@ -150,8 +150,6 @@ extern bool prefix_i(const char *s, const char *t);
 extern bool suffix(const char *s, const char *t);
 extern bool suffix_i(const char *s, const char *t);
 
-#define streq(s, t)		(!strcmp(s, t))
-
 /**
  * Skip occurrences of a characters
  */

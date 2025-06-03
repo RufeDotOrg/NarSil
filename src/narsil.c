@@ -105650,7 +105650,6 @@ void my_strcap(char *buf)
 /**
  * Determine if string "a" is equal to string "b"
  */
-#undef streq
 bool streq(const char *a, const char *b)
 {
  return (!strcmp(a, b));
