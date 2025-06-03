@@ -331,7 +331,6 @@ const char* parser_error_str[PARSE_ERROR_MAX] = {
     "bad vault description line length",
 };
 typedef void debug_hook(const char*);
-static void to_stderr(const char* out);
 static debug_hook* d_out = to_stderr;
 static int set_value = 0;
 static const struct effect_kind effects[] = {
@@ -1853,28 +1852,6 @@ static const char* trap_flags[] = {
 struct file_parser trap_parser = {"trap", init_parse_trap, run_parse_trap,
                                   finish_parse_trap, cleanup_trap};
 struct trap_kind* trap_info;
-typedef void (*place_thing_func)(struct chunk* c, struct loc grid,
-                                 struct tutorial_section_sym_val* val);
-static void tutorial_section_place_feature(
-    struct chunk* c, struct loc grid, struct tutorial_section_sym_val* val);
-static void tutorial_section_place_trap(struct chunk* c, struct loc grid,
-                                        struct tutorial_section_sym_val* val);
-static void tutorial_section_place_note(struct chunk* c, struct loc grid,
-                                        struct tutorial_section_sym_val* val);
-static void tutorial_section_place_trigger(
-    struct chunk* c, struct loc grid, struct tutorial_section_sym_val* val);
-static void tutorial_section_place_gate(struct chunk* c, struct loc grid,
-                                        struct tutorial_section_sym_val* val);
-static void tutorial_section_place_forge(struct chunk* c, struct loc grid,
-                                         struct tutorial_section_sym_val* val);
-static void tutorial_section_place_object(struct chunk* c, struct loc grid,
-                                          struct tutorial_section_sym_val* val);
-static void tutorial_section_place_monster(
-    struct chunk* c, struct loc grid, struct tutorial_section_sym_val* val);
-static void tutorial_section_place_custom_trap(
-    struct chunk* c, struct loc grid, struct tutorial_section_sym_val* val);
-static void tutorial_section_place_custom_door(
-    struct chunk* c, struct loc grid, struct tutorial_section_sym_val* val);
 void (*tutorial_textblock_show_hook)(textblock* tb, const char* header) = NULL;
 void (*tutorial_textblock_append_command_phrase_hook)(textblock* tb,
                                                       const char* command_name,
@@ -1912,10 +1889,6 @@ static place_thing_func place_ftable[] = {
     tutorial_section_place_custom_trap,
     tutorial_section_place_custom_door,
 };
-static bool tutorial_section_sym_table_insert(
-    struct tutorial_section_sym_table t, struct tutorial_section_sym_key* key,
-    struct tutorial_section_sym_val* value);
-static errr tutorial_run_parser(struct parser* p);
 struct init_module tutorial_module = {"tutorial", NULL,
                                       tutorial_cleanup_parsed_data};
 struct tutorial_parsed_result tutorial_parsed_data = {
@@ -3070,10 +3043,6 @@ static int dir_transitions[10][10] = {
 };
 static struct keypress request_command_buffer[256];
 static struct keymap* keymaps[KEYMAP_MODE_MAX];
-static struct parser* init_ui_knowledge_parser(void);
-static errr run_ui_knowledge_parser(struct parser* p);
-static errr finish_ui_knowledge_parser(struct parser* p);
-static void cleanup_ui_knowledge_parsed_data(void);
 struct file_parser ui_knowledge_parser = {
     "ui_knowledge", init_ui_knowledge_parser, run_ui_knowledge_parser,
     finish_ui_knowledge_parser, cleanup_ui_knowledge_parsed_data};
@@ -3641,7 +3610,6 @@ static struct termios game_termios;
 static char* termtype;
 static bool loaded_terminfo;
 typedef struct rect_s rect_t, *rect_ptr;
-static term_data data[6];
 static int active = 0;
 static int can_use_color = false;
 static int colortable[BASIC_COLORS];
@@ -3650,7 +3618,6 @@ static bool bold_extended = false;
 static bool use_default_background = false;
 static bool keep_terminal_colors = false;
 static int term_count = 1;
-static int bg_color = COLOR_BLACK;
 const char help_gcu[] =
     "Text mode, subopts\n"
     "              -B     Use brighter bold characters\n"
@@ -3665,3 +3632,54 @@ const char help_spoil[] =
     "              -m fname    Write brief monster spoilers to fname\n"
     "              -M fname    Write extended monster spoilers to fname\n"
     "              -o fname    Write object spoilers to fname\n";
+
+static const struct side_handler_t {
+  void (*hook)(int, int);
+  int priority;
+  game_event_type type;
+} side_handlers[] = {
+    {NULL, 21, 0},
+    {prt_name, 13, EVENT_NAME},
+    {NULL, 22, 0},
+    {prt_str, 4, EVENT_STATS},
+    {prt_dex, 3, EVENT_STATS},
+    {prt_con, 2, EVENT_STATS},
+    {prt_gra, 1, EVENT_STATS},
+    {NULL, 23, 0},
+    {prt_exp, 5, EVENT_EXPERIENCE},
+    {NULL, 24, 0},
+    {prt_hp, 6, EVENT_HP},
+    {prt_sp, 7, EVENT_MANA},
+    {NULL, 17, 0},
+    {prt_mel, 8, EVENT_MELEE},
+    {prt_arc, 9, EVENT_ARCHERY},
+    {prt_evn, 10, EVENT_ARMOR},
+    {NULL, 25, 0},
+    {prt_health, 11, EVENT_MONSTERHEALTH},
+    {NULL, 14, 0},
+    {NULL, 20, 0},
+    {prt_cut, 15, EVENT_STATUS},
+    {prt_poisoned, 16, EVENT_STATUS},
+    {prt_song, 12, EVENT_SONG},
+    {NULL, 18, 0},
+    {prt_speed, 19, EVENT_STATUS},
+};
+static struct {
+  char tag;
+  const char* name;
+  void (*action)(const char*, int);
+} extra_item_options[] = {
+    {'Q', "Quality ignoring options", quality_menu},
+    {'E', "Ego ignoring options", ego_menu},
+    {'{', "Autoinscription setup", textui_browse_object_knowledge},
+};
+static const struct {
+  region bounds;
+  bool align_left;
+  struct panel* (*panel)(void);
+} panels[] = {
+    {{1, 1, 18, 4}, true, get_panel_topleft},
+    {{22, 1, 12, 3}, false, get_panel_misc},
+    {{1, 6, 18, 9}, false, get_panel_midleft},
+    {{22, 6, 16, 9}, false, get_panel_combat},
+};

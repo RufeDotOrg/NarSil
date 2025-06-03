@@ -19,6 +19,7 @@ struct vinfo_hack {
   long slopes_min[20 + 1][20 + 1];
   long slopes_max[20 + 1][20 + 1];
 };
+typedef struct vinfo_hack vinfo_hack;
 errr (*cmd_get_hook)(cmd_context c);
 struct command_info {
   cmd_code cmd;
@@ -243,6 +244,7 @@ enum monster_sex {
   MON_SEX_FEMALE,
   MON_SEX_MAX,
 };
+typedef enum monster_sex monster_sex_t;
 struct monster_race_message {
   struct monster_race* race;
   int flags;
@@ -612,6 +614,7 @@ typedef struct project_feature_handler_context_s {
   const int type;
   bool obvious;
 } project_feature_handler_context_t;
+typedef void (*project_feature_handler_f)(project_feature_handler_context_t*);
 typedef struct project_monster_handler_context_s {
   const struct source origin;
   const int r;
@@ -742,37 +745,6 @@ enum context_menu_value_e {
   MENU_VALUE_OPTIONS,
   MENU_VALUE_HELP,
 };
-static const struct side_handler_t {
-  void (*hook)(int, int);
-  int priority;
-  game_event_type type;
-} side_handlers[] = {
-    {NULL, 21, 0},
-    {prt_name, 13, EVENT_NAME},
-    {NULL, 22, 0},
-    {prt_str, 4, EVENT_STATS},
-    {prt_dex, 3, EVENT_STATS},
-    {prt_con, 2, EVENT_STATS},
-    {prt_gra, 1, EVENT_STATS},
-    {NULL, 23, 0},
-    {prt_exp, 5, EVENT_EXPERIENCE},
-    {NULL, 24, 0},
-    {prt_hp, 6, EVENT_HP},
-    {prt_sp, 7, EVENT_MANA},
-    {NULL, 17, 0},
-    {prt_mel, 8, EVENT_MELEE},
-    {prt_arc, 9, EVENT_ARCHERY},
-    {prt_evn, 10, EVENT_ARMOR},
-    {NULL, 25, 0},
-    {prt_health, 11, EVENT_MONSTERHEALTH},
-    {NULL, 14, 0},
-    {NULL, 20, 0},
-    {prt_cut, 15, EVENT_STATUS},
-    {prt_poisoned, 16, EVENT_STATUS},
-    {prt_song, 12, EVENT_SONG},
-    {NULL, 18, 0},
-    {prt_speed, 19, EVENT_STATUS},
-};
 struct state_info {
   int value;
   const char* str;
@@ -885,15 +857,6 @@ typedef struct {
   int tval;
   const char* desc;
 } tval_desc;
-static struct {
-  char tag;
-  const char* name;
-  void (*action)(const char*, int);
-} extra_item_options[] = {
-    {'Q', "Quality ignoring options", quality_menu},
-    {'E', "Ego ignoring options", ego_menu},
-    {'{', "Autoinscription setup", textui_browse_object_knowledge},
-};
 struct panel_line {
   uint8_t attr;
   const char* label;
@@ -903,16 +866,6 @@ struct panel {
   size_t len;
   size_t max;
   struct panel_line* lines;
-};
-static const struct {
-  region bounds;
-  bool align_left;
-  struct panel* (*panel)(void);
-} panels[] = {
-    {{1, 1, 18, 4}, true, get_panel_topleft},
-    {{22, 1, 12, 3}, false, get_panel_misc},
-    {{1, 6, 18, 9}, false, get_panel_midleft},
-    {{22, 6, 16, 9}, false, get_panel_combat},
 };
 struct smithing_menu_data {
   struct object* obj;
@@ -1095,11 +1048,7 @@ struct rect_s {
   int x, y;
   int cx, cy;
 };
-typedef struct term_data {
-  term t;
-  rect_t r;
-  WINDOW* win;
-} term_data;
+typedef struct rect_s rect_t, *rect_ptr;
 static struct {
   char letter;
   void (*func)(const char*);
@@ -1111,3 +1060,16 @@ static struct {
     {'M', spoil_mon_info, false, NULL},
     {'o', spoil_obj_desc, false, NULL},
 };
+typedef void debug_hook(const char*);
+typedef unsigned short name_probs[26 + 1][26 + 1][27 + 1];
+typedef size_t status_f(int row, int col);
+typedef void (*place_thing_func)(struct chunk* c, struct loc grid,
+                                 struct tutorial_section_sym_val* val);
+typedef void (*Signal_Handler_t)(int);
+
+typedef void (*project_monster_handler_f)(project_monster_handler_context_t*);
+typedef void (*project_object_handler_f)(project_object_handler_context_t*);
+typedef void (*project_player_handler_f)(project_player_handler_context_t*);
+typedef void (*dump_func)(ang_file*);
+typedef bool (*target_aux_handler)(struct chunk* c, struct player* p,
+                                   struct target_aux_state* auxst);
