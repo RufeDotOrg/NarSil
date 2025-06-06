@@ -4648,6 +4648,7 @@ STATIC_OVL bool FDECL(song_action,
 STATIC_OVL void FDECL(textui_change_song, (void));
 STATIC_OVL void FDECL(spoiler_menu_act, (const char* title, int row));
 STATIC_OVL void FDECL(do_cmd_spoilers, (void));
+STATIC_OVL int FDECL(target_dir, (struct keypress ch));
 STATIC_OVL int FDECL(target_dir_allow, (struct keypress ch, bool allow_5));
 STATIC_OVL void FDECL(target_display_help,
                       (bool monster, bool object, bool free));
@@ -5150,5 +5151,29 @@ STATIC_OVL void FDECL(generic_reinit, (void));
 STATIC_OVL void FDECL(change_path, (const char* info));
 STATIC_OVL void FDECL(user_name, (char* buf, size_t len, int id));
 STATIC_OVL void FDECL(list_saves, (void));
+STATIC_OVL rect_t FDECL(rect, (int x, int y, int cx, int cy));
+STATIC_OVL void FDECL(keymap_norm, (void));
+STATIC_OVL void FDECL(keymap_game, (void));
+STATIC_OVL void FDECL(keymap_norm_prepare, (void));
+STATIC_OVL void FDECL(keymap_game_prepare, (void));
+STATIC_OVL errr FDECL(Term_xtra_gcu_alive, (int v));
+STATIC_OVL void FDECL(balance_dimension,
+                      (int* size, int* start, int term_group_index,
+                       int term_group_count, int window_size,
+                       int min_term0_size, int comfy_subterm_size));
+STATIC_OVL void FDECL(get_gcu_term_size,
+                      (int i, int* rows, int* cols, int* y, int* x));
+STATIC_OVL void FDECL(do_gcu_resize, (void));
+STATIC_OVL errr FDECL(Term_xtra_gcu_event, (int v));
+STATIC_OVL int FDECL(scale_color, (int i, int j, int scale));
+STATIC_OVL int FDECL(create_color, (int i, int scale));
+STATIC_OVL void FDECL(handle_extended_color_tables, (void));
+STATIC_OVL errr FDECL(Term_xtra_gcu, (int n, int v));
+STATIC_OVL errr FDECL(Term_curs_gcu, (int x, int y));
+STATIC_OVL errr FDECL(Term_wipe_gcu, (int x, int y, int n));
+STATIC_OVL errr FDECL(Term_text_gcu,
+                      (int x, int y, int n, int a, const wchar_t* s));
+STATIC_OVL int FDECL(_parse_size_list, (const char* arg, int sizes[], int max));
+STATIC_OVL void FDECL(hook_quit, (const char* str));
 STATIC_OVL errr FDECL(init_gcu, (int argc, char** argv));
 STATIC_OVL errr FDECL(init_spoil, (int argc, char* argv[]));

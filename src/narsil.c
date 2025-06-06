@@ -66349,7 +66349,7 @@ do_cmd_spoilers(void)
   menu_select(spoil_menu, 0, false);
   screen_load();
 }
-int
+STATIC_OVL int
 target_dir(struct keypress ch)
 {
   return target_dir_allow(ch, false);
@@ -73823,7 +73823,7 @@ typedef struct term_data {
 static term_data data[6];
 static int bg_color = COLOR_BLACK;
 
-rect_t
+STATIC_OVL rect_t
 rect(int x, int y, int cx, int cy)
 {
   rect_t r;
@@ -73833,22 +73833,22 @@ rect(int x, int y, int cx, int cy)
   r.cy = cy;
   return r;
 }
-void
+STATIC_OVL void
 keymap_norm(void)
 {
   (void)tcsetattr(0, TCSAFLUSH, &norm_termios);
 }
-void
+STATIC_OVL void
 keymap_game(void)
 {
   (void)tcsetattr(0, TCSAFLUSH, &game_termios);
 }
-void
+STATIC_OVL void
 keymap_norm_prepare(void)
 {
   tcgetattr(0, &norm_termios);
 }
-void
+STATIC_OVL void
 keymap_game_prepare(void)
 {
   tcgetattr(0, &game_termios);
@@ -73863,7 +73863,7 @@ keymap_game_prepare(void)
   game_termios.c_cc[VTIME] = 0;
   game_termios.c_iflag &= ~IXON;
 }
-errr
+STATIC_OVL errr
 Term_xtra_gcu_alive(int v)
 {
   if (!v) {
@@ -73886,7 +73886,8 @@ Term_xtra_gcu_alive(int v)
   }
   return 0;
 }
-void
+// hack: review
+static void
 Term_init_gcu(term* t)
 {
   term_data* td = (term_data*)(t->data);
@@ -73898,7 +73899,8 @@ Term_init_gcu(term* t)
   wrefresh(td->win);
   keymap_game();
 }
-void
+// hack: review
+static void
 Term_nuke_gcu(term* t)
 {
   int x, y;
@@ -73914,7 +73916,7 @@ Term_nuke_gcu(term* t)
   fflush(stdout);
   keymap_norm();
 }
-void
+STATIC_OVL void
 balance_dimension(int* size, int* start, int term_group_index,
                   int term_group_count, int window_size, int min_term0_size,
                   int comfy_subterm_size)
@@ -73953,7 +73955,7 @@ balance_dimension(int* size, int* start, int term_group_index,
                      window_size - subterm_group_count * (min_term0_size + 1));
   }
 }
-void
+STATIC_OVL void
 get_gcu_term_size(int i, int* rows, int* cols, int* y, int* x)
 {
   bool is_wide = (10 * LINES < 3 * COLS);
@@ -73991,7 +73993,7 @@ get_gcu_term_size(int i, int* rows, int* cols, int* y, int* x)
   balance_dimension(cols, x, term_col_index, term_cols, COLS, 80, 40);
   balance_dimension(rows, y, term_row_index, term_rows, LINES, 24, 5);
 }
-void
+STATIC_OVL void
 do_gcu_resize(void)
 {
   int i, rows, cols, y, x;
@@ -74004,7 +74006,7 @@ do_gcu_resize(void)
   }
   do_cmd_redraw();
 }
-errr
+STATIC_OVL errr
 Term_xtra_gcu_event(int v)
 {
   int i, j, k, mods = 0;
@@ -74102,12 +74104,12 @@ Term_xtra_gcu_event(int v)
   Term_keypress(i, mods);
   return (0);
 }
-int
+STATIC_OVL int
 scale_color(int i, int j, int scale)
 {
   return (angband_color_table[i][j] * (scale - 1) + 127) / 255;
 }
-int
+STATIC_OVL int
 create_color(int i, int scale)
 {
   int r = scale_color(i, 1, scale);
@@ -74120,7 +74122,7 @@ create_color(int i, int scale)
   }
   return rgb;
 }
-void
+STATIC_OVL void
 handle_extended_color_tables(void)
 {
   if (COLORS == 256 || COLORS == 88) {
@@ -74162,7 +74164,7 @@ handle_extended_color_tables(void)
     }
   }
 }
-errr
+STATIC_OVL errr
 Term_xtra_gcu(int n, int v)
 {
   term_data* td = (term_data*)(Term->data);
@@ -74197,14 +74199,14 @@ Term_xtra_gcu(int n, int v)
   }
   return 1;
 }
-errr
+STATIC_OVL errr
 Term_curs_gcu(int x, int y)
 {
   term_data* td = (term_data*)(Term->data);
   wmove(td->win, y, x);
   return 0;
 }
-errr
+STATIC_OVL errr
 Term_wipe_gcu(int x, int y, int n)
 {
   term_data* td = (term_data*)(Term->data);
@@ -74222,7 +74224,7 @@ Term_wipe_gcu(int x, int y, int n)
   }
   return 0;
 }
-errr
+STATIC_OVL errr
 Term_text_gcu(int x, int y, int n, int a, const wchar_t* s)
 {
   term_data* td = (term_data*)(Term->data);
@@ -74250,7 +74252,8 @@ Term_text_gcu(int x, int y, int n, int a, const wchar_t* s)
   mvwaddnwstr(td->win, y, x, s, n);
   return 0;
 }
-errr
+// hack: review
+static errr
 term_data_init_gcu(term_data* td, int rows, int cols, int y, int x)
 {
   term* t = &td->t;
@@ -74269,12 +74272,13 @@ term_data_init_gcu(term_data* td, int rows, int cols, int y, int x)
   Term_activate(t);
   return (0);
 }
-errr
+// hack: review
+static errr
 term_data_init(term_data* td)
 {
   return term_data_init_gcu(td, td->r.cy, td->r.cx, td->r.y, td->r.x);
 }
-int
+STATIC_OVL int
 _parse_size_list(const char* arg, int sizes[], int max)
 {
   int i = 0;
@@ -74297,7 +74301,7 @@ _parse_size_list(const char* arg, int sizes[], int max)
   }
   return i;
 }
-void
+STATIC_OVL void
 hook_quit(const char* str)
 {
   int i;
