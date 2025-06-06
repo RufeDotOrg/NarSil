@@ -146,28 +146,6 @@ struct event_handler_entry {
   game_event_handler* fn;
   void* user;
 };
-static const struct {
-  const char* name;
-  cave_builder builder;
-} cave_builders[] = {
-    {"cave", cave_gen},
-    {"throne", throne_gen},
-    {"gates", gates_gen},
-};
-static const struct {
-  const char* name;
-  int max_height;
-  int max_width;
-  room_builder builder;
-} room_builders[] = {
-    {"simple room", 0, 0, build_simple},
-    {"crossed room", 0, 0, build_crossed},
-    {"Interesting room", 22, 33, build_interesting},
-    {"Lesser vault", 22, 33, build_lesser_vault},
-    {"Greater vault", 44, 66, build_greater_vault},
-    {"Throne room", 30, 35, build_throne},
-    {"Gates of Angband", 32, 64, build_gates},
-};
 struct name {
   struct name* next;
   char* str;
@@ -663,29 +641,6 @@ struct blockinfo {
   loader_t loader;
   uint32_t version;
 };
-static const struct {
-  char name[16];
-  void (*save)(void);
-  uint32_t version;
-} savers[] = {
-    {"description", wr_description, 1},
-    {"rng", wr_randomizer, 1},
-    {"options", wr_options, 1},
-    {"messages", wr_messages, 1},
-    {"monster memory", wr_monster_memory, 1},
-    {"object memory", wr_object_memory, 1},
-    {"player", wr_player, 1},
-    {"ignore", wr_ignore, 1},
-    {"misc", wr_misc, 1},
-    {"artifacts", wr_artifacts, 1},
-    {"gear", wr_gear, 1},
-    {"dungeon", wr_dungeon, 1},
-    {"objects", wr_objects, 1},
-    {"monsters", wr_monsters, 1},
-    {"traps", wr_traps, 1},
-    {"history", wr_history, 1},
-    {"monster groups", wr_monster_groups, 1},
-};
 struct sound_module {
   const char* name;
   const char* help;
@@ -1049,17 +1004,6 @@ struct rect_s {
   int cx, cy;
 };
 typedef struct rect_s rect_t, *rect_ptr;
-static struct {
-  char letter;
-  void (*func)(const char*);
-  bool enabled;
-  const char* path;
-} opts[] = {
-    {'a', spoil_artifact, false, NULL},
-    {'m', spoil_mon_desc, false, NULL},
-    {'M', spoil_mon_info, false, NULL},
-    {'o', spoil_obj_desc, false, NULL},
-};
 typedef void debug_hook(const char*);
 typedef unsigned short name_probs[26 + 1][26 + 1][27 + 1];
 typedef size_t status_f(int row, int col);

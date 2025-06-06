@@ -757,6 +757,7 @@ STATIC_OVL void FDECL(event_signal_poem, (game_event_type type,
 STATIC_OVL void FDECL(event_signal_poem_textblock,
                       (game_event_type type, struct textblock* tb, int row,
                        int col));
+STATIC_OVL bool FDECL(get_string, (const char* prompt, char* buf, size_t len));
 STATIC_OVL int FDECL(get_quantity, (const char* prompt, int max));
 STATIC_OVL bool FDECL(get_check, (const char* prompt));
 STATIC_OVL bool FDECL(get_com, (const char* prompt, char* command));
@@ -4686,7 +4687,7 @@ STATIC_OVL bool FDECL(target_set_interactive,
 STATIC_OVL errr FDECL(term_win_nuke, (term_win * s));
 STATIC_OVL errr FDECL(term_win_init, (term_win * s, int w, int h));
 STATIC_OVL errr FDECL(term_win_copy, (term_win * s, term_win* f, int w, int h));
-STATIC_OVL extern errr FDECL(Term_redraw_all, (void));
+STATIC_OVL errr FDECL(Term_redraw_all, (void));
 STATIC_OVL errr FDECL(Term_xtra, (int n, int v));
 STATIC_OVL errr FDECL(Term_curs_hack, (int x, int y));
 STATIC_OVL errr FDECL(Term_wipe_hack, (int x, int y, int n));
@@ -4990,6 +4991,8 @@ STATIC_OVL bool FDECL(file_delete, (const char* fname));
 STATIC_OVL bool FDECL(file_move, (const char* fname, const char* newname));
 STATIC_OVL bool FDECL(file_exists, (const char* fname));
 STATIC_OVL bool FDECL(file_newer, (const char* first, const char* second));
+STATIC_OVL ang_file* FDECL(file_open, (const char* fname, file_mode mode,
+                                       file_type ftype));
 STATIC_OVL bool FDECL(file_close, (ang_file * f));
 STATIC_OVL void FDECL(file_lock, (ang_file * f));
 STATIC_OVL void FDECL(file_unlock, (ang_file * f));
@@ -5147,4 +5150,5 @@ STATIC_OVL void FDECL(generic_reinit, (void));
 STATIC_OVL void FDECL(change_path, (const char* info));
 STATIC_OVL void FDECL(user_name, (char* buf, size_t len, int id));
 STATIC_OVL void FDECL(list_saves, (void));
-STATIC_OVL int FDECL(main, (int argc, char* argv[]));
+STATIC_OVL errr FDECL(init_gcu, (int argc, char** argv));
+STATIC_OVL errr FDECL(init_spoil, (int argc, char* argv[]));

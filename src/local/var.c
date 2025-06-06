@@ -913,7 +913,7 @@ static const char* obj_flags[] = {"NONE",
                                   "HAND_AND_A_HALF",
                                   "TWO_HANDED",
                                   "MAX",
-                                  ""};
+                                  NULL};
 struct file_parser meth_parser = {"blow_methods", init_parse_meth,
                                   run_parse_meth, finish_parse_meth,
                                   cleanup_meth};
@@ -3683,3 +3683,60 @@ static const struct {
     {{1, 6, 18, 9}, false, get_panel_midleft},
     {{22, 6, 16, 9}, false, get_panel_combat},
 };
+static const struct {
+  const char* name;
+  cave_builder builder;
+} cave_builders[] = {
+    {"cave", cave_gen},
+    {"throne", throne_gen},
+    {"gates", gates_gen},
+};
+static const struct {
+  const char* name;
+  int max_height;
+  int max_width;
+  room_builder builder;
+} room_builders[] = {
+    {"simple room", 0, 0, build_simple},
+    {"crossed room", 0, 0, build_crossed},
+    {"Interesting room", 22, 33, build_interesting},
+    {"Lesser vault", 22, 33, build_lesser_vault},
+    {"Greater vault", 44, 66, build_greater_vault},
+    {"Throne room", 30, 35, build_throne},
+    {"Gates of Angband", 32, 64, build_gates},
+};
+static const struct {
+  char name[16];
+  void (*save)(void);
+  uint32_t version;
+} savers[] = {
+    {"description", wr_description, 1},
+    {"rng", wr_randomizer, 1},
+    {"options", wr_options, 1},
+    {"messages", wr_messages, 1},
+    {"monster memory", wr_monster_memory, 1},
+    {"object memory", wr_object_memory, 1},
+    {"player", wr_player, 1},
+    {"ignore", wr_ignore, 1},
+    {"misc", wr_misc, 1},
+    {"artifacts", wr_artifacts, 1},
+    {"gear", wr_gear, 1},
+    {"dungeon", wr_dungeon, 1},
+    {"objects", wr_objects, 1},
+    {"monsters", wr_monsters, 1},
+    {"traps", wr_traps, 1},
+    {"history", wr_history, 1},
+    {"monster groups", wr_monster_groups, 1},
+};
+static struct {
+  char letter;
+  void (*func)(const char*);
+  bool enabled;
+  const char* path;
+} opts[] = {
+    {'a', spoil_artifact, false, NULL},
+    {'m', spoil_mon_desc, false, NULL},
+    {'M', spoil_mon_info, false, NULL},
+    {'o', spoil_obj_desc, false, NULL},
+};
+void (*file_open_hook)(const char *path, file_type ftype);

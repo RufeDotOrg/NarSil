@@ -2,7 +2,9 @@
 
 #include "src/local/macro.c"
 #include "src/local/type.c"
+
 #include "pre.h"
+
 #include "src/local/var.c"
 
 STATIC_OVL int
@@ -7159,6 +7161,7 @@ parse_file(struct parser* p, const char* filename)
   ang_file* fh;
   errr r = 0;
   path_build(path, sizeof(path), ANGBAND_DIR_USER, format("%s.txt", filename));
+  printf("fopen %s\n", path);
   fh = file_open(path, MODE_READ, FTYPE_TEXT);
   if (!fh) {
     path_build(path, sizeof(path), ANGBAND_DIR_GAMEDATA,
@@ -9690,7 +9693,7 @@ struct object* (*smith_object_hook)(struct smithing_cost* cost);
 void (*view_abilities_hook)(struct player_ability* ability_list,
                             int num_abilities);
 void (*change_song_hook)(void);
-bool
+STATIC_OVL bool
 get_string(const char* prompt, char* buf, size_t len)
 {
   if (get_string_hook)
@@ -67234,7 +67237,7 @@ term_win_copy(term_win* s, term_win* f, int w, int h)
   s->cv = f->cv;
   return (0);
 }
-STATIC_OVL extern errr
+STATIC_OVL errr
 Term_redraw_all(void)
 {
   term* old = Term;
@@ -71770,8 +71773,7 @@ file_newer(const char* first, const char* second)
   if (stat(second, &stat2) != 0) return true;
   return stat1.st_mtime > stat2.st_mtime ? true : false;
 }
-void (*file_open_hook)(const char* path, file_type ftype);
-ang_file*
+STATIC_OVL ang_file*
 file_open(const char* fname, file_mode mode, file_type ftype)
 {
   ang_file* f = mem_zalloc(sizeof(ang_file));
@@ -73688,7 +73690,7 @@ list_saves(void)
   printf("\nUse angband -u<name> to use savefile <name>.\n");
   cleanup_savefile_getter(g);
 }
-STATIC_OVL int
+int
 main(int argc, char* argv[])
 {
   int i;
@@ -74306,7 +74308,7 @@ hook_quit(const char* str)
   }
   endwin();
 }
-errr
+STATIC_OVL errr
 init_gcu(int argc, char** argv)
 {
   int i;
@@ -74564,7 +74566,7 @@ init_gcu(int argc, char** argv)
   term_screen = &data[0].t;
   return (0);
 }
-errr
+STATIC_OVL errr
 init_spoil(int argc, char* argv[])
 {
   int i = 1;
