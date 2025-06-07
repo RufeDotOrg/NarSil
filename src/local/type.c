@@ -20,7 +20,6 @@ struct vinfo_hack {
   long slopes_max[20 + 1][20 + 1];
 };
 typedef struct vinfo_hack vinfo_hack;
-errr (*cmd_get_hook)(cmd_context c);
 struct command_info {
   cmd_code cmd;
   const char* verb;
@@ -29,7 +28,7 @@ struct command_info {
   int auto_repeat_n;
 };
 enum use { USE_CHARGE, USE_VOICE, USE_SINGLE };
-enum EditPlayerState {
+DATA enum EditPlayerState {
   EDIT_PLAYER_UNKNOWN,
   EDIT_PLAYER_STARTED,
   EDIT_PLAYER_BREAK
@@ -825,7 +824,7 @@ struct visuals_cycler {
   struct visuals_cycle_group** groups;
   size_t max_groups;
 };
-struct {
+DATA struct {
   struct visuals_color_cycle** race;
   size_t max_entries;
   size_t alloc_size;

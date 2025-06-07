@@ -1,77 +1,79 @@
-struct feature* f_info;
-struct chunk* cave = NULL;
-const int16_t ddd[9] = {2, 8, 6, 4, 3, 1, 9, 7, 5};
-const uint8_t cycle[] = {1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1};
-const uint8_t chome[] = {0, 8, 9, 10, 7, 0, 11, 6, 5, 4};
-const int16_t ddx[10] = {0, -1, 0, 1, -1, 0, 1, -1, 0, 1};
-const int16_t ddy[10] = {0, 1, 1, 1, 0, 0, 0, -1, -1, -1};
-const struct loc ddgrid[10] = {{0, 0}, {-1, 1}, {0, 1},   {1, 1},  {-1, 0},
-                               {0, 0}, {1, 0},  {-1, -1}, {0, -1}, {1, -1}};
-const int16_t ddx_ddd[9] = {0, 0, 1, -1, 1, -1, 1, -1, 0};
-const int16_t ddy_ddd[9] = {1, -1, 0, 0, 1, 1, -1, -1, 0};
-const struct loc ddgrid_ddd[9] = {{0, 1},  {0, -1}, {1, 0},   {-1, 0}, {1, 1},
-                                  {-1, 1}, {1, -1}, {-1, -1}, {0, 0}};
-const int16_t clockwise_ddd[9] = {8, 9, 6, 3, 2, 1, 4, 7, 5};
-const struct loc clockwise_grid[9] = {{0, -1}, {1, -1},  {1, 0},
-                                      {1, 1},  {0, 1},   {-1, 1},
-                                      {-1, 0}, {-1, -1}, {0, 0}};
-static const int d_off_y_0[] = {0};
-static const int d_off_x_0[] = {0};
-static const int d_off_y_1[] = {-1, -1, -1, 0, 0, 1, 1, 1, 0};
-static const int d_off_x_1[] = {-1, 0, 1, -1, 1, -1, 0, 1, 0};
-static const int d_off_y_2[] = {-1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0};
-static const int d_off_x_2[] = {-2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0};
-static const int d_off_y_3[] = {-1, -1, -2, -2, -3, -3, -3, 0, 0,
-                                1,  1,  2,  2,  3,  3,  3,  0};
-static const int d_off_x_3[] = {-3, 3, -2, 2, -1, 0, 1, -3, 3,
-                                -3, 3, -2, 2, -1, 0, 1, 0};
-static const int d_off_y_4[] = {-1, -1, -2, -2, -3, -3, -3, -3, -4,
-                                -4, -4, 0,  0,  1,  1,  2,  2,  3,
-                                3,  3,  3,  4,  4,  4,  0};
-static const int d_off_x_4[] = {-4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4,
-                                -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0};
-static const int d_off_y_5[] = {-1, -1, -2, -2, -3, -3, -4, -4, -4, -4,
-                                -5, -5, -5, 0,  0,  1,  1,  2,  2,  3,
-                                3,  4,  4,  4,  4,  5,  5,  5,  0};
-static const int d_off_x_5[] = {-5, 5,  -4, 4,  -4, 4,  -2, -3, 2, 3,
-                                -1, 0,  1,  -5, 5,  -5, 5,  -4, 4, -4,
-                                4,  -2, -3, 2,  3,  -1, 0,  1,  0};
-static const int d_off_y_6[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5,
-                                -5, -6, -6, -6, 0,  0,  1,  1,  2,  2,  3,
-                                3,  4,  4,  5,  5,  5,  5,  6,  6,  6,  0};
-static const int d_off_x_6[] = {-6, 6,  -5, 5,  -5, 5, -4, 4,  -2, -3, 2,
-                                3,  -1, 0,  1,  -6, 6, -6, 6,  -5, 5,  -5,
-                                5,  -4, 4,  -2, -3, 2, 3,  -1, 0,  1,  0};
-static const int d_off_y_7[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5,
-                                -5, -6, -6, -6, -6, -7, -7, -7, 0,  0,  1,
-                                1,  2,  2,  3,  3,  4,  4,  5,  5,  5,  5,
-                                6,  6,  6,  6,  7,  7,  7,  0};
-static const int d_off_x_7[] = {
+DATA struct feature* f_info;
+DATA struct chunk* cave = NULL;
+DATA const int16_t ddd[9] = {2, 8, 6, 4, 3, 1, 9, 7, 5};
+DATA const uint8_t cycle[] = {1, 2, 3, 6, 9, 8, 7, 4, 1,
+                              2, 3, 6, 9, 8, 7, 4, 1};
+DATA const uint8_t chome[] = {0, 8, 9, 10, 7, 0, 11, 6, 5, 4};
+DATA const int16_t ddx[10] = {0, -1, 0, 1, -1, 0, 1, -1, 0, 1};
+DATA const int16_t ddy[10] = {0, 1, 1, 1, 0, 0, 0, -1, -1, -1};
+DATA const struct loc ddgrid[10] = {{0, 0},  {-1, 1}, {0, 1}, {1, 1},
+                                    {-1, 0}, {0, 0},  {1, 0}, {-1, -1},
+                                    {0, -1}, {1, -1}};
+DATA const int16_t ddx_ddd[9] = {0, 0, 1, -1, 1, -1, 1, -1, 0};
+DATA const int16_t ddy_ddd[9] = {1, -1, 0, 0, 1, 1, -1, -1, 0};
+DATA const struct loc ddgrid_ddd[9] = {{0, 1},  {0, -1},  {1, 0},
+                                       {-1, 0}, {1, 1},   {-1, 1},
+                                       {1, -1}, {-1, -1}, {0, 0}};
+DATA const int16_t clockwise_ddd[9] = {8, 9, 6, 3, 2, 1, 4, 7, 5};
+DATA const struct loc clockwise_grid[9] = {{0, -1}, {1, -1},  {1, 0},
+                                           {1, 1},  {0, 1},   {-1, 1},
+                                           {-1, 0}, {-1, -1}, {0, 0}};
+DATA const int d_off_y_0[] = {0};
+DATA const int d_off_x_0[] = {0};
+DATA const int d_off_y_1[] = {-1, -1, -1, 0, 0, 1, 1, 1, 0};
+DATA const int d_off_x_1[] = {-1, 0, 1, -1, 1, -1, 0, 1, 0};
+DATA const int d_off_y_2[] = {-1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0};
+DATA const int d_off_x_2[] = {-2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0};
+DATA const int d_off_y_3[] = {-1, -1, -2, -2, -3, -3, -3, 0, 0,
+                              1,  1,  2,  2,  3,  3,  3,  0};
+DATA const int d_off_x_3[] = {-3, 3, -2, 2, -1, 0, 1, -3, 3,
+                              -3, 3, -2, 2, -1, 0, 1, 0};
+DATA const int d_off_y_4[] = {-1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0, 0,
+                              1,  1,  2,  2,  3,  3,  3,  3,  4,  4,  4,  0};
+DATA const int d_off_x_4[] = {-4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4,
+                              -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0};
+DATA const int d_off_y_5[] = {-1, -1, -2, -2, -3, -3, -4, -4, -4, -4,
+                              -5, -5, -5, 0,  0,  1,  1,  2,  2,  3,
+                              3,  4,  4,  4,  4,  5,  5,  5,  0};
+DATA const int d_off_x_5[] = {-5, 5,  -4, 4,  -4, 4,  -2, -3, 2, 3,
+                              -1, 0,  1,  -5, 5,  -5, 5,  -4, 4, -4,
+                              4,  -2, -3, 2,  3,  -1, 0,  1,  0};
+DATA const int d_off_y_6[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5,
+                              -5, -6, -6, -6, 0,  0,  1,  1,  2,  2,  3,
+                              3,  4,  4,  5,  5,  5,  5,  6,  6,  6,  0};
+DATA const int d_off_x_6[] = {-6, 6,  -5, 5,  -5, 5, -4, 4,  -2, -3, 2,
+                              3,  -1, 0,  1,  -6, 6, -6, 6,  -5, 5,  -5,
+                              5,  -4, 4,  -2, -3, 2, 3,  -1, 0,  1,  0};
+DATA const int d_off_y_7[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5,
+                              -5, -6, -6, -6, -6, -7, -7, -7, 0,  0,  1,
+                              1,  2,  2,  3,  3,  4,  4,  5,  5,  5,  5,
+                              6,  6,  6,  6,  7,  7,  7,  0};
+DATA const int d_off_x_7[] = {
     -7, 7, -6, 6, -6, 6, -5, 5, -4, -5, 4, 5, -2, -3, 2, 3, -1, 0, 1, -7, 7,
     -7, 7, -6, 6, -6, 6, -5, 5, -4, -5, 4, 5, -2, -3, 2, 3, -1, 0, 1, 0};
-static const int d_off_y_8[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
-                                -6, -6, -7, -7, -7, -7, -8, -8, -8, 0,  0,  1,
-                                1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  6,
-                                6,  7,  7,  7,  7,  8,  8,  8,  0};
-static const int d_off_x_8[] = {-8, 8,  -7, 7,  -7, 7,  -6, 6,  -6, 6,  -4, -5,
-                                4,  5,  -2, -3, 2,  3,  -1, 0,  1,  -8, 8,  -8,
-                                8,  -7, 7,  -7, 7,  -6, 6,  -6, 6,  -4, -5, 4,
-                                5,  -2, -3, 2,  3,  -1, 0,  1,  0};
-static const int d_off_y_9[] = {
+DATA const int d_off_y_8[] = {-1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
+                              -6, -6, -7, -7, -7, -7, -8, -8, -8, 0,  0,  1,
+                              1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  6,
+                              6,  7,  7,  7,  7,  8,  8,  8,  0};
+DATA const int d_off_x_8[] = {-8, 8,  -7, 7,  -7, 7,  -6, 6,  -6, 6,  -4, -5,
+                              4,  5,  -2, -3, 2,  3,  -1, 0,  1,  -8, 8,  -8,
+                              8,  -7, 7,  -7, 7,  -6, 6,  -6, 6,  -4, -5, 4,
+                              5,  -2, -3, 2,  3,  -1, 0,  1,  0};
+DATA const int d_off_y_9[] = {
     -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6, -7, -7, -7, -7, -8,
     -8, -8, -8, -9, -9, -9, 0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,
     5,  6,  6,  7,  7,  7,  7,  8,  8,  8,  8,  9,  9,  9,  0};
-static const int d_off_x_9[] = {
+DATA const int d_off_x_9[] = {
     -9, 9,  -8, 8,  -8, 8, -7, 7,  -7, 7, -6, 6,  -4, -5, 4,  5, -2,
     -3, 2,  3,  -1, 0,  1, -9, 9,  -9, 9, -8, 8,  -8, 8,  -7, 7, -7,
     7,  -6, 6,  -4, -5, 4, 5,  -2, -3, 2, 3,  -1, 0,  1,  0};
-const int* dist_offsets_y[10] = {d_off_y_0, d_off_y_1, d_off_y_2, d_off_y_3,
-                                 d_off_y_4, d_off_y_5, d_off_y_6, d_off_y_7,
-                                 d_off_y_8, d_off_y_9};
-const int* dist_offsets_x[10] = {d_off_x_0, d_off_x_1, d_off_x_2, d_off_x_3,
-                                 d_off_x_4, d_off_x_5, d_off_x_6, d_off_x_7,
-                                 d_off_x_8, d_off_x_9};
-const uint8_t side_dirs[20][8] = {
+DATA const int* dist_offsets_y[10] = {
+    d_off_y_0, d_off_y_1, d_off_y_2, d_off_y_3, d_off_y_4,
+    d_off_y_5, d_off_y_6, d_off_y_7, d_off_y_8, d_off_y_9};
+DATA const int* dist_offsets_x[10] = {
+    d_off_x_0, d_off_x_1, d_off_x_2, d_off_x_3, d_off_x_4,
+    d_off_x_5, d_off_x_6, d_off_x_7, d_off_x_8, d_off_x_9};
+DATA const uint8_t side_dirs[20][8] = {
     {0, 0, 0, 0, 0, 0, 0, 0}, {1, 4, 2, 7, 3, 8, 6, 9},
     {2, 1, 3, 4, 6, 7, 9, 8}, {3, 2, 6, 1, 9, 4, 8, 7},
     {4, 7, 1, 8, 2, 9, 3, 6}, {5, 5, 5, 5, 5, 5, 5, 5},
@@ -82,22 +84,23 @@ const uint8_t side_dirs[20][8] = {
     {4, 1, 7, 2, 8, 3, 9, 6}, {5, 5, 5, 5, 5, 5, 5, 5},
     {6, 9, 3, 8, 2, 7, 1, 4}, {7, 4, 8, 1, 9, 2, 6, 3},
     {8, 7, 9, 4, 6, 1, 3, 2}, {9, 8, 6, 7, 3, 4, 2, 1}};
-static const char* feat_code_list[] = {
+DATA const char* feat_code_list[] = {
     "NONE",   "FLOOR",      "CLOSED",     "OPEN",  "BROKEN",     "LESS",
     "MORE",   "LESS_SHAFT", "MORE_SHAFT", "CHASM", "SECRET",     "RUBBLE",
     "QUARTZ", "GRANITE",    "PERM",       "FORGE", "FORGE_GOOD", "FORGE_UNIQUE",
     "PIT",    "SPIKED_PIT", NULL};
-static struct vinfo_type vinfo[161];
+DATA struct vinfo_type vinfo[161];
 typedef struct vinfo_hack vinfo_hack;
-static uint16_t fire_g[1536];
-static int fire_n = 0;
-static bool fire_info[256 * 55];
-static const struct command_info game_cmds[] = {
+DATA uint16_t fire_g[1536];
+DATA int fire_n = 0;
+DATA bool fire_info[256 * 55];
+DATA const struct command_info game_cmds[] = {
     {CMD_LOADFILE, "load a savefile", NULL, false, 0},
     {CMD_NEWGAME, "start a new game", NULL, false, 0},
-    {CMD_BIRTH_INIT, "start the character birth process", fptr(do_cmd_birth_init),
+    {CMD_BIRTH_INIT, "start the character birth process",
+     fptr(do_cmd_birth_init), false, 0},
+    {CMD_BIRTH_RESET, "go back to the beginning", fptr(do_cmd_birth_reset),
      false, 0},
-    {CMD_BIRTH_RESET, "go back to the beginning", fptr(do_cmd_birth_reset), false, 0},
     {CMD_CHOOSE_RACE, "select race", fptr(do_cmd_choose_race), false, 0},
     {CMD_CHOOSE_HOUSE, "select house", fptr(do_cmd_choose_house), false, 0},
     {CMD_CHOOSE_SEX, "select sex", fptr(do_cmd_choose_sex), false, 0},
@@ -106,16 +109,20 @@ static const struct command_info game_cmds[] = {
     {CMD_RESET_STATS, "reset stats", fptr(do_cmd_reset_stats), false, 0},
     {CMD_REFRESH_STATS, "refresh stats", fptr(do_cmd_refresh_stats), false, 0},
     {CMD_BUY_SKILL, "buy points in a skill", fptr(do_cmd_buy_skill), false, 0},
-    {CMD_SELL_SKILL, "sell points in a skill", fptr(do_cmd_sell_skill), false, 0},
-    {CMD_RESET_SKILLS, "reset skills", fptr(do_cmd_reset_skills), false, 0},
-    {CMD_REFRESH_SKILLS, "refresh skills", fptr(do_cmd_refresh_skills), false, 0},
-    {CMD_NAME_CHOICE, "choose name", fptr(do_cmd_choose_name), false, 0},
-    {CMD_HISTORY_CHOICE, "write history", fptr(do_cmd_choose_history), false, 0},
-    {CMD_ACCEPT_CHARACTER, "accept character", fptr(do_cmd_accept_character), false,
+    {CMD_SELL_SKILL, "sell points in a skill", fptr(do_cmd_sell_skill), false,
      0},
+    {CMD_RESET_SKILLS, "reset skills", fptr(do_cmd_reset_skills), false, 0},
+    {CMD_REFRESH_SKILLS, "refresh skills", fptr(do_cmd_refresh_skills), false,
+     0},
+    {CMD_NAME_CHOICE, "choose name", fptr(do_cmd_choose_name), false, 0},
+    {CMD_HISTORY_CHOICE, "write history", fptr(do_cmd_choose_history), false,
+     0},
+    {CMD_ACCEPT_CHARACTER, "accept character", fptr(do_cmd_accept_character),
+     false, 0},
     {CMD_GO_UP, "go up stairs", fptr(do_cmd_go_up), false, 0},
     {CMD_GO_DOWN, "go down stairs", fptr(do_cmd_go_down), false, 0},
-    {CMD_TOGGLE_STEALTH, "toggle stealth", fptr(do_cmd_toggle_stealth), false, 0},
+    {CMD_TOGGLE_STEALTH, "toggle stealth", fptr(do_cmd_toggle_stealth), false,
+     0},
     {CMD_WALK, "walk", fptr(do_cmd_walk), true, 0},
     {CMD_RUN, "run", fptr(do_cmd_run), true, 0},
     {CMD_JUMP, "jump", fptr(do_cmd_jump), false, 0},
@@ -156,15 +163,17 @@ static const struct command_info game_cmds[] = {
     {CMD_REPEAT, "repeat", NULL, false, 0},
     {CMD_SPOIL_ARTIFACT, "generate spoiler file for artifacts",
      fptr(do_cmd_spoil_artifact), false, 0},
-    {CMD_SPOIL_MON, "generate spoiler file for monsters", fptr(do_cmd_spoil_monster),
-     false, 0},
+    {CMD_SPOIL_MON, "generate spoiler file for monsters",
+     fptr(do_cmd_spoil_monster), false, 0},
     {CMD_SPOIL_MON_BRIEF, "generate brief spoiler file for monsters",
      fptr(do_cmd_spoil_monster_brief), false, 0},
     {CMD_SPOIL_OBJ, "generate spoiler file for objects", fptr(do_cmd_spoil_obj),
      false, 0},
     {CMD_WIZ_ACQUIRE, "acquire objects", fptr(do_cmd_wiz_acquire), false, 0},
-    {CMD_WIZ_ADVANCE, "make character powerful", fptr(do_cmd_wiz_advance), false, 0},
-    {CMD_WIZ_BANISH, "banish nearby monsters", fptr(do_cmd_wiz_banish), false, 0},
+    {CMD_WIZ_ADVANCE, "make character powerful", fptr(do_cmd_wiz_advance),
+     false, 0},
+    {CMD_WIZ_BANISH, "banish nearby monsters", fptr(do_cmd_wiz_banish), false,
+     0},
     {CMD_WIZ_CHANGE_ITEM_QUANTITY, "change number of an item",
      fptr(do_cmd_wiz_change_item_quantity), false, 0},
     {CMD_WIZ_COLLECT_DISCONNECT_STATS,
@@ -176,81 +185,85 @@ static const struct command_info game_cmds[] = {
      fptr(do_cmd_wiz_create_all_artifact), false, 0},
     {CMD_WIZ_CREATE_ALL_ARTIFACT_FROM_TVAL, "create all artifacts of a tval",
      fptr(do_cmd_wiz_create_all_artifact_from_tval), false, 0},
-    {CMD_WIZ_CREATE_ALL_OBJ, "create all objects", fptr(do_cmd_wiz_create_all_obj),
-     false, 0},
+    {CMD_WIZ_CREATE_ALL_OBJ, "create all objects",
+     fptr(do_cmd_wiz_create_all_obj), false, 0},
     {CMD_WIZ_CREATE_ALL_OBJ_FROM_TVAL, "create all objects of a tval",
      fptr(do_cmd_wiz_create_all_obj_from_tval), false, 0},
-    {CMD_WIZ_CREATE_ARTIFACT, "create artifact", fptr(do_cmd_wiz_create_artifact),
-     false, 0},
-    {CMD_WIZ_CREATE_OBJ, "create object", fptr(do_cmd_wiz_create_obj), false, 0},
-    {CMD_WIZ_CREATE_TRAP, "create trap", fptr(do_cmd_wiz_create_trap), false, 0},
+    {CMD_WIZ_CREATE_ARTIFACT, "create artifact",
+     fptr(do_cmd_wiz_create_artifact), false, 0},
+    {CMD_WIZ_CREATE_OBJ, "create object", fptr(do_cmd_wiz_create_obj), false,
+     0},
+    {CMD_WIZ_CREATE_TRAP, "create trap", fptr(do_cmd_wiz_create_trap), false,
+     0},
     {CMD_WIZ_CURE_ALL, "cure everything", fptr(do_cmd_wiz_cure_all), false, 0},
     {CMD_WIZ_DETECT_ALL_LOCAL, "detect everything nearby",
      fptr(do_cmd_wiz_detect_all_local), false, 0},
     {CMD_WIZ_DETECT_ALL_MONSTERS, "detect all monsters",
      fptr(do_cmd_wiz_detect_all_monsters), false, 0},
-    {CMD_WIZ_DISPLAY_KEYLOG, "display keystroke log", fptr(do_cmd_wiz_display_keylog),
-     false, 0},
-    {CMD_WIZ_DUMP_LEVEL_MAP, "write map of level", fptr(do_cmd_wiz_dump_level_map),
-     false, 0},
+    {CMD_WIZ_DISPLAY_KEYLOG, "display keystroke log",
+     fptr(do_cmd_wiz_display_keylog), false, 0},
+    {CMD_WIZ_DUMP_LEVEL_MAP, "write map of level",
+     fptr(do_cmd_wiz_dump_level_map), false, 0},
     {CMD_WIZ_EDIT_PLAYER_EXP, "change the player's experience",
      fptr(do_cmd_wiz_edit_player_exp), false, 0},
     {CMD_WIZ_EDIT_PLAYER_START, "start editing the player",
      fptr(do_cmd_wiz_edit_player_start), false, 0},
     {CMD_WIZ_EDIT_PLAYER_STAT, "edit one of the player's stats",
      fptr(do_cmd_wiz_edit_player_stat), false, 0},
-    {CMD_WIZ_HIT_ALL_LOS, "hit all monsters in LOS", fptr(do_cmd_wiz_hit_all_los),
-     false, 0},
+    {CMD_WIZ_HIT_ALL_LOS, "hit all monsters in LOS",
+     fptr(do_cmd_wiz_hit_all_los), false, 0},
     {CMD_WIZ_INCREASE_EXP, "increase experience", fptr(do_cmd_wiz_increase_exp),
      false, 0},
-    {CMD_WIZ_JUMP_LEVEL, "jump to a level", fptr(do_cmd_wiz_jump_level), false, 0},
+    {CMD_WIZ_JUMP_LEVEL, "jump to a level", fptr(do_cmd_wiz_jump_level), false,
+     0},
     {CMD_WIZ_LEARN_OBJECT_KINDS, "learn about kinds of objects",
      fptr(do_cmd_wiz_learn_object_kinds), false, 0},
     {CMD_WIZ_MAGIC_MAP, "map local area", fptr(do_cmd_wiz_magic_map), false, 0},
     {CMD_WIZ_PEEK_NOISE_SCENT, "peek at noise and scent",
      fptr(do_cmd_wiz_peek_noise_scent), false, 0},
-    {CMD_WIZ_PERFORM_EFFECT, "perform an effect", fptr(do_cmd_wiz_perform_effect),
-     false, 0},
+    {CMD_WIZ_PERFORM_EFFECT, "perform an effect",
+     fptr(do_cmd_wiz_perform_effect), false, 0},
     {CMD_WIZ_PLAY_ITEM, "play with item", fptr(do_cmd_wiz_play_item), false, 0},
-    {CMD_WIZ_PUSH_OBJECT, "push objects from fptr(square)", fptr(do_cmd_wiz_push_object),
-     false, 0},
+    {CMD_WIZ_PUSH_OBJECT, "push objects from fptr(square)",
+     fptr(do_cmd_wiz_push_object), false, 0},
     {CMD_WIZ_QUERY_FEATURE, "highlight specific feature",
      fptr(do_cmd_wiz_query_feature), false, 0},
     {CMD_WIZ_QUERY_SQUARE_FLAG, "query fptr(square) flag",
      fptr(do_cmd_wiz_query_square_flag), false, 0},
     {CMD_WIZ_QUIT_NO_SAVE, "quit without saving", fptr(do_cmd_wiz_quit_no_save),
      false, 0},
-    {CMD_WIZ_RECALL_MONSTER, "recall monster", fptr(do_cmd_wiz_recall_monster), false,
-     0},
-    {CMD_WIZ_REROLL_ITEM, "reroll an item", fptr(do_cmd_wiz_reroll_item), false, 0},
-    {CMD_WIZ_STAT_ITEM, "get statistics for an item", fptr(do_cmd_wiz_stat_item),
+    {CMD_WIZ_RECALL_MONSTER, "recall monster", fptr(do_cmd_wiz_recall_monster),
      false, 0},
-    {CMD_WIZ_SUMMON_NAMED, "summon specific monster", fptr(do_cmd_wiz_summon_named),
-     false, 0},
-    {CMD_WIZ_SUMMON_RANDOM, "summon random monsters", fptr(do_cmd_wiz_summon_random),
-     false, 0},
-    {CMD_WIZ_TELEPORT_TO, "teleport to location", fptr(do_cmd_wiz_teleport_to), false,
+    {CMD_WIZ_REROLL_ITEM, "reroll an item", fptr(do_cmd_wiz_reroll_item), false,
      0},
-    {CMD_WIZ_TWEAK_ITEM, "modify item attributes", fptr(do_cmd_wiz_tweak_item), false,
-     0},
-    {CMD_WIZ_WIPE_RECALL, "erase monster recall", fptr(do_cmd_wiz_wipe_recall), false,
-     0},
-    {CMD_WIZ_WIZARD_LIGHT, "wizard light the level", fptr(do_cmd_wiz_wizard_light),
+    {CMD_WIZ_STAT_ITEM, "get statistics for an item",
+     fptr(do_cmd_wiz_stat_item), false, 0},
+    {CMD_WIZ_SUMMON_NAMED, "summon specific monster",
+     fptr(do_cmd_wiz_summon_named), false, 0},
+    {CMD_WIZ_SUMMON_RANDOM, "summon random monsters",
+     fptr(do_cmd_wiz_summon_random), false, 0},
+    {CMD_WIZ_TELEPORT_TO, "teleport to location", fptr(do_cmd_wiz_teleport_to),
      false, 0},
+    {CMD_WIZ_TWEAK_ITEM, "modify item attributes", fptr(do_cmd_wiz_tweak_item),
+     false, 0},
+    {CMD_WIZ_WIPE_RECALL, "erase monster recall", fptr(do_cmd_wiz_wipe_recall),
+     false, 0},
+    {CMD_WIZ_WIZARD_LIGHT, "wizard light the level",
+     fptr(do_cmd_wiz_wizard_light), false, 0},
 };
-static int cmd_head = 0;
-static int cmd_tail = 0;
-static struct command cmd_queue[20];
-int last_command_idx = -1;
-static struct command last_command = {.context = CTX_INIT,
-                                      .code = CMD_NULL,
-                                      .nrepeats = 0,
-                                      .is_background_command = false,
-                                      .arg = {{0}}};
-static bool repeat_prev_allowed = false;
-static bool repeating = false;
-static char* archive_user_pfx = NULL;
-const char* parser_error_str[PARSE_ERROR_MAX] = {
+DATA int cmd_head = 0;
+DATA int cmd_tail = 0;
+DATA struct command cmd_queue[20];
+DATA int last_command_idx = -1;
+DATA struct command last_command = {.context = CTX_INIT,
+                                    .code = CMD_NULL,
+                                    .nrepeats = 0,
+                                    .is_background_command = false,
+                                    .arg = {{0}}};
+DATA bool repeat_prev_allowed = false;
+DATA bool repeating = false;
+DATA char* archive_user_pfx = NULL;
+DATA const char* parser_error_str[PARSE_ERROR_MAX] = {
     "(none)",
     "bad expression string",
     "name is already in use",
@@ -331,12 +344,12 @@ const char* parser_error_str[PARSE_ERROR_MAX] = {
     "bad vault description line length",
 };
 typedef void debug_hook(const char*);
-static debug_hook* d_out = fptr(to_stderr);
-static int set_value = 0;
-static const struct effect_kind effects[] = {
+DATA debug_hook* d_out = fptr(to_stderr);
+DATA int set_value = 0;
+DATA const struct effect_kind effects[] = {
     {EF_NONE, false, NULL, NULL, NULL, NULL},
-    {EF_HEAL_HP, false, "heal", fptr(effect_handler_HEAL_HP), "heals %s hitpoints%s",
-     "heal self"},
+    {EF_HEAL_HP, false, "heal", fptr(effect_handler_HEAL_HP),
+     "heals %s hitpoints%s", "heal self"},
     {EF_DAMAGE, false, "hurt", fptr(effect_handler_DAMAGE),
      "does %s damage to the player", "%s damage"},
     {EF_DART, false, "hurt", fptr(effect_handler_DART),
@@ -345,8 +358,9 @@ static const struct effect_kind effects[] = {
      "pitfall"},
     {EF_PROJECT_LOS, false, "power", fptr(effect_handler_PROJECT_LOS),
      "%s which are in line of sight", "%s in line of sight"},
-    {EF_PROJECT_LOS_GRIDS, false, "power", fptr(effect_handler_PROJECT_LOS_GRIDS),
-     "%s which are in line of sight", "%s in line of sight"},
+    {EF_PROJECT_LOS_GRIDS, false, "power",
+     fptr(effect_handler_PROJECT_LOS_GRIDS), "%s which are in line of sight",
+     "%s in line of sight"},
     {EF_DEADFALL, false, "hurt", fptr(effect_handler_DEADFALL),
      "makes rocks fall on the player", "deadfall"},
     {EF_EARTHQUAKE, false, NULL, fptr(effect_handler_EARTHQUAKE),
@@ -389,8 +403,8 @@ static const struct effect_kind effects[] = {
      "inscribes a glyph beneath you", "inscribe a glyph"},
     {EF_RESTORE_STAT, false, NULL, fptr(effect_handler_RESTORE_STAT),
      "restores your %s", "restore %s"},
-    {EF_DRAIN_STAT, false, NULL, fptr(effect_handler_DRAIN_STAT), "reduces your %s",
-     "drains %s"},
+    {EF_DRAIN_STAT, false, NULL, fptr(effect_handler_DRAIN_STAT),
+     "reduces your %s", "drains %s"},
     {EF_RESTORE_MANA, false, NULL, fptr(effect_handler_RESTORE_MANA),
      "restores some mana", "restore some mana"},
     {EF_REMOVE_CURSE, false, NULL, fptr(effect_handler_REMOVE_CURSE),
@@ -445,7 +459,7 @@ static const struct effect_kind effects[] = {
     {EF_CREATE_TRAPS, false, NULL, fptr(effect_handler_CREATE_TRAPS),
      "create traps on the level", "create traps"},
     {EF_MAX, false, NULL, NULL, NULL, NULL}};
-static const char* effect_names[] = {
+DATA const char* effect_names[] = {
     NULL,
     "HEAL_HP",
     "DAMAGE",
@@ -498,33 +512,34 @@ static const char* effect_names[] = {
     "NOISE",
     "CREATE_TRAPS",
 };
-static struct event_handler_entry* event_handlers[N_GAME_EVENTS];
-uint16_t daycount = 0;
-uint32_t seed_randart;
-uint32_t seed_flavor;
-int32_t turn;
-bool character_generated;
-bool character_dungeon;
-struct level* world;
-const uint8_t extract_energy[8] = {
+DATA struct event_handler_entry* event_handlers[N_GAME_EVENTS];
+DATA uint16_t daycount = 0;
+DATA uint32_t seed_randart;
+DATA uint32_t seed_flavor;
+DATA int32_t turn;
+DATA bool character_generated;
+DATA bool character_dungeon;
+DATA struct level* world;
+DATA const uint8_t extract_energy[8] = {
     5, 5, 10, 15, 20, 25, 30, 35,
 };
-struct vault* vaults;
-static struct cave_profile* cave_profiles;
-struct dun_data* dun;
-struct room_template* room_templates;
-static const char* room_flags[] = {"NONE",  "NO_ROTATION", "TRAPS", "WEBS",
-                                   "LIGHT", "TEST",        "MAX",   NULL};
-static struct file_parser profile_parser = {
+DATA struct vault* vaults;
+DATA struct cave_profile* cave_profiles;
+DATA struct dun_data* dun;
+DATA struct room_template* room_templates;
+DATA const char* room_flags[] = {"NONE",  "NO_ROTATION", "TRAPS", "WEBS",
+                                 "LIGHT", "TEST",        "MAX",   NULL};
+DATA struct file_parser profile_parser = {
     "dungeon_profile", fptr(init_parse_profile), fptr(run_parse_profile),
     fptr(finish_parse_profile), fptr(cleanup_profile)};
-static struct file_parser vault_parser = {"vault", fptr(init_parse_vault),
-                                          fptr(run_parse_vault), fptr(finish_parse_vault),
-                                          fptr(cleanup_vault)};
-struct init_module generate_module = {.name = "generate",
-                                      .init = fptr(run_template_parser),
-                                      .cleanup = fptr(cleanup_template_parser)};
-uint8_t get_angle_to_grid[41][41] = {
+DATA struct file_parser vault_parser = {
+    "vault", fptr(init_parse_vault), fptr(run_parse_vault),
+    fptr(finish_parse_vault), fptr(cleanup_vault)};
+DATA struct init_module generate_module = {
+    .name = "generate",
+    .init = fptr(run_template_parser),
+    .cleanup = fptr(cleanup_template_parser)};
+DATA uint8_t get_angle_to_grid[41][41] = {
     {68, 67, 66, 65, 64, 63, 62, 62, 60, 59, 58, 57, 56, 55,
      53, 52, 51, 49, 48, 46, 45, 44, 42, 41, 39, 38, 37, 35,
      34, 33, 32, 31, 30, 28, 28, 27, 26, 25, 24, 24, 23},
@@ -648,127 +663,127 @@ uint8_t get_angle_to_grid[41][41] = {
     {113, 114, 114, 115, 116, 117, 118, 118, 120, 121, 122, 123, 124, 125,
      127, 128, 129, 131, 132, 134, 135, 136, 138, 139, 141, 142, 143, 145,
      146, 147, 148, 149, 150, 152, 152, 153, 154, 155, 156, 157, 158}};
-graphics_mode* graphics_modes;
-graphics_mode* current_graphics_mode = NULL;
-int graphics_mode_high_id;
-bool play_again = false;
-struct angband_constants* z_info;
-const char* ANGBAND_SYS = "xxx";
-char* ANGBAND_DIR_GAMEDATA;
-char* ANGBAND_DIR_CUSTOMIZE;
-char* ANGBAND_DIR_HELP;
-char* ANGBAND_DIR_SCREENS;
-char* ANGBAND_DIR_FONTS;
-char* ANGBAND_DIR_TILES;
-char* ANGBAND_DIR_SOUNDS;
-char* ANGBAND_DIR_ICONS;
-char* ANGBAND_DIR_USER;
-char* ANGBAND_DIR_SAVE;
-char* ANGBAND_DIR_PANIC;
-char* ANGBAND_DIR_SCORES;
-char* ANGBAND_DIR_ARCHIVE;
-static const char* slots[] = {
+DATA graphics_mode* graphics_modes;
+DATA graphics_mode* current_graphics_mode = NULL;
+DATA int graphics_mode_high_id;
+DATA bool play_again = false;
+DATA struct angband_constants* z_info;
+DATA const char* ANGBAND_SYS = "xxx";
+DATA char* ANGBAND_DIR_GAMEDATA;
+DATA char* ANGBAND_DIR_CUSTOMIZE;
+DATA char* ANGBAND_DIR_HELP;
+DATA char* ANGBAND_DIR_SCREENS;
+DATA char* ANGBAND_DIR_FONTS;
+DATA char* ANGBAND_DIR_TILES;
+DATA char* ANGBAND_DIR_SOUNDS;
+DATA char* ANGBAND_DIR_ICONS;
+DATA char* ANGBAND_DIR_USER;
+DATA char* ANGBAND_DIR_SAVE;
+DATA char* ANGBAND_DIR_PANIC;
+DATA char* ANGBAND_DIR_SCORES;
+DATA char* ANGBAND_DIR_ARCHIVE;
+DATA const char* slots[] = {
     "NONE",  "WEAPON", "BOW", "RING",   "AMULET", "LIGHT",  "BODY_ARMOR",
     "CLOAK", "SHIELD", "HAT", "GLOVES", "BOOTS",  "QUIVER", NULL};
-const char* list_obj_flag_names[] = {"NONE",
-                                     "SUST_STR",
-                                     "SUST_DEX",
-                                     "SUST_CON",
-                                     "SUST_GRA",
-                                     "PROT_FEAR",
-                                     "PROT_BLIND",
-                                     "PROT_CONF",
-                                     "PROT_STUN",
-                                     "PROT_HALLU",
-                                     "SLOW_DIGEST",
-                                     "REGEN",
-                                     "SEE_INVIS",
-                                     "FREE_ACT",
-                                     "RADIANCE",
-                                     "LIGHT",
-                                     "SPEED",
-                                     "SHARPNESS",
-                                     "SHARPNESS2",
-                                     "VAMPIRIC",
-                                     "BURNS_OUT",
-                                     "TAKES_FUEL",
-                                     "NO_FUEL",
-                                     "COWARDICE",
-                                     "HUNGER",
-                                     "DARKNESS",
-                                     "DANGER",
-                                     "HAUNTED",
-                                     "AGGRAVATE",
-                                     "CURSED",
-                                     "DIG_1",
-                                     "DIG_2",
-                                     "THROWING",
-                                     "INDESTRUCTIBLE",
-                                     "NO_SMITHING",
-                                     "NO_RANDOM",
-                                     "MITHRIL",
-                                     "AXE",
-                                     "POLEARM",
-                                     "ENCHANTABLE",
-                                     "HAND_AND_A_HALF",
-                                     "TWO_HANDED",
-                                     "MAX",
-                                     NULL};
-const char* list_element_names[] = {"ACID", "FIRE", "COLD",
-                                    "POIS", "DARK", NULL};
-static const char* effect_list[] = {"NONE",
-                                    "HEAL_HP",
-                                    "DAMAGE",
-                                    "DART",
-                                    "PIT",
-                                    "PROJECT_LOS",
-                                    "PROJECT_LOS_GRIDS",
-                                    "DEADFALL",
-                                    "EARTHQUAKE",
-                                    "SPOT",
-                                    "SPHERE",
-                                    "EXPLOSION",
-                                    "BREATH",
-                                    "BOLT",
-                                    "BEAM",
-                                    "TERRAIN_BEAM",
-                                    "NOURISH",
-                                    "CURE",
-                                    "TIMED_SET",
-                                    "TIMED_INC",
-                                    "TIMED_INC_CHECK",
-                                    "TIMED_INC_NO_RES",
-                                    "TERROR",
-                                    "GLYPH",
-                                    "RESTORE_STAT",
-                                    "DRAIN_STAT",
-                                    "RESTORE_MANA",
-                                    "REMOVE_CURSE",
-                                    "MAP_AREA",
-                                    "DETECT_TRAPS",
-                                    "DETECT_DOORS",
-                                    "DETECT_OBJECTS",
-                                    "DETECT_MONSTERS",
-                                    "REVEAL_MONSTER",
-                                    "CLOSE_CHASMS",
-                                    "IDENTIFY",
-                                    "RECHARGE",
-                                    "SUMMON",
-                                    "TELEPORT_TO",
-                                    "DARKEN_LEVEL",
-                                    "LIGHT_AREA",
-                                    "DARKEN_AREA",
-                                    "SONG_OF_ELBERETH",
-                                    "SONG_OF_LORIEN",
-                                    "SONG_OF_FREEDOM",
-                                    "SONG_OF_BINDING",
-                                    "SONG_OF_PIERCING",
-                                    "SONG_OF_OATHS",
-                                    "AGGRAVATE",
-                                    "NOISE",
-                                    "CREATE_TRAPS",
-                                    "MAX"};
-static const char* terrain_flags[] = {
+DATA const char* list_obj_flag_names[] = {"NONE",
+                                          "SUST_STR",
+                                          "SUST_DEX",
+                                          "SUST_CON",
+                                          "SUST_GRA",
+                                          "PROT_FEAR",
+                                          "PROT_BLIND",
+                                          "PROT_CONF",
+                                          "PROT_STUN",
+                                          "PROT_HALLU",
+                                          "SLOW_DIGEST",
+                                          "REGEN",
+                                          "SEE_INVIS",
+                                          "FREE_ACT",
+                                          "RADIANCE",
+                                          "LIGHT",
+                                          "SPEED",
+                                          "SHARPNESS",
+                                          "SHARPNESS2",
+                                          "VAMPIRIC",
+                                          "BURNS_OUT",
+                                          "TAKES_FUEL",
+                                          "NO_FUEL",
+                                          "COWARDICE",
+                                          "HUNGER",
+                                          "DARKNESS",
+                                          "DANGER",
+                                          "HAUNTED",
+                                          "AGGRAVATE",
+                                          "CURSED",
+                                          "DIG_1",
+                                          "DIG_2",
+                                          "THROWING",
+                                          "INDESTRUCTIBLE",
+                                          "NO_SMITHING",
+                                          "NO_RANDOM",
+                                          "MITHRIL",
+                                          "AXE",
+                                          "POLEARM",
+                                          "ENCHANTABLE",
+                                          "HAND_AND_A_HALF",
+                                          "TWO_HANDED",
+                                          "MAX",
+                                          NULL};
+DATA const char* list_element_names[] = {"ACID", "FIRE", "COLD",
+                                         "POIS", "DARK", NULL};
+DATA const char* effect_list[] = {"NONE",
+                                  "HEAL_HP",
+                                  "DAMAGE",
+                                  "DART",
+                                  "PIT",
+                                  "PROJECT_LOS",
+                                  "PROJECT_LOS_GRIDS",
+                                  "DEADFALL",
+                                  "EARTHQUAKE",
+                                  "SPOT",
+                                  "SPHERE",
+                                  "EXPLOSION",
+                                  "BREATH",
+                                  "BOLT",
+                                  "BEAM",
+                                  "TERRAIN_BEAM",
+                                  "NOURISH",
+                                  "CURE",
+                                  "TIMED_SET",
+                                  "TIMED_INC",
+                                  "TIMED_INC_CHECK",
+                                  "TIMED_INC_NO_RES",
+                                  "TERROR",
+                                  "GLYPH",
+                                  "RESTORE_STAT",
+                                  "DRAIN_STAT",
+                                  "RESTORE_MANA",
+                                  "REMOVE_CURSE",
+                                  "MAP_AREA",
+                                  "DETECT_TRAPS",
+                                  "DETECT_DOORS",
+                                  "DETECT_OBJECTS",
+                                  "DETECT_MONSTERS",
+                                  "REVEAL_MONSTER",
+                                  "CLOSE_CHASMS",
+                                  "IDENTIFY",
+                                  "RECHARGE",
+                                  "SUMMON",
+                                  "TELEPORT_TO",
+                                  "DARKEN_LEVEL",
+                                  "LIGHT_AREA",
+                                  "DARKEN_AREA",
+                                  "SONG_OF_ELBERETH",
+                                  "SONG_OF_LORIEN",
+                                  "SONG_OF_FREEDOM",
+                                  "SONG_OF_BINDING",
+                                  "SONG_OF_PIERCING",
+                                  "SONG_OF_OATHS",
+                                  "AGGRAVATE",
+                                  "NOISE",
+                                  "CREATE_TRAPS",
+                                  "MAX"};
+DATA const char* terrain_flags[] = {
     "NONE",        "LOS",   "PROJECT",     "PASSABLE",    "INTERESTING",
     "PERMANENT",   "EASY",  "TRAP",        "NO_SCENT",    "NO_FLOW",
     "OBJECT",      "TORCH", "HIDDEN",      "GOLD",        "CLOSABLE",
@@ -776,75 +791,68 @@ static const char* terrain_flags[] = {
     "DOOR_CLOSED", "FORGE", "DOOR_JAMMED", "DOOR_LOCKED", "MAGMA",
     "QUARTZ",      "STAIR", "SHAFT",       "UPSTAIR",     "DOWNSTAIR",
     "PIT",         "CHASM", NULL};
-static const char* player_info_flags[] = {"NONE", "BLADE_PROFICIENCY",
-                                          "AXE_PROFICIENCY", NULL};
-struct file_parser constants_parser = {
+DATA const char* player_info_flags[] = {"NONE", "BLADE_PROFICIENCY",
+                                        "AXE_PROFICIENCY", NULL};
+DATA struct file_parser constants_parser = {
     "constants", fptr(init_parse_constants), fptr(run_parse_constants),
     fptr(finish_parse_constants), fptr(cleanup_constants)};
-struct file_parser world_parser = {"world", fptr(init_parse_world), fptr(run_parse_world),
-                                   fptr(finish_parse_world), fptr(cleanup_world)};
-struct file_parser feat_parser = {"terrain", fptr(init_parse_feat), fptr(run_parse_feat),
-                                  fptr(finish_parse_feat), fptr(cleanup_feat)};
-struct file_parser body_parser = {"body", fptr(init_parse_body), fptr(run_parse_body),
-                                  fptr(finish_parse_body), fptr(cleanup_body)};
-static struct history_chart* histories;
-struct file_parser history_parser = {"history", fptr(init_parse_history),
-                                     fptr(run_parse_history), fptr(finish_parse_history),
-                                     fptr(cleanup_history)};
-struct file_parser sex_parser = {"sex", fptr(init_parse_sex), fptr(run_parse_sex),
-                                 fptr(finish_parse_sex), fptr(cleanup_sex)};
-struct file_parser race_parser = {"race", fptr(init_parse_race), fptr(run_parse_race),
-                                  fptr(finish_parse_race), fptr(cleanup_race)};
-struct file_parser house_parser = {"house", fptr(init_parse_house), fptr(run_parse_house),
-                                   fptr(finish_parse_house), fptr(cleanup_house)};
-struct file_parser names_parser = {"names", fptr(init_parse_names), fptr(run_parse_names),
-                                   fptr(finish_parse_names), fptr(cleanup_names)};
-static wchar_t flavor_glyph;
-static unsigned int flavor_tval;
-struct file_parser flavor_parser = {"flavor", fptr(init_parse_flavor),
-                                    fptr(run_parse_flavor), fptr(finish_parse_flavor),
-                                    fptr(cleanup_flavor)};
-static struct init_module arrays_module = {
-    .name = "arrays", .init = fptr(init_arrays), .cleanup = fptr(cleanup_arrays)};
-extern struct init_module z_quark_module;
-extern struct init_module generate_module;
-extern struct init_module rune_module;
-extern struct init_module obj_make_module;
-extern struct init_module ignore_module;
-extern struct init_module mon_make_module;
-extern struct init_module player_module;
-extern struct init_module store_module;
-extern struct init_module messages_module;
-extern struct init_module options_module;
-extern struct init_module ui_equip_cmp_module;
-extern struct init_module tutorial_module;
-static struct init_module* modules[] = {
-    &z_quark_module,  &messages_module, &arrays_module,   &generate_module,
-    &player_module,   &rune_module,     &obj_make_module, &ignore_module,
-    &mon_make_module, &options_module,  &tutorial_module, NULL};
-static uint8_t square_size = 0;
-static uint8_t hist_size = 0;
-static uint8_t obj_mod_max = 0;
-static uint8_t of_size = 0;
-static uint8_t elem_max = 0;
-static uint8_t brand_max;
-static uint8_t slay_max;
-static uint8_t mflag_size = 0;
-static uint8_t trf_size = 0;
-static msgqueue_t* messages = NULL;
-struct init_module messages_module = {
-    .name = "messages", .init = fptr(messages_init), .cleanup = fptr(messages_free)};
-struct blow_method* blow_methods;
-struct blow_effect* blow_effects;
-struct monster_pain* pain_messages;
-struct monster_pursuit* pursuit_messages;
-struct monster_warning* warning_messages;
-struct monster_spell* monster_spells;
-struct monster_base* rb_info;
-struct monster_race* r_info;
-const struct monster_race* ref_race = NULL;
-struct monster_lore* l_list;
-const char* r_info_flags[] = {
+DATA struct file_parser world_parser = {
+    "world", fptr(init_parse_world), fptr(run_parse_world),
+    fptr(finish_parse_world), fptr(cleanup_world)};
+DATA struct file_parser feat_parser = {
+    "terrain", fptr(init_parse_feat), fptr(run_parse_feat),
+    fptr(finish_parse_feat), fptr(cleanup_feat)};
+DATA struct file_parser body_parser = {
+    "body", fptr(init_parse_body), fptr(run_parse_body),
+    fptr(finish_parse_body), fptr(cleanup_body)};
+DATA struct history_chart* histories;
+DATA struct file_parser history_parser = {
+    "history", fptr(init_parse_history), fptr(run_parse_history),
+    fptr(finish_parse_history), fptr(cleanup_history)};
+DATA struct file_parser sex_parser = {
+    "sex", fptr(init_parse_sex), fptr(run_parse_sex), fptr(finish_parse_sex),
+    fptr(cleanup_sex)};
+DATA struct file_parser race_parser = {
+    "race", fptr(init_parse_race), fptr(run_parse_race),
+    fptr(finish_parse_race), fptr(cleanup_race)};
+DATA struct file_parser house_parser = {
+    "house", fptr(init_parse_house), fptr(run_parse_house),
+    fptr(finish_parse_house), fptr(cleanup_house)};
+DATA struct file_parser names_parser = {
+    "names", fptr(init_parse_names), fptr(run_parse_names),
+    fptr(finish_parse_names), fptr(cleanup_names)};
+DATA wchar_t flavor_glyph;
+DATA unsigned int flavor_tval;
+DATA struct file_parser flavor_parser = {
+    "flavor", fptr(init_parse_flavor), fptr(run_parse_flavor),
+    fptr(finish_parse_flavor), fptr(cleanup_flavor)};
+DATA struct init_module arrays_module = {.name = "arrays",
+                                         .init = fptr(init_arrays),
+                                         .cleanup = fptr(cleanup_arrays)};
+DATA uint8_t square_size = 0;
+DATA uint8_t hist_size = 0;
+DATA uint8_t obj_mod_max = 0;
+DATA uint8_t of_size = 0;
+DATA uint8_t elem_max = 0;
+DATA uint8_t brand_max;
+DATA uint8_t slay_max;
+DATA uint8_t mflag_size = 0;
+DATA uint8_t trf_size = 0;
+DATA msgqueue_t* messages = NULL;
+DATA struct init_module messages_module = {.name = "messages",
+                                           .init = fptr(messages_init),
+                                           .cleanup = fptr(messages_free)};
+DATA struct blow_method* blow_methods;
+DATA struct blow_effect* blow_effects;
+DATA struct monster_pain* pain_messages;
+DATA struct monster_pursuit* pursuit_messages;
+DATA struct monster_warning* warning_messages;
+DATA struct monster_spell* monster_spells;
+DATA struct monster_base* rb_info;
+DATA struct monster_race* r_info;
+DATA const struct monster_race* ref_race = NULL;
+DATA struct monster_lore* l_list;
+DATA const char* r_info_flags[] = {
     "NONE",          "UNIQUE",       "QUESTOR",     "MALE",
     "FEMALE",        "NAME_COMMA",   "SPECIAL_GEN", "CHAR_CLEAR",
     "ATTR_MULTI",    "ATTR_FLICKER", "FORCE_DEPTH", "INVISIBLE",
@@ -865,97 +873,100 @@ const char* r_info_flags[] = {
     "HURT_FIRE",     "HURT_COLD",    "RES_FIRE",    "RES_COLD",
     "RES_POIS",      "NO_FEAR",      "NO_STUN",     "NO_CONF",
     "NO_SLEEP",      "NO_SLOW",      NULL};
-const char* r_info_spell_flags[] = {
+DATA const char* r_info_spell_flags[] = {
     "NONE",       "ARROW1",    "ARROW2",     "BOULDER", "BR_FIRE", "BR_COLD",
     "BR_POIS",    "BR_DARK",   "EARTHQUAKE", "SHRIEK",  "SCREECH", "DARKNESS",
     "FORGET",     "SCARE",     "CONF",       "HOLD",    "SLOW",    "SNG_BIND",
     "SNG_PIERCE", "SNG_OATHS", "MAX",        NULL};
-static const char* obj_flags[] = {"NONE",
-                                  "SUST_STR",
-                                  "SUST_DEX",
-                                  "SUST_CON",
-                                  "SUST_GRA",
-                                  "PROT_FEAR",
-                                  "PROT_BLIND",
-                                  "PROT_CONF",
-                                  "PROT_STUN",
-                                  "PROT_HALLU",
-                                  "SLOW_DIGEST",
-                                  "REGEN",
-                                  "SEE_INVIS",
-                                  "FREE_ACT",
-                                  "RADIANCE",
-                                  "LIGHT",
-                                  "SPEED",
-                                  "SHARPNESS",
-                                  "SHARPNESS2",
-                                  "VAMPIRIC",
-                                  "BURNS_OUT",
-                                  "TAKES_FUEL",
-                                  "NO_FUEL",
-                                  "COWARDICE",
-                                  "HUNGER",
-                                  "DARKNESS",
-                                  "DANGER",
-                                  "HAUNTED",
-                                  "AGGRAVATE",
-                                  "CURSED",
-                                  "DIG_1",
-                                  "DIG_2",
-                                  "THROWING",
-                                  "INDESTRUCTIBLE",
-                                  "NO_SMITHING",
-                                  "NO_RANDOM",
-                                  "MITHRIL",
-                                  "AXE",
-                                  "POLEARM",
-                                  "ENCHANTABLE",
-                                  "HAND_AND_A_HALF",
-                                  "TWO_HANDED",
-                                  "MAX",
-                                  NULL};
-struct file_parser meth_parser = {"blow_methods", fptr(init_parse_meth),
-                                  fptr(run_parse_meth), fptr(finish_parse_meth),
-                                  fptr(cleanup_meth)};
-struct file_parser eff_parser = {"blow_effects", fptr(init_parse_eff), fptr(run_parse_eff),
-                                 fptr(finish_parse_eff), fptr(cleanup_eff)};
-struct file_parser pain_parser = {"pain messages", fptr(init_parse_pain),
-                                  fptr(run_parse_pain), fptr(finish_parse_pain),
-                                  fptr(cleanup_pain)};
-struct file_parser pursuit_parser = {"pursuit messages", fptr(init_parse_pursuit),
-                                     fptr(run_parse_pursuit), fptr(finish_parse_pursuit),
-                                     fptr(cleanup_pursuit)};
-struct file_parser warning_parser = {"warning messages", fptr(init_parse_warning),
-                                     fptr(run_parse_warning), fptr(finish_parse_warning),
-                                     fptr(cleanup_warning)};
-struct file_parser mon_spell_parser = {
+DATA const char* obj_flags[] = {"NONE",
+                                "SUST_STR",
+                                "SUST_DEX",
+                                "SUST_CON",
+                                "SUST_GRA",
+                                "PROT_FEAR",
+                                "PROT_BLIND",
+                                "PROT_CONF",
+                                "PROT_STUN",
+                                "PROT_HALLU",
+                                "SLOW_DIGEST",
+                                "REGEN",
+                                "SEE_INVIS",
+                                "FREE_ACT",
+                                "RADIANCE",
+                                "LIGHT",
+                                "SPEED",
+                                "SHARPNESS",
+                                "SHARPNESS2",
+                                "VAMPIRIC",
+                                "BURNS_OUT",
+                                "TAKES_FUEL",
+                                "NO_FUEL",
+                                "COWARDICE",
+                                "HUNGER",
+                                "DARKNESS",
+                                "DANGER",
+                                "HAUNTED",
+                                "AGGRAVATE",
+                                "CURSED",
+                                "DIG_1",
+                                "DIG_2",
+                                "THROWING",
+                                "INDESTRUCTIBLE",
+                                "NO_SMITHING",
+                                "NO_RANDOM",
+                                "MITHRIL",
+                                "AXE",
+                                "POLEARM",
+                                "ENCHANTABLE",
+                                "HAND_AND_A_HALF",
+                                "TWO_HANDED",
+                                "MAX",
+                                NULL};
+DATA struct file_parser meth_parser = {
+    "blow_methods", fptr(init_parse_meth), fptr(run_parse_meth),
+    fptr(finish_parse_meth), fptr(cleanup_meth)};
+DATA struct file_parser eff_parser = {
+    "blow_effects", fptr(init_parse_eff), fptr(run_parse_eff),
+    fptr(finish_parse_eff), fptr(cleanup_eff)};
+DATA struct file_parser pain_parser = {
+    "pain messages", fptr(init_parse_pain), fptr(run_parse_pain),
+    fptr(finish_parse_pain), fptr(cleanup_pain)};
+DATA struct file_parser pursuit_parser = {
+    "pursuit messages", fptr(init_parse_pursuit), fptr(run_parse_pursuit),
+    fptr(finish_parse_pursuit), fptr(cleanup_pursuit)};
+DATA struct file_parser warning_parser = {
+    "warning messages", fptr(init_parse_warning), fptr(run_parse_warning),
+    fptr(finish_parse_warning), fptr(cleanup_warning)};
+DATA struct file_parser mon_spell_parser = {
     "monster_spell", fptr(init_parse_mon_spell), fptr(run_parse_mon_spell),
     fptr(finish_parse_mon_spell), fptr(cleanup_mon_spell)};
-struct file_parser mon_base_parser = {"monster_base", fptr(init_parse_mon_base),
-                                      fptr(run_parse_mon_base), fptr(finish_parse_mon_base),
-                                      fptr(cleanup_mon_base)};
-struct file_parser monster_parser = {"monster", fptr(init_parse_monster),
-                                     fptr(run_parse_monster), fptr(finish_parse_monster),
-                                     fptr(cleanup_monster)};
-struct file_parser lore_parser = {"lore", fptr(init_parse_lore), fptr(run_parse_lore),
-                                  fptr(finish_parse_lore), fptr(cleanup_lore)};
-static monster_list_t* monster_list_subwindow = NULL;
+DATA struct file_parser mon_base_parser = {
+    "monster_base", fptr(init_parse_mon_base), fptr(run_parse_mon_base),
+    fptr(finish_parse_mon_base), fptr(cleanup_mon_base)};
+DATA struct file_parser monster_parser = {
+    "monster", fptr(init_parse_monster), fptr(run_parse_monster),
+    fptr(finish_parse_monster), fptr(cleanup_monster)};
+DATA struct file_parser lore_parser = {
+    "lore", fptr(init_parse_lore), fptr(run_parse_lore),
+    fptr(finish_parse_lore), fptr(cleanup_lore)};
+DATA monster_list_t* monster_list_subwindow = NULL;
 typedef enum monster_sex monster_sex_t;
-static int16_t alloc_race_size;
-static struct alloc_entry* alloc_race_table;
-static struct monster_race* place_escort_race = NULL;
-struct init_module mon_make_module = {.name = "monster/mon-make",
-                                      .init = fptr(init_race_allocs),
-                                      .cleanup = fptr(cleanup_race_allocs)};
-static int size_mon_hist = 0;
-static int size_mon_msg = 0;
-static struct monster_race_message mon_msg[200];
-static struct monster_message_history mon_message_hist[400];
-static int summon_specific_type = 0;
-static int summon_max = 0;
-struct monster_base* kin_base;
-struct summon* summons;
-static const char* mon_race_flags[] = {
+DATA int16_t alloc_race_size;
+DATA struct alloc_entry* alloc_race_table;
+DATA struct monster_race* place_escort_race = NULL;
+DATA struct init_module mon_make_module = {
+    .name = "monster/mon-make",
+    .init = fptr(init_race_allocs),
+    .cleanup = fptr(cleanup_race_allocs)};
+DATA int size_mon_hist = 0;
+DATA int size_mon_msg = 0;
+DATA struct monster_race_message mon_msg[200];
+DATA struct monster_message_history mon_message_hist[400];
+DATA int summon_specific_type = 0;
+DATA int summon_max = 0;
+DATA struct monster_base* kin_base;
+DATA struct summon* summons;
+DATA const char* mon_race_flags[] = {
     "NONE",          "UNIQUE",       "QUESTOR",     "MALE",
     "FEMALE",        "NAME_COMMA",   "SPECIAL_GEN", "CHAR_CLEAR",
     "ATTR_MULTI",    "ATTR_FLICKER", "FORCE_DEPTH", "INVISIBLE",
@@ -976,10 +987,10 @@ static const char* mon_race_flags[] = {
     "HURT_FIRE",     "HURT_COLD",    "RES_FIRE",    "RES_COLD",
     "RES_POIS",      "NO_FEAR",      "NO_STUN",     "NO_CONF",
     "NO_SLEEP",      "NO_SLOW",      NULL};
-struct file_parser summon_parser = {"summon", fptr(init_parse_summon),
-                                    fptr(run_parse_summon), fptr(finish_parse_summon),
-                                    fptr(cleanup_summon)};
-static const struct monster_flag monster_flag_table[] = {
+DATA struct file_parser summon_parser = {
+    "summon", fptr(init_parse_summon), fptr(run_parse_summon),
+    fptr(finish_parse_summon), fptr(cleanup_summon)};
+DATA const struct monster_flag monster_flag_table[] = {
     {RF_NONE, RFT_NONE, ""},
     {RF_UNIQUE, RFT_OBV, ""},
     {RF_QUESTOR, RFT_OBV, ""},
@@ -1059,8 +1070,8 @@ static const struct monster_flag monster_flag_table[] = {
     {RF_NO_SLEEP, RFT_PROT, "put to sleep"},
     {RF_NO_SLOW, RFT_PROT, "slowed"},
     {RF_MAX, 0, NULL}};
-struct chest_trap* chest_traps;
-const uint8_t chest_trap_list[] = {
+DATA struct chest_trap* chest_traps;
+DATA const uint8_t chest_trap_list[] = {
     0,
     (CHEST_GAS_CONF),
     (CHEST_GAS_CONF),
@@ -1088,14 +1099,14 @@ const uint8_t chest_trap_list[] = {
     0,
     (CHEST_GAS_POISON | CHEST_NEEDLE_ENTRANCE),
 };
-struct file_parser chest_trap_parser = {
+DATA struct file_parser chest_trap_parser = {
     "chest_trap", fptr(init_parse_chest_trap), fptr(run_parse_chest_trap),
     fptr(finish_parse_chest_trap), fptr(cleanup_chest_trap)};
-const char* inscrip_text[OBJ_PSEUDO_MAX] = {
+DATA const char* inscrip_text[OBJ_PSEUDO_MAX] = {
     NULL,     "average", "artefact, cursed", "special, cursed",
     "cursed", "special", "artefact",         "uncursed",
 };
-static quality_ignore_struct quality_mapping[] = {
+DATA quality_ignore_struct quality_mapping[] = {
     {ITYPE_SHARP, TV_SWORD, ""},     {ITYPE_SHARP, TV_POLEARM, ""},
     {ITYPE_BLUNT, TV_HAFTED, ""},    {ITYPE_BOW, TV_BOW, "Bow"},
     {ITYPE_ARROW, TV_ARROW, ""},     {ITYPE_ROBE, TV_SOFT_ARMOR, "Robe"},
@@ -1106,7 +1117,7 @@ static quality_ignore_struct quality_mapping[] = {
     {ITYPE_DIGGER, TV_DIGGING, ""},  {ITYPE_RING, TV_RING, ""},
     {ITYPE_AMULET, TV_AMULET, ""},   {ITYPE_LIGHT, TV_LIGHT, ""},
 };
-quality_name_struct quality_choices[] = {
+DATA quality_name_struct quality_choices[] = {
     {ITYPE_NONE, ""},
     {ITYPE_SHARP, "Sharp Melee Weapons"},
     {ITYPE_BLUNT, "Blunt Melee Weapons"},
@@ -1124,77 +1135,83 @@ quality_name_struct quality_choices[] = {
     {ITYPE_AMULET, "Amulets"},
     {ITYPE_LIGHT, "Lights"},
 };
-quality_name_struct quality_values[IGNORE_MAX] = {
+DATA quality_name_struct quality_values[IGNORE_MAX] = {
     {IGNORE_NONE, "no ignore"},   {IGNORE_BAD, "bad"},
     {IGNORE_AVERAGE, "average"},  {IGNORE_GOOD, "good"},
     {IGNORE_ALL, "non-artifact"},
 };
-uint8_t ignore_level[ITYPE_MAX];
-const size_t ignore_size = ITYPE_MAX;
-bool** ego_ignore_types;
-static int num_ego_types;
-struct init_module ignore_module = {
-    .name = "ignore", .init = fptr(init_ignore), .cleanup = fptr(cleanup_ignore)};
-static const char* obj_mods[] = {
-    "STR",      "DEX",     "CON",          "GRA",        "MELEE",
-    "ARCHERY",  "EVASION", "STEALTH",      "PERCEPTION", "WILL",
-    "SMITHING", "SONG",    "DAMAGE_SIDES", "TUNNEL",     NULL};
-static const char* kind_flags[] = {"NONE",      "INSTA_ART", "QUEST_ART",
-                                   "SMITH_ART", "GOOD",      "SHOW_DICE",
-                                   "EASY_KNOW", "MAX",       NULL};
-static const char* element_names[] = {"ACID", "FIRE", "COLD",
-                                      "POIS", "DARK", NULL};
-struct file_parser projection_parser = {
+DATA uint8_t ignore_level[ITYPE_MAX];
+DATA const size_t ignore_size = ITYPE_MAX;
+DATA bool** ego_ignore_types;
+DATA int num_ego_types;
+DATA struct init_module ignore_module = {.name = "ignore",
+                                         .init = fptr(init_ignore),
+                                         .cleanup = fptr(cleanup_ignore)};
+DATA const char* obj_mods[] = {"STR",          "DEX",     "CON",      "GRA",
+                               "MELEE",        "ARCHERY", "EVASION",  "STEALTH",
+                               "PERCEPTION",   "WILL",    "SMITHING", "SONG",
+                               "DAMAGE_SIDES", "TUNNEL",  NULL};
+DATA const char* kind_flags[] = {"NONE",      "INSTA_ART", "QUEST_ART",
+                                 "SMITH_ART", "GOOD",      "SHOW_DICE",
+                                 "EASY_KNOW", "MAX",       NULL};
+DATA const char* element_names[] = {"ACID", "FIRE", "COLD",
+                                    "POIS", "DARK", NULL};
+DATA struct file_parser projection_parser = {
     "projection", fptr(init_parse_projection), fptr(run_parse_projection),
     fptr(finish_parse_projection), fptr(cleanup_projection)};
-struct file_parser object_base_parser = {
+DATA struct file_parser object_base_parser = {
     "object_base", fptr(init_parse_object_base), fptr(run_parse_object_base),
     fptr(finish_parse_object_base), fptr(cleanup_object_base)};
-struct file_parser slay_parser = {"slay", fptr(init_parse_slay), fptr(run_parse_slay),
-                                  fptr(finish_parse_slay), fptr(cleanup_slay)};
-struct file_parser brand_parser = {"brand", fptr(init_parse_brand), fptr(run_parse_brand),
-                                   fptr(finish_parse_brand), fptr(cleanup_brand)};
-struct object_kind* unknown_item_kind;
-struct object_kind* pile_kind;
-struct file_parser object_parser = {"object", fptr(init_parse_object),
-                                    fptr(run_parse_object), fptr(finish_parse_object),
-                                    fptr(cleanup_object)};
-struct file_parser drop_parser = {"drop", fptr(init_parse_drop), fptr(run_parse_drop),
-                                  fptr(finish_parse_drop), fptr(cleanup_drop)};
-struct file_parser ego_parser = {"ego_item", fptr(init_parse_ego), fptr(run_parse_ego),
-                                 fptr(finish_parse_ego), fptr(cleanup_ego)};
-struct file_parser artifact_parser = {"artefact", fptr(init_parse_artifact),
-                                      fptr(run_parse_artifact), fptr(finish_parse_artifact),
-                                      fptr(cleanup_artifact)};
-struct file_parser randart_parser = {"randart", fptr(init_parse_artifact),
-                                     fptr(run_parse_randart), fptr(finish_parse_randart),
-                                     fptr(cleanup_artifact)};
-struct file_parser object_property_parser = {
-    "object_property", fptr(init_parse_object_property), fptr(run_parse_object_property),
-    fptr(finish_parse_object_property), fptr(cleanup_object_property)};
-static size_t rune_max;
-static struct rune* rune_list;
-struct init_module rune_module = {
+DATA struct file_parser slay_parser = {
+    "slay", fptr(init_parse_slay), fptr(run_parse_slay),
+    fptr(finish_parse_slay), fptr(cleanup_slay)};
+DATA struct file_parser brand_parser = {
+    "brand", fptr(init_parse_brand), fptr(run_parse_brand),
+    fptr(finish_parse_brand), fptr(cleanup_brand)};
+DATA struct object_kind* unknown_item_kind;
+DATA struct object_kind* pile_kind;
+DATA struct file_parser object_parser = {
+    "object", fptr(init_parse_object), fptr(run_parse_object),
+    fptr(finish_parse_object), fptr(cleanup_object)};
+DATA struct file_parser drop_parser = {
+    "drop", fptr(init_parse_drop), fptr(run_parse_drop),
+    fptr(finish_parse_drop), fptr(cleanup_drop)};
+DATA struct file_parser ego_parser = {
+    "ego_item", fptr(init_parse_ego), fptr(run_parse_ego),
+    fptr(finish_parse_ego), fptr(cleanup_ego)};
+DATA struct file_parser artifact_parser = {
+    "artefact", fptr(init_parse_artifact), fptr(run_parse_artifact),
+    fptr(finish_parse_artifact), fptr(cleanup_artifact)};
+DATA struct file_parser randart_parser = {
+    "randart", fptr(init_parse_artifact), fptr(run_parse_randart),
+    fptr(finish_parse_randart), fptr(cleanup_artifact)};
+DATA struct file_parser object_property_parser = {
+    "object_property", fptr(init_parse_object_property),
+    fptr(run_parse_object_property), fptr(finish_parse_object_property),
+    fptr(cleanup_object_property)};
+DATA size_t rune_max;
+DATA struct rune* rune_list;
+DATA struct init_module rune_module = {
     .name = "rune", .init = fptr(init_rune), .cleanup = fptr(cleanup_rune)};
-static object_list_t* object_list_subwindow = NULL;
-static int16_t alloc_kind_size = 0;
-static struct alloc_entry* alloc_kind_table;
-static int16_t alloc_ego_size = 0;
-static struct alloc_entry* alloc_ego_table;
-struct drop* drops;
-struct init_module obj_make_module = {.name = "object/obj-make",
-                                      .init = fptr(init_obj_make),
-                                      .cleanup = fptr(cleanup_obj_make)};
-static struct object* fail_pile;
-static struct object* fail_object;
-static bool fail_prev;
-static bool fail_next;
-static const char* fail_file;
-static int fail_line;
-struct obj_property* obj_properties;
-struct slay* slays;
-struct brand* brands;
-const struct smithing_tval_desc smithing_tvals[MAX_SMITHING_TVALS] = {
+DATA object_list_t* object_list_subwindow = NULL;
+DATA int16_t alloc_kind_size = 0;
+DATA struct alloc_entry* alloc_kind_table;
+DATA int16_t alloc_ego_size = 0;
+DATA struct alloc_entry* alloc_ego_table;
+DATA struct drop* drops;
+DATA struct init_module obj_make_module = {.name = "object/obj-make",
+                                           .init = fptr(init_obj_make),
+                                           .cleanup = fptr(cleanup_obj_make)};
+DATA struct object* fail_pile;
+DATA struct object* fail_object;
+DATA bool fail_prev;
+DATA bool fail_next;
+DATA const char* fail_file;
+DATA int fail_line;
+DATA struct obj_property* obj_properties;
+DATA struct slay* slays;
+DATA struct brand* brands;
+DATA const struct smithing_tval_desc smithing_tvals[MAX_SMITHING_TVALS] = {
     {SMITH_TYPE_WEAPON, TV_ARROW, "Arrows"},
     {SMITH_TYPE_WEAPON, TV_BOW, "Bow"},
     {SMITH_TYPE_WEAPON, TV_DIGGING, "Digger"},
@@ -1214,7 +1231,7 @@ const struct smithing_tval_desc smithing_tvals[MAX_SMITHING_TVALS] = {
     {SMITH_TYPE_JEWELRY, TV_RING, "Ring"},
     {SMITH_TYPE_JEWELRY, TV_HORN, "Horn"},
 };
-static const grouper tval_names[] = {
+DATA const grouper tval_names[] = {
     {TV_NULL, "none"},        {TV_NOTE, "note"},
     {TV_USELESS, "skeleton"}, {TV_METAL, "metal"},
     {TV_CHEST, "chest"},      {TV_ARROW, "arrow"},
@@ -1231,30 +1248,30 @@ static const grouper tval_names[] = {
     {TV_FOOD, "food"},        {TV_HERB, "herb"},
     {TV_EASTER, "easter"},
 };
-struct object_base* kb_info;
-struct object_kind* k_info;
-struct artifact* a_info;
-struct artifact_upkeep* aup_info;
-struct ego_item* e_info;
-struct flavor* flavors;
-int option_page[OPT_PAGE_MAX][OPT_PAGE_PER] = {{0}};
-struct init_module options_module = {
+DATA struct object_base* kb_info;
+DATA struct object_kind* k_info;
+DATA struct artifact* a_info;
+DATA struct artifact_upkeep* aup_info;
+DATA struct ego_item* e_info;
+DATA struct flavor* flavors;
+DATA int option_page[OPT_PAGE_MAX][OPT_PAGE_PER] = {{0}};
+DATA struct init_module options_module = {
     .name = "options", .init = fptr(init_options), .cleanup = NULL};
-struct ability* abilities;
-static unsigned int prereq_num = 1;
-static unsigned int skill_index;
-struct file_parser ability_parser = {"ability", fptr(init_parse_ability),
-                                     fptr(run_parse_ability), fptr(finish_parse_ability),
-                                     fptr(cleanup_ability)};
-static int stats[STAT_MAX];
-static int points_spent[STAT_MAX];
-static int points_inc[STAT_MAX];
-static int points_left;
-static bool quickstart_allowed;
-static birther prev;
-static birther quickstart_prev;
-static const int birth_stat_costs[11] = {-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
-static const struct flag_event_trigger redraw_events[] = {
+DATA struct ability* abilities;
+DATA unsigned int prereq_num = 1;
+DATA unsigned int skill_index;
+DATA struct file_parser ability_parser = {
+    "ability", fptr(init_parse_ability), fptr(run_parse_ability),
+    fptr(finish_parse_ability), fptr(cleanup_ability)};
+DATA int stats[STAT_MAX];
+DATA int points_spent[STAT_MAX];
+DATA int points_inc[STAT_MAX];
+DATA int points_left;
+DATA bool quickstart_allowed;
+DATA birther prev;
+DATA birther quickstart_prev;
+DATA const int birth_stat_costs[11] = {-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6};
+DATA const struct flag_event_trigger redraw_events[] = {
     {PR_MISC, EVENT_NAME},
     {PR_EXP, EVENT_EXPERIENCE},
     {PR_STATS, EVENT_STATS},
@@ -1279,27 +1296,27 @@ static const struct flag_event_trigger redraw_events[] = {
     {PR_MESSAGE, EVENT_MESSAGE},
     {PR_COMBAT, EVENT_COMBAT_DISPLAY},
 };
-static struct loc top_left, bottom_right;
-static int path_distance[100][100];
-static int path_step_dir[500];
-static int path_step_idx;
-static int run_cur_dir;
-static int run_old_dir;
-static bool run_open_area;
-static bool run_break_right;
-static bool run_break_left;
-static int skills[SKILL_MAX];
-static int old_skills[SKILL_MAX];
-static int exp_spent[SKILL_MAX];
-static int exp_inc[SKILL_MAX];
-static int exp_left;
-static int old_exp_left;
-int PY_FOOD_MAX;
-int PY_FOOD_FULL;
-int PY_FOOD_ALERT;
-int PY_FOOD_WEAK;
-int PY_FOOD_STARVE;
-struct timed_effect_data timed_effects[TMD_MAX] = {
+DATA struct loc top_left, bottom_right;
+DATA int path_distance[100][100];
+DATA int path_step_dir[500];
+DATA int path_step_idx;
+DATA int run_cur_dir;
+DATA int run_old_dir;
+DATA bool run_open_area;
+DATA bool run_break_right;
+DATA bool run_break_left;
+DATA int skills[SKILL_MAX];
+DATA int old_skills[SKILL_MAX];
+DATA int exp_spent[SKILL_MAX];
+DATA int exp_inc[SKILL_MAX];
+DATA int exp_left;
+DATA int old_exp_left;
+DATA int PY_FOOD_MAX;
+DATA int PY_FOOD_FULL;
+DATA int PY_FOOD_ALERT;
+DATA int PY_FOOD_WEAK;
+DATA int PY_FOOD_STARVE;
+DATA struct timed_effect_data timed_effects[TMD_MAX] = {
     {"FAST",
      PR_STATUS,
      PU_BONUS,
@@ -1658,45 +1675,47 @@ struct timed_effect_data timed_effects[TMD_MAX] = {
      false,
      false},
 };
-static const char* list_timed_effect_names[] = {
+DATA const char* list_timed_effect_names[] = {
     "FAST",     "SLOW",     "BLIND",    "ENTRANCED", "CONFUSED", "AFRAID",
     "IMAGE",    "POISONED", "CUT",      "STUN",      "FOOD",     "DARKENED",
     "RAGE",     "STR",      "DEX",      "CON",       "GRA",      "SINVIS",
     "OPP_FIRE", "OPP_COLD", "OPP_POIS", "MAX",
 };
-struct file_parser player_timed_parser = {
-    "player timed effects", fptr(init_parse_player_timed), fptr(run_parse_player_timed),
-    fptr(finish_parse_player_timed), fptr(cleanup_player_timed)};
-static const char* skill_names[] = {"Melee",    "Archery",    "Evasion",
-                                    "Stealth",  "Perception", "Will",
-                                    "Smithing", "Song",       ""};
-static const int bane_flag[] = {
+DATA struct file_parser player_timed_parser = {
+    "player timed effects", fptr(init_parse_player_timed),
+    fptr(run_parse_player_timed), fptr(finish_parse_player_timed),
+    fptr(cleanup_player_timed)};
+DATA const char* skill_names[] = {"Melee",    "Archery",    "Evasion",
+                                  "Stealth",  "Perception", "Will",
+                                  "Smithing", "Song",       ""};
+DATA const int bane_flag[] = {
     RF_NONE,   RF_ORC,   RF_WOLF,    RF_SPIDER, RF_TROLL,
     RF_UNDEAD, RF_RAUKO, RF_SERPENT, RF_DRAGON,
 };
-static int player_turns_rested = 0;
-static bool player_rest_disturb = false;
-static int player_resting_repeat_count = 0;
-struct player* player = NULL;
-struct player_body* bodies;
-struct player_race* races;
-struct player_sex* sexes;
-struct player_house* houses;
-struct player_ability* player_abilities;
-static const char* stat_name_list[] = {"STR", "DEX", "CON", "GRA", "MAX", NULL};
-struct init_module player_module = {
-    .name = "player", .init = fptr(init_player), .cleanup = fptr(cleanup_player)};
-struct projection* projections;
-uint8_t proj_to_attr[PROJ_MAX][BOLT_MAX];
-wchar_t proj_to_char[PROJ_MAX][BOLT_MAX];
-static const char* proj_name_list[] = {
+DATA int player_turns_rested = 0;
+DATA bool player_rest_disturb = false;
+DATA int player_resting_repeat_count = 0;
+DATA struct player* player = NULL;
+DATA struct player_body* bodies;
+DATA struct player_race* races;
+DATA struct player_sex* sexes;
+DATA struct player_house* houses;
+DATA struct player_ability* player_abilities;
+DATA const char* stat_name_list[] = {"STR", "DEX", "CON", "GRA", "MAX", NULL};
+DATA struct init_module player_module = {.name = "player",
+                                         .init = fptr(init_player),
+                                         .cleanup = fptr(cleanup_player)};
+DATA struct projection* projections;
+DATA uint8_t proj_to_attr[PROJ_MAX][BOLT_MAX];
+DATA wchar_t proj_to_char[PROJ_MAX][BOLT_MAX];
+DATA const char* proj_name_list[] = {
     "ACID",      "FIRE",      "COLD",      "POIS",       "DARK",
     "NOTHING",   "HURT",      "ARROW",     "BOULDER",    "SOUND",
     "FORCE",     "LIGHT",     "KILL_WALL", "SLEEP",      "SPEED",
     "SLOW",      "CONFUSION", "FEAR",      "EARTHQUAKE", "DARK_WEAK",
     "KILL_DOOR", "LOCK_DOOR", "KILL_TRAP", "DISP_ALL",   "MAX",
     NULL};
-static const project_feature_handler_f feature_handlers[] = {
+DATA const project_feature_handler_f feature_handlers[] = {
     fptr(project_feature_handler_ACID),
     fptr(project_feature_handler_FIRE),
     fptr(project_feature_handler_COLD),
@@ -1722,7 +1741,7 @@ static const project_feature_handler_f feature_handlers[] = {
     fptr(project_feature_handler_KILL_TRAP),
     fptr(project_feature_handler_DISP_ALL),
     NULL};
-static const project_monster_handler_f monster_handlers[] = {
+DATA const project_monster_handler_f monster_handlers[] = {
     fptr(project_monster_handler_ACID),
     fptr(project_monster_handler_FIRE),
     fptr(project_monster_handler_COLD),
@@ -1748,7 +1767,7 @@ static const project_monster_handler_f monster_handlers[] = {
     fptr(project_monster_handler_KILL_TRAP),
     fptr(project_monster_handler_DISP_ALL),
     NULL};
-static const project_object_handler_f object_handlers[] = {
+DATA const project_object_handler_f object_handlers[] = {
     fptr(project_object_handler_ACID),
     fptr(project_object_handler_FIRE),
     fptr(project_object_handler_COLD),
@@ -1774,7 +1793,7 @@ static const project_object_handler_f object_handlers[] = {
     fptr(project_object_handler_KILL_TRAP),
     fptr(project_object_handler_DISP_ALL),
     NULL};
-static const project_player_handler_f player_handlers[] = {
+DATA const project_player_handler_f player_handlers[] = {
     fptr(project_player_handler_ACID),
     fptr(project_player_handler_FIRE),
     fptr(project_player_handler_COLD),
@@ -1800,12 +1819,12 @@ static const project_player_handler_f player_handlers[] = {
     fptr(project_player_handler_KILL_TRAP),
     fptr(project_player_handler_DISP_ALL),
     NULL};
-const char*** name_sections;
+DATA const char*** name_sections;
 typedef unsigned short name_probs[26 + 1][26 + 1][27 + 1];
-bool character_saved;
-static const uint8_t savefile_magic[4] = {83, 97, 118, 101};
-static const uint8_t savefile_name[4] = "USIL";
-static const struct blockinfo loaders[] = {
+DATA bool character_saved;
+DATA const uint8_t savefile_magic[4] = {83, 97, 118, 101};
+DATA const uint8_t savefile_name[4] = "USIL";
+DATA const struct blockinfo loaders[] = {
     {"description", fptr(rd_null), 1},
     {"rng", fptr(rd_randomizer), 1},
     {"options", fptr(rd_options), 1},
@@ -1824,51 +1843,50 @@ static const struct blockinfo loaders[] = {
     {"history", fptr(rd_history), 1},
     {"monster groups", fptr(rd_monster_groups), 1},
 };
-static uint8_t* buffer;
-static uint32_t buffer_size;
-static uint32_t buffer_pos;
-static uint32_t buffer_check;
-static char savefile_desc[120];
-struct song* songs;
-static int song_index = 1;
-struct file_parser song_parser = {"song", fptr(init_parse_song), fptr(run_parse_song),
-                                  fptr(finish_parse_song), fptr(cleanup_song)};
-static struct msg_snd_data message_sounds[MSG_MAX];
-static const struct sound_module sound_modules[] = {
+DATA uint8_t* buffer;
+DATA uint32_t buffer_size;
+DATA uint32_t buffer_pos;
+DATA uint32_t buffer_check;
+DATA char savefile_desc[120];
+DATA struct song* songs;
+DATA int song_index = 1;
+DATA struct file_parser song_parser = {
+    "song", fptr(init_parse_song), fptr(run_parse_song),
+    fptr(finish_parse_song), fptr(cleanup_song)};
+DATA struct msg_snd_data message_sounds[MSG_MAX];
+DATA const struct sound_module sound_modules[] = {
     {"", "", NULL},
 };
-static uint16_t next_sound_id;
-static struct sound_data* sounds;
-static struct sound_hooks hooks;
-static bool preload_sounds = false;
-static bool target_set;
-static bool target_fixed;
-static struct target target;
-static struct target old_target;
-static const char* trap_flags[] = {
+DATA uint16_t next_sound_id;
+DATA struct sound_data* sounds;
+DATA struct sound_hooks hooks;
+DATA bool preload_sounds = false;
+DATA bool target_set;
+DATA bool target_fixed;
+DATA struct target target;
+DATA struct target old_target;
+DATA const char* trap_flags[] = {
     "NONE",    "GLYPH",     "TRAP",  "VISIBLE", "INVISIBLE",  "FLOOR",
     "SURFACE", "DOWN",      "PIT",   "ONETIME", "SAVE_SKILL", "LOCK",
     "JAM",     "FORGE_USE", "DELAY", NULL};
-struct file_parser trap_parser = {"trap", fptr(init_parse_trap), fptr(run_parse_trap),
-                                  fptr(finish_parse_trap), fptr(cleanup_trap)};
-struct trap_kind* trap_info;
-void (*tutorial_textblock_show_hook)(textblock* tb, const char* header) = NULL;
-void (*tutorial_textblock_append_command_phrase_hook)(textblock* tb,
-                                                      const char* command_name,
-                                                      bool capital,
-                                                      bool gerund) = NULL;
-void (*tutorial_textblock_append_direction_phrase_hook)(textblock* tb,
-                                                        int dirnum,
-                                                        bool capital,
-                                                        bool gerund) = NULL;
-void (*tutorial_textblock_append_direction_rose_hook)(textblock* tb);
-void (*tutorial_textblock_append_feature_symbol_hook)(textblock* tb,
-                                                      int feat) = NULL;
-void (*tutorial_textblock_append_monster_symbol_hook)(
+DATA struct file_parser trap_parser = {
+    "trap", fptr(init_parse_trap), fptr(run_parse_trap),
+    fptr(finish_parse_trap), fptr(cleanup_trap)};
+DATA struct trap_kind* trap_info;
+DATA void (*tutorial_textblock_show_hook)(textblock* tb,
+                                          const char* header) = NULL;
+DATA void (*tutorial_textblock_append_command_phrase_hook)(
+    textblock* tb, const char* command_name, bool capital, bool gerund) = NULL;
+DATA void (*tutorial_textblock_append_direction_phrase_hook)(
+    textblock* tb, int dirnum, bool capital, bool gerund) = NULL;
+DATA void (*tutorial_textblock_append_direction_rose_hook)(textblock* tb);
+DATA void (*tutorial_textblock_append_feature_symbol_hook)(textblock* tb,
+                                                           int feat) = NULL;
+DATA void (*tutorial_textblock_append_monster_symbol_hook)(
     textblock* tb, const struct monster_race* race) = NULL;
-void (*tutorial_textblock_append_object_symbol_hook)(
+DATA void (*tutorial_textblock_append_object_symbol_hook)(
     textblock* tb, const struct object_kind* kind) = NULL;
-static place_thing_func place_ftable[] = {
+DATA place_thing_func place_ftable[] = {
     NULL,
     fptr(tutorial_section_place_note),
     fptr(tutorial_section_place_feature),
@@ -1889,40 +1907,41 @@ static place_thing_func place_ftable[] = {
     fptr(tutorial_section_place_custom_trap),
     fptr(tutorial_section_place_custom_door),
 };
-struct init_module tutorial_module = {"tutorial", NULL,
-                                      fptr(tutorial_cleanup_parsed_data)};
-struct tutorial_parsed_result tutorial_parsed_data = {
+DATA struct init_module tutorial_module = {"tutorial", NULL,
+                                           fptr(tutorial_cleanup_parsed_data)};
+DATA struct tutorial_parsed_result tutorial_parsed_data = {
     {NULL}, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0};
-static struct file_parser tutorial_parser = {
+DATA struct file_parser tutorial_parser = {
     "tutorial", fptr(tutorial_init_parser), fptr(tutorial_run_parser),
     fptr(tutorial_finish_parser), fptr(tutorial_cleanup_parsed_data)};
-static const char* square_flag_names[] = {
+DATA const char* square_flag_names[] = {
     "NONE",  "MARK",         "GLOW",       "VAULT",      "G_VAULT",
     "ROOM",  "SEEN",         "VIEW",       "WASSEEN",    "FEEL",
     "TRAP",  "INVIS",        "WALL_INNER", "WALL_OUTER", "WALL_SOLID",
     "CHASM", "PROJECT",      "HIDDEN",     "TEMP",       "WALL",
     "FIRE",  "CLOSE_PLAYER", "OLD_VIEW",   "OLD_LIT",    "OLD_TORCH",
     NULL};
-static struct ability** skill_abilities;
-const char* list_player_flag_names[] = {"", "Blade proficiency",
-                                        "Axe proficiency", NULL};
-static bool quickstart_allowed = false;
-bool arg_force_name;
-static struct menu race_menu, house_menu, sex_menu;
-static int house_start = 0;
-static region race_region = {2, 9, 17, 9 + 14};
-static region house_region = {19, 9, 17, 9 + 14};
-static region sex_region = {42, 9, 34, 9 + 14};
-static const menu_iter birth_iter = {NULL, NULL, fptr(birthmenu_display), NULL, NULL};
-static int buysell[STAT_MAX];
-static int combat_number = 0;
-static int combat_number_old = 0;
-static int turns_since_combat = 0;
-struct combat_roll combat_rolls[2][MAX_COMBAT_ROLLS] = {{{0}, {0}}};
-static struct menu* command_menu;
-static menu_iter command_menu_iter = {NULL, NULL, fptr(cmd_list_entry),
-                                      fptr(cmd_list_action), NULL};
-static menu_action death_actions[] = {
+DATA struct ability** skill_abilities;
+DATA const char* list_player_flag_names[] = {"", "Blade proficiency",
+                                             "Axe proficiency", NULL};
+DATA bool quickstart_allowed = false;
+DATA bool arg_force_name;
+DATA struct menu race_menu, house_menu, sex_menu;
+DATA int house_start = 0;
+DATA region race_region = {2, 9, 17, 9 + 14};
+DATA region house_region = {19, 9, 17, 9 + 14};
+DATA region sex_region = {42, 9, 34, 9 + 14};
+DATA const menu_iter birth_iter = {NULL, NULL, fptr(birthmenu_display), NULL,
+                                   NULL};
+DATA int buysell[STAT_MAX];
+DATA int combat_number = 0;
+DATA int combat_number_old = 0;
+DATA int turns_since_combat = 0;
+DATA struct combat_roll combat_rolls[2][MAX_COMBAT_ROLLS] = {{{0}, {0}}};
+DATA struct menu* command_menu;
+DATA menu_iter command_menu_iter = {NULL, NULL, fptr(cmd_list_entry),
+                                    fptr(cmd_list_action), NULL};
+DATA menu_action death_actions[] = {
     {0, 'v', "View scores", fptr(death_scores)},
     {0, 'x', "View inventory and equipment", fptr(death_examine)},
     {0, 'd', "View dungeon", fptr(death_dungeon)},
@@ -1935,62 +1954,64 @@ static menu_action death_actions[] = {
     {0, 'g', "Another game", fptr(death_new_game)},
     {0, 'q', "Quit", NULL},
 };
-static game_event_type player_events[] = {
+DATA game_event_type player_events[] = {
     EVENT_NAME,  EVENT_EXPERIENCE,    EVENT_EQUIPMENT,    EVENT_STATS,
     EVENT_HP,    EVENT_MANA,          EVENT_MELEE,        EVENT_ARCHERY,
     EVENT_ARMOR, EVENT_MONSTERHEALTH, EVENT_DUNGEONLEVEL, EVENT_STATUS,
     EVENT_SONG};
-static game_event_type statusline_events[] = {
+DATA game_event_type statusline_events[] = {
     EVENT_STATUS,
     EVENT_STATE,
     EVENT_LIGHT,
     EVENT_PLAYERSPEED,
 };
-const char* stat_names[STAT_MAX] = {"STR: ", "DEX: ", "CON: ", "GRA: "};
-const char* stat_names_reduced[STAT_MAX] = {"Str: ", "Dex: ", "Con: ", "Gra: "};
+DATA const char* stat_names[STAT_MAX] = {"STR: ", "DEX: ", "CON: ", "GRA: "};
+DATA const char* stat_names_reduced[STAT_MAX] = {
+    "Str: ", "Dex: ", "Con: ", "Gra: "};
 typedef size_t status_f(int row, int col);
-static status_f* status_handlers[] = {fptr(prt_light), fptr(prt_unignore), fptr(prt_state),
-                                      fptr(prt_tmd),   fptr(prt_terrain),  fptr(prt_depth)};
-static bool animations_allowed = true;
-static uint8_t flicker = 0;
-static bool flip_inven;
-const char* window_flag_desc[32] = {"Display inven/equip",
-                                    "Display equip/inven",
-                                    "Display player (basic)",
-                                    "Display player (extra)",
-                                    "Display player (compact)",
-                                    "Display map view",
-                                    "Display messages",
-                                    "Display overhead view",
-                                    "Display monster recall",
-                                    "Display object recall",
-                                    "Display monster list",
-                                    "Display status",
-                                    "Display item list",
-                                    "Display player (topbar)",
-                                    "Display combat rolls",
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL,
-                                    NULL};
-bool arg_wizard;
-char savefile[1024];
-char panicfile[1024];
-void (*reinit_hook)(void) = NULL;
-struct cmd_info cmd_item[] = {
+DATA status_f* status_handlers[] = {fptr(prt_light),   fptr(prt_unignore),
+                                    fptr(prt_state),   fptr(prt_tmd),
+                                    fptr(prt_terrain), fptr(prt_depth)};
+DATA bool animations_allowed = true;
+DATA uint8_t flicker = 0;
+DATA bool flip_inven;
+DATA const char* window_flag_desc[32] = {"Display inven/equip",
+                                         "Display equip/inven",
+                                         "Display player (basic)",
+                                         "Display player (extra)",
+                                         "Display player (compact)",
+                                         "Display map view",
+                                         "Display messages",
+                                         "Display overhead view",
+                                         "Display monster recall",
+                                         "Display object recall",
+                                         "Display monster list",
+                                         "Display status",
+                                         "Display item list",
+                                         "Display player (topbar)",
+                                         "Display combat rolls",
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         NULL};
+DATA bool arg_wizard;
+DATA char savefile[1024];
+DATA char panicfile[1024];
+DATA void (*reinit_hook)(void) = NULL;
+DATA struct cmd_info cmd_item[] = {
     {"Inscribe an object",
      {'{'},
      CMD_INSCRIBE,
@@ -2115,7 +2136,7 @@ struct cmd_info cmd_item[] = {
      NULL,
      NULL,
      0}};
-struct cmd_info cmd_action[] = {
+DATA struct cmd_info cmd_action[] = {
     {"Disarm a trap or chest",
      {'D'},
      CMD_DISARM,
@@ -2261,7 +2282,7 @@ struct cmd_info cmd_action[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_item_manage[] = {
+DATA struct cmd_info cmd_item_manage[] = {
     {"Display equipment listing",
      {'e'},
      CMD_NULL,
@@ -2294,7 +2315,7 @@ struct cmd_info cmd_item_manage[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_info[] = {
+DATA struct cmd_info cmd_info[] = {
     {"Full dungeon map",
      {'M'},
      CMD_NULL,
@@ -2411,68 +2432,77 @@ struct cmd_info cmd_info[] = {
      NULL,
      NULL,
      0}};
-struct cmd_info cmd_util[] = {{"Interact with options",
-                               {'O', 'O', '=', '='},
-                               CMD_NULL,
-                               fptr(do_cmd_xxx_options),
-                               NULL,
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0},
-                              {"Save and don't quit",
-                               {KTRL('S')},
-                               CMD_NULL,
-                               fptr(save_game),
-                               fptr(player_can_save_prereq),
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0},
-                              {"Save and quit",
-                               {KTRL('X')},
-                               CMD_NULL,
-                               fptr(textui_quit),
-                               NULL,
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0},
-                              {"Retire character and quit",
-                               {'Q'},
-                               CMD_NULL,
-                               fptr(textui_cmd_retire),
-                               NULL,
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0},
-                              {"Redraw the screen",
-                               {KTRL('R')},
-                               CMD_NULL,
-                               fptr(do_cmd_redraw),
-                               NULL,
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0},
-                              {"Save \"screen dump\"",
-                               {')'},
-                               CMD_NULL,
-                               fptr(do_cmd_save_screen),
-                               NULL,
-                               0,
-                               NULL,
-                               NULL,
-                               NULL,
-                               0}};
-struct cmd_info cmd_hidden[] = {
-    {"Take notes", {':'}, CMD_NULL, fptr(do_cmd_note), NULL, 0, NULL, NULL, NULL, 0},
+DATA struct cmd_info cmd_util[] = {{"Interact with options",
+                                    {'O', 'O', '=', '='},
+                                    CMD_NULL,
+                                    fptr(do_cmd_xxx_options),
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0},
+                                   {"Save and don't quit",
+                                    {KTRL('S')},
+                                    CMD_NULL,
+                                    fptr(save_game),
+                                    fptr(player_can_save_prereq),
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0},
+                                   {"Save and quit",
+                                    {KTRL('X')},
+                                    CMD_NULL,
+                                    fptr(textui_quit),
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0},
+                                   {"Retire character and quit",
+                                    {'Q'},
+                                    CMD_NULL,
+                                    fptr(textui_cmd_retire),
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0},
+                                   {"Redraw the screen",
+                                    {KTRL('R')},
+                                    CMD_NULL,
+                                    fptr(do_cmd_redraw),
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0},
+                                   {"Save \"screen dump\"",
+                                    {')'},
+                                    CMD_NULL,
+                                    fptr(do_cmd_save_screen),
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    0}};
+DATA struct cmd_info cmd_hidden[] = {
+    {"Take notes",
+     {':'},
+     CMD_NULL,
+     fptr(do_cmd_note),
+     NULL,
+     0,
+     NULL,
+     NULL,
+     NULL,
+     0},
     {"Version info",
      {'V'},
      CMD_NULL,
@@ -2576,7 +2606,7 @@ struct cmd_info cmd_hidden[] = {
      "Debug",
      -1},
 };
-struct cmd_info cmd_debug[] = {
+DATA struct cmd_info cmd_debug[] = {
     {"Items", {'\0'}, CMD_NULL, NULL, NULL, 0, NULL, NULL, "DbgObj", -1},
     {"Player", {'\0'}, CMD_NULL, NULL, NULL, 0, NULL, NULL, "DbgPlayer", -1},
     {"Teleport", {'\0'}, CMD_NULL, NULL, NULL, 0, NULL, NULL, "DbgTele", -1},
@@ -2596,7 +2626,7 @@ struct cmd_info cmd_debug[] = {
      "DbgMisc",
      -1},
 };
-struct cmd_info cmd_debug_obj[] = {
+DATA struct cmd_info cmd_debug_obj[] = {
     {"Create an object",
      {'c'},
      CMD_NULL,
@@ -2658,7 +2688,7 @@ struct cmd_info cmd_debug_obj[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_player[] = {
+DATA struct cmd_info cmd_debug_player[] = {
     {"Cure everything",
      {'a'},
      CMD_WIZ_CURE_ALL,
@@ -2740,7 +2770,7 @@ struct cmd_info cmd_debug_player[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_tele[] = {
+DATA struct cmd_info cmd_debug_tele[] = {
     {"To location",
      {'b'},
      CMD_WIZ_TELEPORT_TO,
@@ -2762,7 +2792,7 @@ struct cmd_info cmd_debug_tele[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_effects[] = {
+DATA struct cmd_info cmd_debug_effects[] = {
     {"Detect all nearby",
      {'d'},
      CMD_WIZ_DETECT_ALL_LOCAL,
@@ -2824,7 +2854,7 @@ struct cmd_info cmd_debug_effects[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_summon[] = {
+DATA struct cmd_info cmd_debug_summon[] = {
     {"Summon specific",
      {'n'},
      CMD_WIZ_SUMMON_NAMED,
@@ -2846,7 +2876,7 @@ struct cmd_info cmd_debug_summon[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_files[] = {
+DATA struct cmd_info cmd_debug_files[] = {
     {"Create spoilers",
      {'"'},
      CMD_NULL,
@@ -2868,7 +2898,7 @@ struct cmd_info cmd_debug_files[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_stats[] = {
+DATA struct cmd_info cmd_debug_stats[] = {
     {"Objects and monsters",
      {'S'},
      CMD_WIZ_COLLECT_OBJ_MON_STATS,
@@ -2910,7 +2940,7 @@ struct cmd_info cmd_debug_stats[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_query[] = {
+DATA struct cmd_info cmd_debug_query[] = {
     {"Feature",
      {'F'},
      CMD_WIZ_QUERY_FEATURE,
@@ -2952,7 +2982,7 @@ struct cmd_info cmd_debug_query[] = {
      NULL,
      0},
 };
-struct cmd_info cmd_debug_misc[] = {
+DATA struct cmd_info cmd_debug_misc[] = {
     {"Wizard light level",
      {'w'},
      CMD_WIZ_WIZARD_LIGHT,
@@ -3004,7 +3034,7 @@ struct cmd_info cmd_debug_misc[] = {
      NULL,
      0},
 };
-struct command_list cmds_all[] = {
+DATA struct command_list cmds_all[] = {
     {"Items", cmd_item, N_ELEMENTS(cmd_item), 0, 0},
     {"Action commands", cmd_action, N_ELEMENTS(cmd_action), 0, 0},
     {"Manage items", cmd_item_manage, N_ELEMENTS(cmd_item_manage), 0, 0},
@@ -3022,72 +3052,72 @@ struct command_list cmds_all[] = {
     {"DbgQuery", cmd_debug_query, N_ELEMENTS(cmd_debug_query), 2, 1},
     {"DbgMisc", cmd_debug_misc, N_ELEMENTS(cmd_debug_misc), 2, 1},
     {NULL, NULL, 0, 0, 0}};
-static struct cmd_info* converted_list[4][UCHAR_MAX + 1];
-static int n_nested = 0;
-static struct cmd_info*** nested_lists = NULL;
-static bool inkey_xtra;
-uint32_t inkey_scan;
-bool inkey_flag;
-struct keypress* inkey_next = NULL;
-static bool keymap_auto_more;
-static int message_column = 0;
-bool msg_flag;
-bool (*get_file)(const char* suggested_name, char* path,
-                 size_t len) = fptr(get_file_text);
-static int dir_transitions[10][10] = {
+DATA struct cmd_info* converted_list[4][UCHAR_MAX + 1];
+DATA int n_nested = 0;
+DATA struct cmd_info*** nested_lists = NULL;
+DATA bool inkey_xtra;
+DATA uint32_t inkey_scan;
+DATA bool inkey_flag;
+DATA struct keypress* inkey_next = NULL;
+DATA bool keymap_auto_more;
+DATA int message_column = 0;
+DATA bool msg_flag;
+DATA bool (*get_file)(const char* suggested_name, char* path,
+                      size_t len) = fptr(get_file_text);
+DATA int dir_transitions[10][10] = {
     {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 2, 0, 1, 0, 3, 0, 5, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 1, 0, 4, 0, 5, 0, 7, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 3, 0, 5, 0, 6, 0, 9, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 5, 0, 7, 0, 9, 0, 8, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
-static struct keypress request_command_buffer[256];
-static struct keymap* keymaps[KEYMAP_MODE_MAX];
-struct file_parser ui_knowledge_parser = {
-    "ui_knowledge", fptr(init_ui_knowledge_parser), fptr(run_ui_knowledge_parser),
-    fptr(finish_ui_knowledge_parser), fptr(cleanup_ui_knowledge_parsed_data)};
-static join_t* default_join;
-static uint8_t attr_idx = 0;
-static wchar_t char_idx = 0;
-static struct ui_monster_category* monster_group = NULL;
-static int n_monster_group = 0;
-static const grouper object_text_order[] = {{TV_RING, "Ring"},
-                                            {TV_AMULET, "Amulet"},
-                                            {TV_POTION, "Potion"},
-                                            {TV_STAFF, "Staff"},
-                                            {TV_HORN, "Horn"},
-                                            {TV_FOOD, "Food"},
-                                            {TV_HERB, "Herb"},
-                                            {TV_LIGHT, "Light"},
-                                            {TV_FLASK, "Flask"},
-                                            {TV_SWORD, "Sword"},
-                                            {TV_POLEARM, "Polearm"},
-                                            {TV_HAFTED, "Hafted Weapon"},
-                                            {TV_BOW, "Bow"},
-                                            {TV_ARROW, "Ammunition"},
-                                            {TV_SHIELD, "Shield"},
-                                            {TV_CROWN, "Crown"},
-                                            {TV_HELM, "Helm"},
-                                            {TV_GLOVES, "Gloves"},
-                                            {TV_BOOTS, "Boots"},
-                                            {TV_CLOAK, "Cloak"},
-                                            {TV_MAIL, "Hard Armor"},
-                                            {TV_SOFT_ARMOR, "Soft Armor"},
-                                            {TV_DIGGING, "Digger"},
-                                            {TV_METAL, "Metal"},
-                                            {0, NULL}};
-static int* obj_group_order = NULL;
-static const char* rune_group_text[] = {"Combat", "Modifiers", "Resists",
-                                        "Brands", "Slays",     "Curses",
-                                        "Other",  NULL};
-static const char* feature_group_text[] = {"Floors", "Doors",        "Stairs",
-                                           "Walls",  "Obstructions", "Forges",
-                                           "Pits",   "Other",        NULL};
-static enum grid_light_level f_uik_lighting = LIGHTING_LIT;
-static const char* trap_group_text[] = {"Runes", "Locks", "Traps", "Other",
-                                        NULL};
-static enum grid_light_level t_uik_lighting = LIGHTING_LIT;
-static menu_action knowledge_actions[] = {
+DATA struct keypress request_command_buffer[256];
+DATA struct keymap* keymaps[KEYMAP_MODE_MAX];
+DATA struct file_parser ui_knowledge_parser = {
+    "ui_knowledge", fptr(init_ui_knowledge_parser),
+    fptr(run_ui_knowledge_parser), fptr(finish_ui_knowledge_parser),
+    fptr(cleanup_ui_knowledge_parsed_data)};
+DATA join_t* default_join;
+DATA uint8_t attr_idx = 0;
+DATA wchar_t char_idx = 0;
+DATA struct ui_monster_category* monster_group = NULL;
+DATA int n_monster_group = 0;
+DATA const grouper object_text_order[] = {{TV_RING, "Ring"},
+                                          {TV_AMULET, "Amulet"},
+                                          {TV_POTION, "Potion"},
+                                          {TV_STAFF, "Staff"},
+                                          {TV_HORN, "Horn"},
+                                          {TV_FOOD, "Food"},
+                                          {TV_HERB, "Herb"},
+                                          {TV_LIGHT, "Light"},
+                                          {TV_FLASK, "Flask"},
+                                          {TV_SWORD, "Sword"},
+                                          {TV_POLEARM, "Polearm"},
+                                          {TV_HAFTED, "Hafted Weapon"},
+                                          {TV_BOW, "Bow"},
+                                          {TV_ARROW, "Ammunition"},
+                                          {TV_SHIELD, "Shield"},
+                                          {TV_CROWN, "Crown"},
+                                          {TV_HELM, "Helm"},
+                                          {TV_GLOVES, "Gloves"},
+                                          {TV_BOOTS, "Boots"},
+                                          {TV_CLOAK, "Cloak"},
+                                          {TV_MAIL, "Hard Armor"},
+                                          {TV_SOFT_ARMOR, "Soft Armor"},
+                                          {TV_DIGGING, "Digger"},
+                                          {TV_METAL, "Metal"},
+                                          {0, NULL}};
+DATA int* obj_group_order = NULL;
+DATA const char* rune_group_text[] = {"Combat", "Modifiers", "Resists",
+                                      "Brands", "Slays",     "Curses",
+                                      "Other",  NULL};
+DATA const char* feature_group_text[] = {"Floors", "Doors",        "Stairs",
+                                         "Walls",  "Obstructions", "Forges",
+                                         "Pits",   "Other",        NULL};
+DATA enum grid_light_level f_uik_lighting = LIGHTING_LIT;
+DATA const char* trap_group_text[] = {"Runes", "Locks", "Traps", "Other", NULL};
+DATA enum grid_light_level t_uik_lighting = LIGHTING_LIT;
+DATA menu_action knowledge_actions[] = {
     {0, 0, "Display object knowledge", fptr(textui_browse_object_knowledge)},
     {0, 0, "Display rune knowledge", fptr(do_cmd_knowledge_runes)},
     {0, 0, "Display artifact knowledge", fptr(do_cmd_knowledge_artifacts)},
@@ -3098,9 +3128,9 @@ static menu_action knowledge_actions[] = {
     {0, 0, "Display hall of fame", fptr(do_cmd_knowledge_scores)},
     {0, 0, "Display character history", fptr(do_cmd_knowledge_history)},
 };
-static struct menu knowledge_menu;
-static wchar_t mini_screenshot_char[7][7];
-static uint8_t mini_screenshot_attr[7][7];
+DATA struct menu knowledge_menu;
+DATA wchar_t mini_screenshot_char[7][7];
+DATA uint8_t mini_screenshot_attr[7][7];
 const uint8_t curs_attrs[3][2] = {{COLOUR_SLATE, COLOUR_BLUE},
                                   {COLOUR_WHITE, COLOUR_L_BLUE},
                                   {COLOUR_RED, COLOUR_L_RED}};
@@ -3110,57 +3140,57 @@ const char all_letters[] =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const char all_letters_nohjkl[] =
     "abcdefgimnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static const menu_iter menu_iter_actions = {fptr(menu_action_tag), fptr(menu_action_valid),
-                                            fptr(menu_action_display),
-                                            fptr(menu_action_handle), NULL};
-static const menu_iter menu_iter_strings = {NULL, NULL, fptr(display_string),
-                                            fptr(handle_string), NULL};
-static const menu_skin menu_skin_scroll = {fptr(scrolling_get_cursor),
-                                           fptr(display_scrolling), fptr(scroll_get_tag),
-                                           fptr(scroll_process_direction)};
-static const menu_skin menu_skin_object = {
-    fptr(object_skin_get_cursor), fptr(object_skin_display), fptr(object_skin_get_tag),
-    fptr(object_skin_process_direction)};
-static const menu_skin menu_skin_column = {fptr(columns_get_cursor), fptr(display_columns),
-                                           fptr(column_get_tag),
-                                           fptr(column_process_direction)};
-static const menu_iter dynamic_iter = {NULL, fptr(dynamic_valid), fptr(dynamic_display),
-                                       NULL, NULL};
-static struct object_menu_data items[50];
-static int num_obj;
-static int num_head;
-static size_t max_len;
-static int ex_width;
-static int ex_offset;
-static item_tester tester_m;
-static region area = {20, 1, -1, -2};
-static struct object* selection;
-static const char* prompt;
-static char header[80];
-static int i1, i2;
-static int e1, e2;
-static int f1, f2;
-static int throwing_num;
-static struct object** floor_list;
-static struct object** throwing_list;
-static olist_detail_t olist_mode = 0;
-static int item_mode;
-static cmd_code item_cmd;
-static bool newmenu = false;
-static bool allow_all = false;
-static const menu_iter option_toggle_iter = {NULL, NULL, fptr(option_toggle_display),
-                                             fptr(option_toggle_handle), NULL};
-static struct keypress keymap_buffer[KEYMAP_ACTION_MAX + 1];
-static struct menu* keymap_menu;
-static menu_action keymap_actions[] = {
+DATA const menu_iter menu_iter_actions = {
+    fptr(menu_action_tag), fptr(menu_action_valid), fptr(menu_action_display),
+    fptr(menu_action_handle), NULL};
+DATA const menu_iter menu_iter_strings = {NULL, NULL, fptr(display_string),
+                                          fptr(handle_string), NULL};
+DATA const menu_skin menu_skin_scroll = {
+    fptr(scrolling_get_cursor), fptr(display_scrolling), fptr(scroll_get_tag),
+    fptr(scroll_process_direction)};
+DATA const menu_skin menu_skin_object = {
+    fptr(object_skin_get_cursor), fptr(object_skin_display),
+    fptr(object_skin_get_tag), fptr(object_skin_process_direction)};
+DATA const menu_skin menu_skin_column = {
+    fptr(columns_get_cursor), fptr(display_columns), fptr(column_get_tag),
+    fptr(column_process_direction)};
+DATA const menu_iter dynamic_iter = {NULL, fptr(dynamic_valid),
+                                     fptr(dynamic_display), NULL, NULL};
+DATA struct object_menu_data items[50];
+DATA int num_obj;
+DATA int num_head;
+DATA size_t max_len;
+DATA int ex_width;
+DATA int ex_offset;
+DATA item_tester tester_m;
+DATA region area = {20, 1, -1, -2};
+DATA struct object* selection;
+DATA const char* prompt;
+DATA char header[80];
+DATA int i1, i2;
+DATA int e1, e2;
+DATA int f1, f2;
+DATA int throwing_num;
+DATA struct object** floor_list;
+DATA struct object** throwing_list;
+DATA olist_detail_t olist_mode = 0;
+DATA int item_mode;
+DATA cmd_code item_cmd;
+DATA bool newmenu = false;
+DATA bool allow_all = false;
+DATA const menu_iter option_toggle_iter = {
+    NULL, NULL, fptr(option_toggle_display), fptr(option_toggle_handle), NULL};
+DATA struct keypress keymap_buffer[KEYMAP_ACTION_MAX + 1];
+DATA struct menu* keymap_menu;
+DATA menu_action keymap_actions[] = {
     {0, 0, "Load a user pref file", fptr(ui_keymap_pref_load)},
     {0, 0, "Save keymaps to file", fptr(ui_keymap_pref_append)},
     {0, 0, "Query a keymap", fptr(ui_keymap_query)},
     {0, 0, "Create a keymap", fptr(ui_keymap_create)},
     {0, 0, "Remove a keymap", fptr(ui_keymap_remove)},
 };
-static struct menu* visual_menu;
-static menu_action visual_menu_items[] = {
+DATA struct menu* visual_menu;
+DATA menu_action visual_menu_items[] = {
     {0, 0, "Load a user pref file", fptr(visuals_pref_load)},
     {0, 0, "Save monster attr/chars", fptr(visuals_dump_monsters)},
     {0, 0, "Save object attr/chars", fptr(visuals_dump_objects)},
@@ -3168,24 +3198,25 @@ static menu_action visual_menu_items[] = {
     {0, 0, "Save flavor attr/chars", fptr(visuals_dump_flavors)},
     {0, 0, "Reset visuals", fptr(visuals_reset)},
 };
-static struct menu* color_menu;
-static menu_action color_events[] = {
+DATA struct menu* color_menu;
+DATA menu_action color_events[] = {
     {0, 0, "Load a user pref file", fptr(colors_pref_load)},
     {0, 0, "Dump colors", fptr(colors_pref_dump)},
     {0, 0, "Modify colors", fptr(colors_modify)}};
-static tval_desc sval_dependent[] = {
+DATA tval_desc sval_dependent[] = {
     {TV_STAFF, "Staffs"}, {TV_HORN, "Horns"},     {TV_POTION, "Potions"},
     {TV_RING, "Rings"},   {TV_AMULET, "Amulets"}, {TV_FOOD, "Food"},
     {TV_HERB, "Herbs"},   {TV_LIGHT, "Lights"},   {TV_FLASK, "Flasks of oil"},
 };
-static const menu_iter ignore_sval_menu = {
-    NULL, NULL, fptr(ignore_sval_menu_display), fptr(ignore_sval_menu_action), NULL,
+DATA const menu_iter ignore_sval_menu = {
+    NULL, NULL, fptr(ignore_sval_menu_display), fptr(ignore_sval_menu_action),
+    NULL,
 };
-static const menu_iter options_item_iter = {
-    fptr(tag_options_item), fptr(valid_options_item), fptr(display_options_item),
-    fptr(handle_options_item), NULL};
-static struct menu* option_menu;
-static menu_action option_actions[] = {
+DATA const menu_iter options_item_iter = {
+    fptr(tag_options_item), fptr(valid_options_item),
+    fptr(display_options_item), fptr(handle_options_item), NULL};
+DATA struct menu* option_menu;
+DATA menu_action option_actions[] = {
     {0, 'a', "User interface options", fptr(option_toggle_menu)},
     {0, 'b', "Birth (difficulty) options", fptr(option_toggle_menu)},
     {0, 'x', "Cheat options", fptr(option_toggle_menu)},
@@ -3206,63 +3237,63 @@ static menu_action option_actions[] = {
     {0, 'c', "Edit colours (advanced)", fptr(do_cmd_colors)},
     {0, 'v', "Save visuals (advanced)", fptr(do_cmd_visuals)},
 };
-int16_t screen_save_depth;
-char arg_name[PLAYER_NAME_LEN];
-int arg_graphics;
-bool arg_graphics_nice;
-int use_graphics;
-uint8_t* monster_x_attr;
-wchar_t* monster_x_char;
-uint8_t* kind_x_attr;
-wchar_t* kind_x_char;
-uint8_t* feat_x_attr[LIGHTING_MAX];
-wchar_t* feat_x_char[LIGHTING_MAX];
-uint8_t* trap_x_attr[LIGHTING_MAX];
-wchar_t* trap_x_char[LIGHTING_MAX];
-uint8_t* flavor_x_attr;
-wchar_t* flavor_x_char;
-uint8_t alert_x_attr = 0;
-wchar_t alert_x_char = 0;
-uint8_t glow_x_attr = 0;
-wchar_t glow_x_char = 0;
-uint8_t damage_x_attr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-wchar_t damage_x_char[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-static size_t flavor_max = 0;
-static const char* dump_separator = "#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#";
-int16_t signal_count;
-static Signal_Handler_t (*signal_aux)(int, Signal_Handler_t) = fptr(wrap_signal);
-int skill_idx = 0;
-static int skbuysell[SKILL_MAX];
-static struct object smith_obj_body;
-static struct object* smith_obj = &smith_obj_body;
-static struct object smith_obj_known_body;
-static struct object* smith_obj_known = &smith_obj_known_body;
-static struct object smith_obj_body_backup;
-static struct object* smith_obj_backup = &smith_obj_body_backup;
-static struct artifact smith_art_body;
-static struct artifact* smith_art = &smith_art_body;
-static char smith_art_name[50];
-static struct smithing_cost current_cost;
-static struct menu* smithing_menu;
-static bool no_forge;
-static bool exhausted;
-static bool create_smithed_item;
-static bool numbers_changed;
-static int pval = 0;
-static bool pval_included = false;
-static struct object_kind* smithing_svals[20];
-struct ego_item** smithing_specials;
-bool* affordable_specials;
-static const char* smithing_art_cats[] = {
+DATA int16_t screen_save_depth;
+DATA char arg_name[PLAYER_NAME_LEN];
+DATA int arg_graphics;
+DATA bool arg_graphics_nice;
+DATA int use_graphics;
+DATA uint8_t* monster_x_attr;
+DATA wchar_t* monster_x_char;
+DATA uint8_t* kind_x_attr;
+DATA wchar_t* kind_x_char;
+DATA uint8_t* feat_x_attr[LIGHTING_MAX];
+DATA wchar_t* feat_x_char[LIGHTING_MAX];
+DATA uint8_t* trap_x_attr[LIGHTING_MAX];
+DATA wchar_t* trap_x_char[LIGHTING_MAX];
+DATA uint8_t* flavor_x_attr;
+DATA wchar_t* flavor_x_char;
+DATA uint8_t alert_x_attr = 0;
+DATA wchar_t alert_x_char = 0;
+DATA uint8_t glow_x_attr = 0;
+DATA wchar_t glow_x_char = 0;
+DATA uint8_t damage_x_attr[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+DATA wchar_t damage_x_char[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+DATA size_t flavor_max = 0;
+DATA const char* dump_separator = "#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#";
+DATA int16_t signal_count;
+DATA Signal_Handler_t (*signal_aux)(int, Signal_Handler_t) = fptr(wrap_signal);
+DATA int skill_idx = 0;
+DATA int skbuysell[SKILL_MAX];
+DATA struct object smith_obj_body;
+DATA struct object* smith_obj = &smith_obj_body;
+DATA struct object smith_obj_known_body;
+DATA struct object* smith_obj_known = &smith_obj_known_body;
+DATA struct object smith_obj_body_backup;
+DATA struct object* smith_obj_backup = &smith_obj_body_backup;
+DATA struct artifact smith_art_body;
+DATA struct artifact* smith_art = &smith_art_body;
+DATA char smith_art_name[50];
+DATA struct smithing_cost current_cost;
+DATA struct menu* smithing_menu;
+DATA bool no_forge;
+DATA bool exhausted;
+DATA bool create_smithed_item;
+DATA bool numbers_changed;
+DATA int pval = 0;
+DATA bool pval_included = false;
+DATA struct object_kind* smithing_svals[20];
+DATA struct ego_item** smithing_specials;
+DATA bool* affordable_specials;
+DATA const char* smithing_art_cats[] = {
     "Stat bonuses", "Sustains",     "Skill bonuses", "Melee powers", "Slays",
     "Resistances",  "Curses",       "Misc",          "Melee",        "Archery",
     "Evasion",      "Stealth",      "Perception",    "Will",         "Smithing",
     "Song",         "Name Artefact"};
-static int* smithing_art_cat_counts = NULL;
-static struct property_info* smith_art_properties;
-static struct ability** smith_art_abilities;
-static bool negative;
-struct numbers_menu_entry numbers_menu_info[SMITH_NUM_MAX] = {
+DATA int* smithing_art_cat_counts = NULL;
+DATA struct property_info* smith_art_properties;
+DATA struct ability** smith_art_abilities;
+DATA bool negative;
+DATA struct numbers_menu_entry numbers_menu_info[SMITH_NUM_MAX] = {
     {SMITH_NUM_INC_ATT, "increase attack bonus"},
     {SMITH_NUM_DEC_ATT, "decrease attack bonus"},
     {SMITH_NUM_INC_DS, "increase damage sides"},
@@ -3275,108 +3306,114 @@ struct numbers_menu_entry numbers_menu_info[SMITH_NUM_MAX] = {
     {SMITH_NUM_DEC_PVAL, "decrease special bonus"},
     {SMITH_NUM_INC_WGT, "increase weight"},
     {SMITH_NUM_DEC_WGT, "decrease weight"}};
-bool numbers_valid[SMITH_NUM_MAX];
-bool numbers_can_afford[SMITH_NUM_MAX] = {false};
-bool numbers_needs_artistry[SMITH_NUM_MAX] = {false};
-static menu_action smithing_actions[] = {
-    {0, 'a', "Base Item", fptr(tval_menu)},    {0, 'b', "Enchant", fptr(special_menu)},
-    {0, 'c', "Artifice", fptr(artefact_menu)}, {0, 'd', "Numbers", fptr(numbers_menu)},
-    {0, 'e', "Melt", fptr(melt_menu)},         {0, 'f', "Accept", fptr(accept_item)},
+DATA bool numbers_valid[SMITH_NUM_MAX];
+DATA bool numbers_can_afford[SMITH_NUM_MAX] = {false};
+DATA bool numbers_needs_artistry[SMITH_NUM_MAX] = {false};
+DATA menu_action smithing_actions[] = {
+    {0, 'a', "Base Item", fptr(tval_menu)},
+    {0, 'b', "Enchant", fptr(special_menu)},
+    {0, 'c', "Artifice", fptr(artefact_menu)},
+    {0, 'd', "Numbers", fptr(numbers_menu)},
+    {0, 'e', "Melt", fptr(melt_menu)},
+    {0, 'f', "Accept", fptr(accept_item)},
 };
-static struct song_menu_info* songlist;
-static char labels[25];
-static struct menu* spoil_menu = NULL;
-static menu_action spoil_actions[] = {
+DATA struct song_menu_info* songlist;
+DATA char labels[25];
+DATA struct menu* spoil_menu = NULL;
+DATA menu_action spoil_actions[] = {
     {0, 0, "Brief Object Info (obj-desc.spo)", fptr(spoiler_menu_act)},
     {0, 0, "Brief Artifact Info (artifact.spo)", fptr(spoiler_menu_act)},
     {0, 0, "Brief Monster Info (mon-desc.spo)", fptr(spoiler_menu_act)},
     {0, 0, "Full Monster Info (mon-info.spo)", fptr(spoiler_menu_act)},
 };
-term* angband_term[ANGBAND_TERM_MAX];
-char angband_term_name[ANGBAND_TERM_MAX][16] = {
+DATA term* angband_term[ANGBAND_TERM_MAX];
+DATA char angband_term_name[ANGBAND_TERM_MAX][16] = {
     VERSION_NAME, "Term-1", "Term-2", "Term-3",
     "Term-4",     "Term-5", "Term-6", "Term-7"};
-uint32_t window_flag[ANGBAND_TERM_MAX];
-int row_top_map[SIDEBAR_MAX] = {1, 4, 1};
-int row_bottom_map[SIDEBAR_MAX] = {1, 0, 0};
-int col_map[SIDEBAR_MAX] = {13, 0, 0};
-term* Term = NULL;
-int log_i = 0;
-int log_size = 0;
-struct keypress keylog[KEYLOG_SIZE];
-uint8_t tile_width = 1;
-uint8_t tile_height = 1;
-bool bigcurs = false;
-bool smlcurs = true;
-static size_t const VISUALS_GROUPS_MAX = 8;
-static size_t const VISUALS_CYCLES_MAX = 64;
-static size_t const VISUALS_STEPS_MAX = 32;
-static uint8_t const VISUALS_INVALID_COLOR = 0xFF;
-static struct visuals_cycler* visuals_cycler_table = NULL;
-static struct visuals_flicker* visuals_flicker_table = NULL;
-static struct file_parser visuals_file_parser = {
+DATA uint32_t window_flag[ANGBAND_TERM_MAX];
+DATA int row_top_map[SIDEBAR_MAX] = {1, 4, 1};
+DATA int row_bottom_map[SIDEBAR_MAX] = {1, 0, 0};
+DATA int col_map[SIDEBAR_MAX] = {13, 0, 0};
+DATA term* Term = NULL;
+DATA int log_i = 0;
+DATA int log_size = 0;
+DATA struct keypress keylog[KEYLOG_SIZE];
+DATA uint8_t tile_width = 1;
+DATA uint8_t tile_height = 1;
+DATA bool bigcurs = false;
+DATA bool smlcurs = true;
+DATA size_t const VISUALS_GROUPS_MAX = 8;
+DATA size_t const VISUALS_CYCLES_MAX = 64;
+DATA size_t const VISUALS_STEPS_MAX = 32;
+DATA uint8_t const VISUALS_INVALID_COLOR = 0xFF;
+DATA struct visuals_cycler* visuals_cycler_table = NULL;
+DATA struct visuals_flicker* visuals_flicker_table = NULL;
+DATA struct file_parser visuals_file_parser = {
     .name = "visuals",
     .init = fptr(visuals_file_parser_init),
     .run = fptr(visuals_file_parser_run),
     .finish = fptr(visuals_file_parser_finish),
     .cleanup = fptr(visuals_file_parser_cleanup)};
-struct init_module ui_visuals_module = {.name = "ui-visuals",
-                                        .init = fptr(ui_visuals_module_init),
-                                        .cleanup = fptr(ui_visuals_module_cleanup)};
-static const menu_iter proj_iter = {NULL, NULL, fptr(proj_display), NULL, NULL};
-static bool choose_artifact = false;
-static const region wiz_create_item_area = {0, 0, 0, 0};
-static menu_iter wiz_create_item_submenu = {
-    NULL, NULL, fptr(wiz_create_item_subdisplay), fptr(wiz_create_item_subaction), NULL};
-static const menu_iter wiz_create_item_menu = {
-    NULL, NULL, fptr(wiz_create_item_display), fptr(wiz_create_item_action), NULL};
-static ang_file* fh = NULL;
-static const grouper group_item[] = {{TV_ARROW, "Ammo"},
-                                     {TV_BOW, "Bows"},
-                                     {TV_SWORD, "Weapons"},
-                                     {TV_POLEARM, NULL},
-                                     {TV_HAFTED, NULL},
-                                     {TV_DIGGING, NULL},
-                                     {TV_SOFT_ARMOR, "Armour (Body)"},
-                                     {TV_MAIL, NULL},
-                                     {TV_CLOAK, "Armour (Misc)"},
-                                     {TV_SHIELD, NULL},
-                                     {TV_HELM, NULL},
-                                     {TV_CROWN, NULL},
-                                     {TV_GLOVES, NULL},
-                                     {TV_BOOTS, NULL},
-                                     {TV_AMULET, "Amulets"},
-                                     {TV_RING, "Rings"},
-                                     {TV_POTION, "Potions"},
-                                     {TV_FOOD, "Food"},
-                                     {TV_HERB, "Herbs"},
-                                     {TV_HORN, "Horns"},
-                                     {TV_CHEST, "Chests"},
-                                     {TV_LIGHT, "Lights and fuel"},
-                                     {TV_FLASK, NULL},
-                                     {0, ""}};
-static const grouper group_artifact[] = {{TV_SWORD, "Edged Weapons"},
-                                         {TV_POLEARM, "Polearms"},
-                                         {TV_HAFTED, "Hafted Weapons"},
-                                         {TV_BOW, "Bows"},
-                                         {TV_DIGGING, "Diggers"},
-                                         {TV_SOFT_ARMOR, "Body Armor"},
-                                         {TV_MAIL, NULL},
-                                         {TV_CLOAK, "Cloaks"},
-                                         {TV_SHIELD, "Shields"},
-                                         {TV_HELM, "Helms/Crowns"},
-                                         {TV_CROWN, NULL},
-                                         {TV_GLOVES, "Gloves"},
-                                         {TV_BOOTS, "Boots"},
-                                         {TV_LIGHT, "Light Sources"},
-                                         {TV_AMULET, "Amulets"},
-                                         {TV_RING, "Rings"},
-                                         {0, NULL}};
-const char* buildid = VERSION_NAME
+DATA struct init_module ui_visuals_module = {
+    .name = "ui-visuals",
+    .init = fptr(ui_visuals_module_init),
+    .cleanup = fptr(ui_visuals_module_cleanup)};
+DATA const menu_iter proj_iter = {NULL, NULL, fptr(proj_display), NULL, NULL};
+DATA bool choose_artifact = false;
+DATA const region wiz_create_item_area = {0, 0, 0, 0};
+DATA menu_iter wiz_create_item_submenu = {
+    NULL, NULL, fptr(wiz_create_item_subdisplay),
+    fptr(wiz_create_item_subaction), NULL};
+DATA const menu_iter wiz_create_item_menu = {
+    NULL, NULL, fptr(wiz_create_item_display), fptr(wiz_create_item_action),
+    NULL};
+DATA ang_file* fh = NULL;
+DATA const grouper group_item[] = {{TV_ARROW, "Ammo"},
+                                   {TV_BOW, "Bows"},
+                                   {TV_SWORD, "Weapons"},
+                                   {TV_POLEARM, NULL},
+                                   {TV_HAFTED, NULL},
+                                   {TV_DIGGING, NULL},
+                                   {TV_SOFT_ARMOR, "Armour (Body)"},
+                                   {TV_MAIL, NULL},
+                                   {TV_CLOAK, "Armour (Misc)"},
+                                   {TV_SHIELD, NULL},
+                                   {TV_HELM, NULL},
+                                   {TV_CROWN, NULL},
+                                   {TV_GLOVES, NULL},
+                                   {TV_BOOTS, NULL},
+                                   {TV_AMULET, "Amulets"},
+                                   {TV_RING, "Rings"},
+                                   {TV_POTION, "Potions"},
+                                   {TV_FOOD, "Food"},
+                                   {TV_HERB, "Herbs"},
+                                   {TV_HORN, "Horns"},
+                                   {TV_CHEST, "Chests"},
+                                   {TV_LIGHT, "Lights and fuel"},
+                                   {TV_FLASK, NULL},
+                                   {0, ""}};
+DATA const grouper group_artifact[] = {{TV_SWORD, "Edged Weapons"},
+                                       {TV_POLEARM, "Polearms"},
+                                       {TV_HAFTED, "Hafted Weapons"},
+                                       {TV_BOW, "Bows"},
+                                       {TV_DIGGING, "Diggers"},
+                                       {TV_SOFT_ARMOR, "Body Armor"},
+                                       {TV_MAIL, NULL},
+                                       {TV_CLOAK, "Cloaks"},
+                                       {TV_SHIELD, "Shields"},
+                                       {TV_HELM, "Helms/Crowns"},
+                                       {TV_CROWN, NULL},
+                                       {TV_GLOVES, "Gloves"},
+                                       {TV_BOOTS, "Boots"},
+                                       {TV_LIGHT, "Light Sources"},
+                                       {TV_AMULET, "Amulets"},
+                                       {TV_RING, "Rings"},
+                                       {0, NULL}};
+DATA const char* buildid = VERSION_NAME
     " "
     "1.4.0";
-const char* buildver = "1.4.0";
-const char* copyright =
+DATA const char* buildver = "1.4.0";
+DATA const char* copyright =
     "Copyright (c) 1987-2024 Angband contributors.\n"
     "\n"
     "This work is free software; you can redistribute it and/or modify it\n"
@@ -3391,7 +3428,7 @@ const char* copyright =
     "   and not for profit purposes provided that this copyright and "
     "statement\n"
     "   are included in all such copies.  Other copyrights may also apply.\n";
-uint8_t angband_color_table[MAX_COLORS][4] = {
+DATA uint8_t angband_color_table[MAX_COLORS][4] = {
     {0x00, 0x00, 0x00, 0x00}, {0x00, 0xff, 0xff, 0xff},
     {0x00, 0x80, 0x80, 0x80}, {0x00, 0xff, 0x80, 0x00},
     {0x00, 0xc0, 0x00, 0x00}, {0x00, 0x00, 0x80, 0x40},
@@ -3408,7 +3445,7 @@ uint8_t angband_color_table[MAX_COLORS][4] = {
     {0x00, 0xa0, 0xc0, 0xd0}, {0x00, 0x00, 0xb0, 0xff},
     {0x00, 0x28, 0x28, 0x28},
 };
-color_type color_table[MAX_COLORS] = {
+DATA color_type color_table[MAX_COLORS] = {
     {'d',
      "Dark",
      {0, 0, 0, COLOUR_DARK, COLOUR_L_DARK, COLOUR_DARK, COLOUR_L_DARK,
@@ -3522,8 +3559,8 @@ color_type color_table[MAX_COLORS] = {
      {27, 1, 14, COLOUR_L_WHITE, COLOUR_L_BLUE, COLOUR_BLUE_SLATE,
       COLOUR_L_BLUE, COLOUR_L_BLUE, COLOUR_L_BLUE}},
 };
-uint8_t gamma_table[256];
-static const int16_t gamma_helper[256] = {
+DATA uint8_t gamma_table[256];
+DATA const int16_t gamma_helper[256] = {
     0,    -1420, -1242, -1138, -1065, -1007, -961, -921, -887, -857, -830, -806,
     -783, -762,  -744,  -726,  -710,  -694,  -679, -666, -652, -640, -628, -617,
     -606, -596,  -586,  -576,  -567,  -577,  -549, -541, -532, -525, -517, -509,
@@ -3546,24 +3583,25 @@ static const int16_t gamma_helper[256] = {
     -30,  -29,   -27,   -26,   -25,   -24,   -23,  -22,  -21,  -20,  -19,  -18,
     -17,  -16,   -14,   -13,   -12,   -11,   -10,  -9,   -8,   -7,   -6,   -5,
     -4,   -3,    -2,    -1};
-int player_uid;
-int player_egid;
-static char* format_buf = NULL;
-static size_t format_len = 0;
-static char** quarks;
-static size_t nr_quarks = 1;
-static size_t alloc_quarks = 0;
-struct init_module z_quark_module = {
+DATA int player_uid;
+DATA int player_egid;
+DATA char* format_buf = NULL;
+DATA size_t format_len = 0;
+DATA char** quarks;
+DATA size_t nr_quarks = 1;
+DATA size_t alloc_quarks = 0;
+DATA struct init_module z_quark_module = {
     .name = "z-quark", .init = fptr(quarks_init), .cleanup = fptr(quarks_free)};
-uint32_t state_i = 0;
-uint32_t STATE[RAND_DEG] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-uint32_t z0, z1, z2;
-bool Rand_quick = true;
-uint32_t Rand_value;
-static bool rand_fixed = false;
-static uint32_t rand_fixval = 0;
-static int16_t Rand_normal_table[256] = {
+DATA uint32_t state_i = 0;
+DATA uint32_t STATE[RAND_DEG] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+DATA uint32_t z0, z1, z2;
+DATA bool Rand_quick = true;
+DATA uint32_t Rand_value;
+DATA bool rand_fixed = false;
+DATA uint32_t rand_fixval = 0;
+DATA int16_t Rand_normal_table[256] = {
     206,   613,   1022,  1430,  1838,  2245,  2652,  3058,  3463,  3867,  4271,
     4673,  5075,  5475,  5874,  6271,  6667,  7061,  7454,  7845,  8234,  8621,
     9006,  9389,  9770,  10148, 10524, 10898, 11269, 11638, 12004, 12367, 12727,
@@ -3589,38 +3627,38 @@ static int16_t Rand_normal_table[256] = {
     32763, 32764, 32764, 32764, 32764, 32765, 32765, 32765, 32765, 32766, 32766,
     32766, 32766, 32767,
 };
-void (*text_out_hook)(int a, const char* str);
-int text_out_wrap = 0;
-int text_out_indent = 0;
-int text_out_pad = 0;
-ang_file* text_out_file = NULL;
-char* argv0 = NULL;
-size_t (*text_mbcs_hook)(wchar_t* dest, const char* src, int n) = NULL;
-int (*text_wctomb_hook)(char* s, wchar_t wchar) = NULL;
-int (*text_wcsz_hook)(void) = NULL;
-int (*text_iswprint_hook)(wint_t wc) = NULL;
-void (*plog_aux)(const char*) = NULL;
-void (*quit_aux)(const char*) = NULL;
-static struct termios norm_termios;
-static struct termios game_termios;
-static char* termtype;
-static bool loaded_terminfo;
+DATA void (*text_out_hook)(int a, const char* str);
+DATA int text_out_wrap = 0;
+DATA int text_out_indent = 0;
+DATA int text_out_pad = 0;
+DATA ang_file* text_out_file = NULL;
+DATA char* argv0 = NULL;
+DATA size_t (*text_mbcs_hook)(wchar_t* dest, const char* src, int n) = NULL;
+DATA int (*text_wctomb_hook)(char* s, wchar_t wchar) = NULL;
+DATA int (*text_wcsz_hook)(void) = NULL;
+DATA int (*text_iswprint_hook)(wint_t wc) = NULL;
+DATA void (*plog_aux)(const char*) = NULL;
+DATA void (*quit_aux)(const char*) = NULL;
+DATA struct termios norm_termios;
+DATA struct termios game_termios;
+DATA char* termtype;
+DATA bool loaded_terminfo;
 typedef struct rect_s rect_t, *rect_ptr;
-static int active = 0;
-static int can_use_color = false;
-static int colortable[BASIC_COLORS];
-static int same_colortable[BASIC_COLORS];
-static bool bold_extended = false;
-static bool use_default_background = false;
-static bool keep_terminal_colors = false;
-static int term_count = 1;
-const char help_gcu[] =
+DATA int active = 0;
+DATA int can_use_color = false;
+DATA int colortable[BASIC_COLORS];
+DATA int same_colortable[BASIC_COLORS];
+DATA bool bold_extended = false;
+DATA bool use_default_background = false;
+DATA bool keep_terminal_colors = false;
+DATA int term_count = 1;
+DATA const char help_gcu[] =
     "Text mode, subopts\n"
     "              -B     Use brighter bold characters\n"
     "              -D     Use terminal default background color\n"
     "              -K     Keep terminal's color table when changing colors\n"
     "              -nN    Use N terminals (up to 6)";
-const char help_spoil[] =
+DATA const char help_spoil[] =
     "Spoiler generation mode, subopts\n"
     "              -a fname    Write artifact spoilers to fname;\n"
     "                          if neither -p, -r, nor -s are used, uses\n"
@@ -3628,12 +3666,12 @@ const char help_spoil[] =
     "              -m fname    Write brief monster spoilers to fname\n"
     "              -M fname    Write extended monster spoilers to fname\n"
     "              -o fname    Write object spoilers to fname\n";
-static const struct module mmodules[] = {
+DATA const struct module mmodules[] = {
     {"gcu", help_gcu, fptr(init_gcu)},
     {"spoil", help_spoil, fptr(init_spoil)},
 };
 
-static const struct side_handler_t {
+DATA const struct side_handler_t {
   void (*hook)(int, int);
   int priority;
   game_event_type type;
@@ -3664,7 +3702,7 @@ static const struct side_handler_t {
     {NULL, 18, 0},
     {fptr(prt_speed), 19, EVENT_STATUS},
 };
-static struct {
+DATA struct {
   char tag;
   const char* name;
   void (*action)(const char*, int);
@@ -3673,7 +3711,7 @@ static struct {
     {'E', "Ego ignoring options", fptr(ego_menu)},
     {'{', "Autoinscription setup", fptr(textui_browse_object_knowledge)},
 };
-static const struct {
+DATA const struct {
   region bounds;
   bool align_left;
   struct panel* (*panel)(void);
@@ -3683,7 +3721,7 @@ static const struct {
     {{1, 6, 18, 9}, false, fptr(get_panel_midleft)},
     {{22, 6, 16, 9}, false, fptr(get_panel_combat)},
 };
-static const struct {
+DATA const struct {
   const char* name;
   cave_builder builder;
 } cave_builders[] = {
@@ -3691,7 +3729,7 @@ static const struct {
     {"throne", fptr(throne_gen)},
     {"gates", fptr(gates_gen)},
 };
-static const struct {
+DATA const struct {
   const char* name;
   int max_height;
   int max_width;
@@ -3705,7 +3743,7 @@ static const struct {
     {"Throne room", 30, 35, fptr(build_throne)},
     {"Gates of Angband", 32, 64, fptr(build_gates)},
 };
-static const struct {
+DATA const struct {
   char name[16];
   void (*save)(void);
   uint32_t version;
@@ -3728,7 +3766,7 @@ static const struct {
     {"history", fptr(wr_history), 1},
     {"monster groups", fptr(wr_monster_groups), 1},
 };
-static struct {
+DATA struct {
   char letter;
   void (*func)(const char*);
   bool enabled;
@@ -3739,7 +3777,7 @@ static struct {
     {'M', fptr(spoil_mon_info), false, NULL},
     {'o', fptr(spoil_obj_desc), false, NULL},
 };
-static struct {
+DATA struct {
   const char* name;
   struct file_parser* parser;
 } pl[] = {{"world", &world_parser},
@@ -3775,7 +3813,7 @@ static struct {
           {"chest_traps", &chest_trap_parser},
           {"flavours", &flavor_parser},
           {"random names", &names_parser}};
-static const struct {
+DATA const struct {
   const char* name;
   char** path;
   bool setgid_ok;
@@ -3794,4 +3832,9 @@ static const struct {
     {"panic", &ANGBAND_DIR_PANIC, false},
     {"archive", &ANGBAND_DIR_ARCHIVE, false},
 };
-void (*file_open_hook)(const char *path, file_type ftype);
+DATA struct init_module* modules[] = {
+    &z_quark_module,  &messages_module, &arrays_module,   &generate_module,
+    &player_module,   &rune_module,     &obj_make_module, &ignore_module,
+    &mon_make_module, &options_module,  &tutorial_module, NULL};
+DATA void (*file_open_hook)(const char* path, file_type ftype);
+DATA errr (*cmd_get_hook)(cmd_context c);

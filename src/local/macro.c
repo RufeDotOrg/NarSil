@@ -1,4 +1,5 @@
 #define STATIC_OVL static
+#define DATA static
 #define FDECL(f, p) f p
 
 #ifdef PRUNE
