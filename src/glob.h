@@ -56,7 +56,6 @@ struct source {
     struct loc grid;
   } which;
 };
-struct textblock;
 typedef enum game_event_type {
   EVENT_MAP = 0,
   EVENT_NAME,
@@ -1253,9 +1252,6 @@ struct player {
   struct player_state known_state;
   struct player_upkeep* upkeep;
 };
-struct player;
-struct monster;
-struct monster_group;
 enum {
   DIR_UNKNOWN = 0,
   DIR_NW = 7,
@@ -1443,7 +1439,6 @@ enum {
   FEAT_MAX
 };
 typedef bool (*square_predicate)(struct chunk* c, struct loc grid);
-struct player;
 typedef enum cmd_code {
   CMD_NULL = 0,
   CMD_LOADFILE,
@@ -1599,10 +1594,6 @@ enum cmd_return_codes {
   CMD_ARG_ABORTED = -3
 };
 typedef void (*cmd_handler_fn)(struct command* cmd);
-struct source;
-struct monster;
-struct player;
-struct parser;
 enum parser_error {
   PARSE_ERROR_NONE,
   PARSE_ERROR_BAD_EXPRESSION_STRING,
@@ -1697,8 +1688,6 @@ struct file_parser {
   errr (*finish)(struct parser* p);
   void (*cleanup)(void);
 };
-struct player;
-struct monster;
 struct attack_result {
   int hit;
   int dmg;
@@ -1802,7 +1791,6 @@ struct effect_kind {
 };
 typedef struct textblock textblock;
 typedef void (*text_writer)(ang_file* f);
-struct effect;
 enum {
   EFINFO_NONE,
   EFINFO_DICE,
@@ -2769,7 +2757,6 @@ enum {
   EQUIP_QUIVER,
   EQUIP_MAX
 };
-struct player;
 typedef struct {
   unsigned int enum_val;
   const char* name;
@@ -2865,7 +2852,6 @@ typedef enum {
   OFLOOR_TOP = 0x04,
   OFLOOR_VISIBLE = 0x08,
 } object_floor_t;
-struct player;
 struct ability {
   struct ability* next;
   char* name;
@@ -3062,7 +3048,6 @@ typedef enum {
   RANDNAME_SCROLL,
   RANDNAME_NUM_TYPES
 } randname_type;
-struct player;
 struct high_score {
   char what[8];
   char pts[10];
@@ -3085,7 +3070,6 @@ struct alt_song_desc {
   struct alt_song_desc* next;
 };
 enum sound_status { SOUND_ST_UNKNOWN = 0, SOUND_ST_ERROR, SOUND_ST_LOADED };
-struct parser;
 struct sound_data {
   char* name;
   uint32_t hash;
@@ -3159,13 +3143,7 @@ struct trap {
   bitflag
       flags[(((TRF_MAX) + (sizeof(bitflag) * 8) - 1) / (sizeof(bitflag) * 8))];
 };
-struct player;
-struct monster_race;
-struct object_kind;
-struct tutorial_item;
 typedef struct dict_impl* dict_type;
-struct parser;
-struct ability;
 enum tutorial_component {
   TUTORIAL_ARCHETYPE,
   TUTORIAL_NOTE,
@@ -3401,7 +3379,6 @@ struct command_list {
   int menu_level;
   int keymap;
 };
-struct effect;
 enum game_mode_type { GAME_LOAD, GAME_NEW, GAME_SELECT, GAME_TUTORIAL };
 typedef struct savefile_getter_impl* savefile_getter;
 struct savefile_details {
@@ -3523,7 +3500,6 @@ struct prefs_data {
   bool loaded_window_flag[8];
   uint32_t window_flags[8];
 };
-struct chunk;
 struct grid_counter_pred {
   square_predicate pred;
   int in_vault_count;
