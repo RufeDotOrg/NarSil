@@ -13,10 +13,6 @@ struct color_type {
   char name[32];
   uint8_t color_translate[9];
 };
-extern uint8_t angband_color_table[32][4];
-extern color_type color_table[32];
-extern uint8_t gamma_table[256];
-extern char* argv0;
 typedef struct random {
   int base;
   int dice;
@@ -28,13 +24,6 @@ typedef struct random_chance_s {
   int32_t denominator;
 } random_chance;
 typedef enum { MINIMISE, AVERAGE, MAXIMISE, EXTREMIFY, RANDOMISE } aspect;
-extern bool Rand_quick;
-extern uint32_t Rand_value;
-extern uint32_t state_i;
-extern uint32_t STATE[32];
-extern uint32_t z0;
-extern uint32_t z1;
-extern uint32_t z2;
 struct loc {
   int x;
   int y;
@@ -406,8 +395,6 @@ enum {
   SOUND_MAX = MSG_MAX,
 };
 typedef unsigned int guid;
-extern int player_uid;
-extern int player_egid;
 typedef struct ang_file ang_file;
 typedef enum { MODE_WRITE, MODE_READ, MODE_APPEND } file_mode;
 typedef enum { FTYPE_TEXT = 1, FTYPE_SAVE, FTYPE_RAW, FTYPE_HTML } file_type;
@@ -558,7 +545,6 @@ struct obj_property {
   char* slay_msg;
   char* desc;
 };
-extern struct obj_property* obj_properties;
 typedef size_t quark_t;
 enum expression_err_e {
   EXPRESSION_ERR_GENERIC = -1,
@@ -658,7 +644,6 @@ struct allocation {
   uint8_t locale;
   uint8_t chance;
 };
-extern struct activation* activations;
 struct object_base {
   char* name;
   int tval;
@@ -682,7 +667,6 @@ struct object_base {
   int max_stack;
   int num_svals;
 };
-extern struct object_base* kb_info;
 struct object_kind {
   char* name;
   char* text;
@@ -729,11 +713,6 @@ struct object_kind {
   uint8_t ignore;
   bool everseen;
 };
-extern struct object_kind* k_info;
-extern struct object_kind* unknown_item_kind;
-extern struct object_kind* unknown_gold_kind;
-extern struct object_kind* pile_kind;
-extern struct object_kind* curse_object_kind;
 enum artifact_category {
   ARTIFACT_NORMAL,
   ARTIFACT_SELF_MADE,
@@ -774,8 +753,6 @@ struct artifact_upkeep {
   bool seen;
   bool everseen;
 };
-extern struct artifact* a_info;
-extern struct artifact_upkeep* aup_info;
 struct ego_item {
   struct ego_item* next;
   char* name;
@@ -806,7 +783,6 @@ struct ego_item {
   bool aware;
   bool everseen;
 };
-extern struct ego_item* e_info;
 struct drop {
   struct drop* next;
   char* name;
@@ -815,7 +791,6 @@ struct drop {
   struct poss_item* poss;
   struct poss_item* imposs;
 };
-extern struct drop* drops;
 enum {
   OBJ_NOTICE_WORN = 0x01,
   OBJ_NOTICE_ASSESSED = 0x02,
@@ -919,7 +894,6 @@ struct flavor {
   uint8_t d_attr;
   wchar_t d_char;
 };
-extern struct flavor* flavors;
 typedef bool (*item_tester)(const struct object*);
 enum { OP_INTERFACE = 0, OP_BIRTH, OP_CHEAT, OP_SCORE, OP_SPECIAL, OP_MAX };
 enum {
@@ -981,7 +955,6 @@ struct player_options {
   uint8_t delay_factor;
   uint8_t name_suffix;
 };
-extern int option_page[OP_SCORE][21];
 enum { STAT_STR, STAT_DEX, STAT_CON, STAT_GRA, STAT_MAX };
 enum { PF_NONE, PF_BLADE_PROFICIENCY, PF_AXE_PROFICIENCY, PF_MAX };
 enum {
@@ -1280,33 +1253,9 @@ struct player {
   struct player_state known_state;
   struct player_upkeep* upkeep;
 };
-extern struct player_body* bodies;
-extern struct player_race* races;
-extern struct player_sex* sexes;
-extern struct player_house* houses;
-extern struct player_ability* player_abilities;
-extern const int32_t player_exp[50];
-extern struct player* player;
-extern const char* buildid;
-extern const char* buildver;
-extern const char* copyright;
 struct player;
 struct monster;
 struct monster_group;
-extern const int16_t ddd[9];
-extern const uint8_t cycle[17];
-extern const uint8_t chome[10];
-extern const int16_t ddx[10];
-extern const int16_t ddy[10];
-extern const struct loc ddgrid[10];
-extern const int16_t ddx_ddd[9];
-extern const int16_t ddy_ddd[9];
-extern const struct loc ddgrid_ddd[9];
-extern const int16_t clockwise_ddd[9];
-extern const struct loc clockwise_grid[9];
-extern const int* dist_offsets_y[10];
-extern const int* dist_offsets_x[10];
-extern const uint8_t side_dirs[20][8];
 enum {
   DIR_UNKNOWN = 0,
   DIR_NW = 7,
@@ -1409,7 +1358,6 @@ struct feature {
   char* look_prefix;
   char* look_in_preposition;
 };
-extern struct feature* f_info;
 enum grid_light_level {
   LIGHTING_LOS = 0,
   LIGHTING_TORCH,
@@ -1494,9 +1442,6 @@ enum {
   FEAT_SPIKED_PIT,
   FEAT_MAX
 };
-extern struct chunk* cave;
-extern struct chunk** chunk_list;
-extern uint16_t chunk_list_max;
 typedef bool (*square_predicate)(struct chunk* c, struct loc grid);
 struct player;
 typedef enum cmd_code {
@@ -1752,7 +1697,6 @@ struct file_parser {
   errr (*finish)(struct parser* p);
   void (*cleanup)(void);
 };
-extern const char* parser_error_str[PARSE_ERROR_MAX];
 struct player;
 struct monster;
 struct attack_result {
@@ -1857,10 +1801,6 @@ struct effect_kind {
   const char* menu_name;
 };
 typedef struct textblock textblock;
-extern ang_file* text_out_file;
-extern int text_out_wrap;
-extern int text_out_indent;
-extern int text_out_pad;
 typedef void (*text_writer)(ang_file* f);
 struct effect;
 enum {
@@ -1950,7 +1890,6 @@ struct smithing_tval_desc {
   int tval;
   const char* desc;
 };
-extern const struct smithing_tval_desc smithing_tvals[18];
 enum {
   HEALTH_DEAD,
   HEALTH_ALMOST_DEAD,
@@ -1966,14 +1905,6 @@ struct level {
   char* down;
   struct level* next;
 };
-extern uint16_t daycount;
-extern uint32_t seed_randart;
-extern uint32_t seed_flavor;
-extern int32_t turn;
-extern bool character_generated;
-extern bool character_dungeon;
-extern const uint8_t extract_energy[8];
-extern struct level* world;
 typedef bool (*monster_predicate)(const struct monster* mon);
 struct target {
   struct loc grid;
@@ -2002,7 +1933,6 @@ struct blow_method {
   char* desc;
   struct blow_method* next;
 };
-extern struct blow_method* blow_methods;
 typedef struct melee_effect_handler_context_s {
   struct player* const p;
   struct monster* const mon;
@@ -2026,7 +1956,6 @@ struct blow_effect {
   int dam_type;
   struct blow_effect* next;
 };
-extern struct blow_effect* blow_effects;
 enum {
   MFLAG_NONE,
   MFLAG_VIEW,
@@ -2353,11 +2282,6 @@ struct monster {
   int16_t turns_stationary;
   uint8_t previous_action[6];
 };
-extern struct monster_pain* pain_messages;
-extern struct monster_spell* monster_spells;
-extern struct monster_base* rb_info;
-extern struct monster_race* r_info;
-extern const struct monster_race* ref_race;
 enum { SET_CORR = 0x01, SET_ROOM = 0x02, SET_BOTH = 0x03 };
 enum { TYP_RUBBLE, TYP_OBJECT };
 enum {
@@ -2426,10 +2350,6 @@ struct vault {
   uint32_t rarity;
   bool forge;
 };
-extern struct dun_data* dun;
-extern struct vault* vaults;
-extern struct room_template* room_templates;
-extern uint8_t get_angle_to_grid[41][41];
 typedef struct _graphics_mode {
   struct _graphics_mode* pNext;
   uint8_t grafID;
@@ -2443,14 +2363,10 @@ typedef struct _graphics_mode {
   char file[32];
   char menuname[32];
 } graphics_mode;
-extern graphics_mode* graphics_modes;
-extern graphics_mode* current_graphics_mode;
-extern int graphics_mode_high_id;
 struct hint {
   char* hint;
   struct hint* next;
 };
-extern struct hint* hints;
 struct angband_constants {
   uint16_t trap_max;
   uint16_t k_max;
@@ -2524,35 +2440,6 @@ struct init_module {
   void (*init)(void);
   void (*cleanup)(void);
 };
-extern bool play_again;
-extern const char* list_element_names[];
-extern const char* list_obj_flag_names[];
-extern struct angband_constants* z_info;
-extern const char* ANGBAND_SYS;
-extern char* ANGBAND_DIR_GAMEDATA;
-extern char* ANGBAND_DIR_CUSTOMIZE;
-extern char* ANGBAND_DIR_HELP;
-extern char* ANGBAND_DIR_SCREENS;
-extern char* ANGBAND_DIR_FONTS;
-extern char* ANGBAND_DIR_TILES;
-extern char* ANGBAND_DIR_SOUNDS;
-extern char* ANGBAND_DIR_ICONS;
-extern char* ANGBAND_DIR_USER;
-extern char* ANGBAND_DIR_SAVE;
-extern char* ANGBAND_DIR_PANIC;
-extern char* ANGBAND_DIR_SCORES;
-extern char* ANGBAND_DIR_ARCHIVE;
-extern struct file_parser body_parser;
-extern struct file_parser constants_parser;
-extern struct file_parser feat_parser;
-extern struct file_parser flavor_parser;
-extern struct file_parser history_parser;
-extern struct file_parser house_parser;
-extern struct file_parser names_parser;
-extern struct file_parser race_parser;
-extern struct file_parser sex_parser;
-extern struct file_parser trap_parser;
-extern struct file_parser world_parser;
 typedef enum {
   EVT_NONE = 0x0000,
   EVT_KBRD = 0x0001,
@@ -2649,38 +2536,6 @@ struct term {
   void (*view_map_hook)(term* t);
   int (*dblh_hook)(int a, wchar_t c);
 };
-extern int row_top_map[(2 + 1)];
-extern int row_bottom_map[(2 + 1)];
-extern int col_map[(2 + 1)];
-extern int log_i;
-extern int log_size;
-extern struct keypress keylog[8];
-extern term* Term;
-extern uint8_t tile_width;
-extern uint8_t tile_height;
-extern bool bigcurs;
-extern bool smlcurs;
-extern term* angband_term[8];
-extern char angband_term_name[8][16];
-extern uint32_t window_flag[8];
-extern const char help_lfb[];
-extern const char help_xpj[];
-extern const char help_x11[];
-extern const char help_vcs[];
-extern const char help_gcu[];
-extern const char help_cap[];
-extern const char help_vme[];
-extern const char help_ami[];
-extern const char help_lsl[];
-extern const char help_sla[];
-extern const char help_emx[];
-extern const char help_ibm[];
-extern const char help_dos[];
-extern const char help_sdl[];
-extern const char help_sdl2[];
-extern const char help_test[];
-extern const char help_stats[];
-extern const char help_spoil[];
 struct module {
   const char* name;
   const char* help;
@@ -2700,17 +2555,6 @@ struct monster_group {
   int furthest;
   struct mon_group_list_entry* member_list;
 };
-extern const char* r_info_flags[];
-extern const char* r_info_spell_flags[];
-extern struct file_parser lore_parser;
-extern struct file_parser meth_parser;
-extern struct file_parser eff_parser;
-extern struct file_parser mon_spell_parser;
-extern struct file_parser monster_parser;
-extern struct file_parser mon_base_parser;
-extern struct file_parser pain_parser;
-extern struct file_parser pursuit_parser;
-extern struct file_parser warning_parser;
 typedef enum monster_list_section_e {
   MONSTER_LIST_SECTION_LOS = 0,
   MONSTER_LIST_SECTION_ESP,
@@ -2758,7 +2602,6 @@ typedef struct monster_lore {
   bool sleep_known;
   bool ranged_freq_known;
 } monster_lore;
-extern struct monster_lore* l_list;
 enum monster_stagger {
   NO_STAGGER = 0,
   CONFUSED_STAGGER = 1,
@@ -2886,8 +2729,6 @@ struct summon {
   int fallback;
   char* desc;
 };
-extern struct monster_base* kin_base;
-extern struct file_parser summon_parser;
 enum chest_query { CHEST_ANY, CHEST_OPENABLE, CHEST_TRAPPED };
 enum {
   CHEST_GAS_CONF = 0x01,
@@ -2897,7 +2738,6 @@ enum {
   CHEST_NEEDLE_ENTRANCE = 0x10,
   CHEST_NEEDLE_LOSE_STR = 0x20
 };
-extern struct file_parser chest_trap_parser;
 enum {
   ODESC_BASE = 0x00,
   ODESC_COMBAT = 0x01,
@@ -2913,7 +2753,6 @@ enum {
   ODESC_NOEGO = 0x200,
   ODESC_ALTNUM = 0x400
 };
-extern const char* inscrip_text[];
 enum {
   EQUIP_NONE,
   EQUIP_WEAPON,
@@ -2967,11 +2806,6 @@ struct ego_desc {
   uint16_t itype;
   const char* short_name;
 };
-extern quality_name_struct quality_values[IGNORE_MAX];
-extern quality_name_struct quality_choices[ITYPE_MAX];
-extern bool** ego_ignore_types;
-extern uint8_t ignore_level[];
-extern const size_t ignore_size;
 typedef enum {
   OINFO_NONE = 0x00,
   OINFO_TERSE = 0x01,
@@ -2981,16 +2815,6 @@ typedef enum {
   OINFO_SPOIL = 0x10,
   OINFO_SMITH = 0x10,
 } oinfo_detail_t;
-extern struct file_parser projection_parser;
-extern struct file_parser object_base_parser;
-extern struct file_parser slay_parser;
-extern struct file_parser brand_parser;
-extern struct file_parser object_parser;
-extern struct file_parser drop_parser;
-extern struct file_parser ego_parser;
-extern struct file_parser artifact_parser;
-extern struct file_parser randart_parser;
-extern struct file_parser object_property_parser;
 enum rune_variety {
   RUNE_VAR_COMBAT,
   RUNE_VAR_MOD,
@@ -3041,8 +2865,6 @@ typedef enum {
   OFLOOR_TOP = 0x04,
   OFLOOR_VISIBLE = 0x08,
 } object_floor_t;
-extern struct slay* slays;
-extern struct brand* brands;
 struct player;
 struct ability {
   struct ability* next;
@@ -3056,9 +2878,7 @@ struct ability {
   int prereq_index[10];
   struct poss_item* poss_items;
 };
-extern struct ability* abilities;
 typedef bool (*ability_predicate)(const struct ability* test);
-extern struct file_parser ability_parser;
 enum {
   HIST_NONE,
   HIST_PLAYER_BIRTH,
@@ -3158,13 +2978,6 @@ struct timed_effect_data {
   bool este;
   bool save;
 };
-extern int PY_FOOD_MAX;
-extern int PY_FOOD_FULL;
-extern int PY_FOOD_ALERT;
-extern int PY_FOOD_WEAK;
-extern int PY_FOOD_STARVE;
-extern struct file_parser player_timed_parser;
-extern struct timed_effect_data timed_effects[TMD_MAX];
 enum {
   PY_EXERT_NONE = 0x00,
   PY_EXERT_CON = 0x01,
@@ -3220,7 +3033,6 @@ struct projection {
   int color;
   struct projection* next;
 };
-extern struct projection* projections;
 enum { BOLT_NO_MOTION, BOLT_0, BOLT_45, BOLT_90, BOLT_135, BOLT_MAX };
 enum { PROJECT_PATH_NO, PROJECT_PATH_NOT_CLEAR, PROJECT_PATH_CLEAR };
 enum {
@@ -3245,15 +3057,11 @@ enum {
   PROJECT_LEAVE = 0x20000,
   PROJECT_RANGE_DAM = 0x40000
 };
-extern uint8_t proj_to_attr[PROJ_MAX][BOLT_MAX];
-extern wchar_t proj_to_char[PROJ_MAX][BOLT_MAX];
 typedef enum {
   RANDNAME_TOLKIEN = 1,
   RANDNAME_SCROLL,
   RANDNAME_NUM_TYPES
 } randname_type;
-extern const char*** name_sections;
-extern bool character_saved;
 struct player;
 struct high_score {
   char what[8];
@@ -3276,8 +3084,6 @@ struct alt_song_desc {
   char* desc;
   struct alt_song_desc* next;
 };
-extern struct song* songs;
-extern struct file_parser song_parser;
 enum sound_status { SOUND_ST_UNKNOWN = 0, SOUND_ST_ERROR, SOUND_ST_LOADED };
 struct parser;
 struct sound_data {
@@ -3344,7 +3150,6 @@ struct trap_kind {
   struct effect* effect;
   struct effect* effect_xtra;
 };
-extern struct trap_kind* trap_info;
 struct trap {
   uint8_t t_idx;
   struct trap_kind* kind;
@@ -3354,7 +3159,6 @@ struct trap {
   bitflag
       flags[(((TRF_MAX) + (sizeof(bitflag) * 8) - 1) / (sizeof(bitflag) * 8))];
 };
-extern struct file_parser trap_parser;
 struct player;
 struct monster_race;
 struct object_kind;
@@ -3553,9 +3357,6 @@ struct tutorial_parser_priv {
   struct tutorial_dict_val_type* curr_value;
   int section_lines_parsed;
 };
-extern struct tutorial_parsed_result tutorial_parsed_data;
-extern struct init_module tutorial_module;
-extern bool arg_force_name;
 enum combat_roll_type {
   COMBAT_ROLL_NONE = 1,
   COMBAT_ROLL_ROLL = 2,
@@ -3600,21 +3401,6 @@ struct command_list {
   int menu_level;
   int keymap;
 };
-extern struct cmd_info cmd_item[];
-extern struct cmd_info cmd_action[];
-extern struct cmd_info cmd_item_manage[];
-extern struct cmd_info cmd_info[];
-extern struct cmd_info cmd_util[];
-extern struct cmd_info cmd_hidden[];
-extern struct command_list cmds_all[];
-extern struct keypress* inkey_next;
-extern uint32_t inkey_scan;
-extern bool inkey_flag;
-extern uint8_t lazymove_delay;
-extern bool msg_flag;
-extern const char* stat_names[STAT_MAX];
-extern const char* stat_names_reduced[STAT_MAX];
-extern const char* window_flag_desc[32];
 struct effect;
 enum game_mode_type { GAME_LOAD, GAME_NEW, GAME_SELECT, GAME_TUTORIAL };
 typedef struct savefile_getter_impl* savefile_getter;
@@ -3623,9 +3409,6 @@ struct savefile_details {
   char* desc;
   size_t foff;
 };
-extern bool arg_wizard;
-extern char savefile[1024];
-extern char panicfile[1024];
 enum {
   KEYMAP_MODE_ORIG = 0x0,
   KEYMAP_MODE_ROGUE = 0x1,
@@ -3646,7 +3429,6 @@ struct ui_monster_category {
 struct ui_knowledge_parse_state {
   struct ui_monster_category* categories;
 };
-extern struct file_parser ui_knowledge_parser;
 typedef struct region region;
 struct region {
   int col;
@@ -3655,7 +3437,6 @@ struct region {
   int page_rows;
 };
 static const region SCREEN_REGION = {0, 0, 0, 0};
-extern int16_t screen_save_depth;
 enum { CURS_UNKNOWN = 0, CURS_KNOWN = 1, CURS_MAYBE = 2 };
 typedef enum _menu_row_style_t {
   MN_ROW_STYLE_DISABLED = CURS_UNKNOWN,
@@ -3668,11 +3449,6 @@ typedef enum _menu_row_validity_t {
   MN_ROW_HIDDEN = 2,
   MN_ROW_MAYBE = 3,
 } menu_row_validity_t;
-extern const uint8_t curs_attrs[3][2];
-extern const char lower_case[];
-extern const char upper_case[];
-extern const char all_letters[];
-extern const char all_letters_nohjkl[];
 struct menu;
 typedef enum { MN_ITER_ACTIONS = 1, MN_ITER_STRINGS = 2 } menu_iter_id;
 typedef struct {
@@ -3740,26 +3516,6 @@ typedef enum {
   OLIST_SEMPTY = 0x04,
   OLIST_DEATH = 0x08,
 } olist_detail_t;
-extern char arg_name[32];
-extern int use_graphics;
-extern int arg_graphics;
-extern bool arg_graphics_nice;
-extern uint8_t* monster_x_attr;
-extern wchar_t* monster_x_char;
-extern uint8_t* kind_x_attr;
-extern wchar_t* kind_x_char;
-extern uint8_t* feat_x_attr[LIGHTING_MAX];
-extern wchar_t* feat_x_char[LIGHTING_MAX];
-extern uint8_t* trap_x_attr[LIGHTING_MAX];
-extern wchar_t* trap_x_char[LIGHTING_MAX];
-extern uint8_t* flavor_x_attr;
-extern wchar_t* flavor_x_char;
-extern uint8_t alert_x_attr;
-extern wchar_t alert_x_char;
-extern uint8_t glow_x_attr;
-extern wchar_t glow_x_char;
-extern uint8_t damage_x_attr[10];
-extern wchar_t damage_x_char[10];
 struct prefs_data {
   bool bypass;
   struct keypress keymap_buffer[20];
@@ -3767,8 +3523,6 @@ struct prefs_data {
   bool loaded_window_flag[8];
   uint32_t window_flags[8];
 };
-extern int16_t signal_count;
-extern struct init_module ui_visuals_module;
 struct chunk;
 struct grid_counter_pred {
   square_predicate pred;

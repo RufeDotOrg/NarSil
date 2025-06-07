@@ -155,42 +155,6 @@ struct names_parse {
   unsigned int nnames[RANDNAME_NUM_TYPES];
   struct name* names[RANDNAME_NUM_TYPES];
 };
-static struct {
-  const char* name;
-  struct file_parser* parser;
-} pl[] = {{"world", &world_parser},
-          {"projections", &projection_parser},
-          {"features", &feat_parser},
-          {"slays", &slay_parser},
-          {"brands", &brand_parser},
-          {"object bases", &object_base_parser},
-          {"monster pain messages", &pain_parser},
-          {"monster pursuit messages", &pursuit_parser},
-          {"monster warning messages", &warning_parser},
-          {"monster bases", &mon_base_parser},
-          {"summons", &summon_parser},
-          {"objects", &object_parser},
-          {"abilities", &ability_parser},
-          {"ego-items", &ego_parser},
-          {"history charts", &history_parser},
-          {"bodies", &body_parser},
-          {"player races", &race_parser},
-          {"player houses", &house_parser},
-          {"player sexes", &sex_parser},
-          {"artifacts", &artifact_parser},
-          {"drops", &drop_parser},
-          {"object properties", &object_property_parser},
-          {"timed effects", &player_timed_parser},
-          {"blow methods", &meth_parser},
-          {"blow effects", &eff_parser},
-          {"monster spells", &mon_spell_parser},
-          {"monsters", &monster_parser},
-          {"monster lore", &lore_parser},
-          {"traps", &trap_parser},
-          {"songs", &song_parser},
-          {"chest_traps", &chest_trap_parser},
-          {"flavours", &flavor_parser},
-          {"random names", &names_parser}};
 typedef struct _message_t {
   char* str;
   struct _message_t* newer;
@@ -979,25 +943,6 @@ struct textblock {
   int* attrs;
   size_t strlen;
   size_t size;
-};
-static const struct {
-  const char* name;
-  char** path;
-  bool setgid_ok;
-} change_path_values[] = {
-    {"scores", &ANGBAND_DIR_SCORES, false},
-    {"gamedata", &ANGBAND_DIR_GAMEDATA, true},
-    {"screens", &ANGBAND_DIR_SCREENS, true},
-    {"help", &ANGBAND_DIR_HELP, true},
-    {"pref", &ANGBAND_DIR_CUSTOMIZE, true},
-    {"fonts", &ANGBAND_DIR_FONTS, true},
-    {"tiles", &ANGBAND_DIR_TILES, true},
-    {"sounds", &ANGBAND_DIR_SOUNDS, true},
-    {"icons", &ANGBAND_DIR_ICONS, true},
-    {"user", &ANGBAND_DIR_USER, true},
-    {"save", &ANGBAND_DIR_SAVE, false},
-    {"panic", &ANGBAND_DIR_PANIC, false},
-    {"archive", &ANGBAND_DIR_ARCHIVE, false},
 };
 struct rect_s {
   int x, y;
