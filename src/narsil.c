@@ -1,8 +1,20 @@
-#include "bulk.h"
+#include <dirent.h>
+#include <fcntl.h>
+#include <langinfo.h>
+#include <locale.h>
+#include <pwd.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
+
+#include "narsil.h"
 
 #include "src/local/macro.c"
 #include "src/local/type.c"
 
+// Note: requires type.c; consumed by var.c
 #include "pre.h"
 
 #include "src/local/var.c"
